@@ -1,16 +1,16 @@
 import { t, getLang, setLang } from "./i18n.js";
+import { icons } from "./icons.js";
 
 // State
 let books = [];
 let verses = [];
 let internalLinks = [];
 let externalLinks = [];
-let allConnectionsList = []; // Array of { verseId, conns } for sequential touring
 let currentTourIndex = 0;
 let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] }
 let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
 
-let selectedVerseId = 142; // Default to 1 Nephi 3:7
+let selectedVerseId = 142; // Default to 1 Nephi 3:7 ("I will go and do...")
 let hoveredVerseId = null;
 let hoveredBookId = null;
 let currentFilter = "all"; // "all" | "internal" | "external"
@@ -21,10 +21,8 @@ let activeTopicFilter = "all";
 const FEATURED_CONNECTIONS = [
   {
     id: "samuel-prophecy",
-    titleEn: "Samuel's Sign → Fulfilled",
-    titlePt: "Sinal de Samuel → Cumprimento",
-    srcRef: "Helaman 14:2",
-    tgtRef: "3 Nephi 1:15",
+    titleEn: "Samuel's Sign → 3 Nephi Fulfilled",
+    titlePt: "Sinal de Samuel → 3 Néfi Cumprido",
     tagEn: "Prophecy",
     tagPt: "Profecia",
     verseId: 4897, // Helaman 14:2
@@ -34,67 +32,55 @@ const FEATURED_CONNECTIONS = [
     id: "iron-rod",
     titleEn: "The Iron Rod & Tree of Life",
     titlePt: "A Barra de Ferro & Árvore da Vida",
-    srcRef: "1 Nephi 8:19",
-    tgtRef: "1 Nephi 11:25",
     tagEn: "Typology",
     tagPt: "Tipologia",
-    verseId: 198,
-    targetId: 288
+    verseId: 198,   // 1 Nephi 8:19
+    targetId: 288   // 1 Nephi 11:25
   },
   {
     id: "alma-conversion",
     titleEn: "Alma's Repentance & Grace",
     titlePt: "Conversão & Graça de Alma",
-    srcRef: "Mosiah 27:24",
-    tgtRef: "Alma 36:18",
     tagEn: "Parallel",
     tagPt: "Paralelo",
-    verseId: 2395,
-    targetId: 3543
+    verseId: 2395,  // Mosiah 27:24
+    targetId: 3543  // Alma 36:18
   },
   {
     id: "abinadi-noah",
     titleEn: "Abinadi's Prophecy on King Noah",
     titlePt: "Profecia de Abinádi sobre o Rei Noé",
-    srcRef: "Mosiah 17:15",
-    tgtRef: "Mosiah 19:20",
     tagEn: "Fulfillment",
     tagPt: "Cumprimento",
-    verseId: 2110,
-    targetId: 2157
+    verseId: 2110,  // Mosiah 17:15
+    targetId: 2157  // Mosiah 19:20
   },
   {
     id: "christ-appearance",
     titleEn: "Christ Appears in the Americas",
     titlePt: "Aparição de Cristo nas Américas",
-    srcRef: "2 Nephi 26:1",
-    tgtRef: "3 Nephi 11:8",
     tagEn: "Prophecy",
     tagPt: "Profecia",
-    verseId: 1198,
-    targetId: 5211
+    verseId: 1198,  // 2 Nephi 26:1
+    targetId: 5211  // 3 Nephi 11:8
   },
   {
     id: "sermon-mount",
     titleEn: "Sermon on the Mount in 3 Nephi",
     titlePt: "Sermão da Montanha em 3 Néfi",
-    srcRef: "3 Nephi 12:3",
-    tgtRef: "Matthew 5:3",
     tagEn: "Bible Quoted",
     tagPt: "Citação Bíblica",
-    verseId: 5240,
+    verseId: 5240,  // 3 Nephi 12:3
     targetId: null
   },
   {
     id: "moroni-farewell",
     titleEn: "Moroni's Final Exhortation",
     titlePt: "Exortação Final de Morôni",
-    srcRef: "Mormon 9:37",
-    tgtRef: "Moroni 10:3",
     tagEn: "Doctrine",
     tagPt: "Doutrina",
-    verseId: 6008,
-    targetId: 6444
+    verseId: 6008,  // Mormon 9:37
+    targetId: 6444  // Moroni 10:3
   }
 ];
 
@@ -109,6 +95,7 @@ const topicSelect = document.getElementById("topicSelect");
 const searchInput = document.getElementById("searchInput");
 const filterBtns = document.querySelectorAll(".filter-btn");
 const langToggleBtn = document.getElementById("langToggleBtn");
+const langText = document.getElementById("langText");
 
 const featuredPillsRow = document.getElementById("featuredPillsRow");
 const prevConnBtn = document.getElementById("prevConnBtn");
@@ -145,7 +132,7 @@ const CHURCH_BOOK_SLUGS = {
 
 // Layout calculations
 const PADDING_X = 24;
-const PADDING_TOP = 20;
+const PADDING_TOP = 24;
 let usableWidth = 0;
 let canvasHeight = 0;
 let baselineY = 0;
@@ -159,7 +146,7 @@ function setupCanvas() {
 
   usableWidth = rect.width - PADDING_X * 2;
   canvasHeight = rect.height;
-  baselineY = canvasHeight - 16;
+  baselineY = canvasHeight - 18;
   draw();
 }
 
@@ -174,7 +161,7 @@ function xToVerse(x) {
 }
 
 // Find nearest verse with connections within a pixel threshold for magnetic snapping
-function findNearestConnectedVerse(mouseX, pixelTolerance = 18) {
+function findNearestConnectedVerse(mouseX, pixelTolerance = 20) {
   if (connectedVerseIdsList.length === 0) return xToVerse(mouseX);
 
   let bestId = null;
@@ -208,7 +195,7 @@ function draw() {
   });
 
   // 1. Draw Baseline & Book dividers
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(PADDING_X, baselineY);
@@ -229,10 +216,9 @@ function draw() {
   // 2. Draw Hotspot Glow Dots (every verse that has connections)
   connectedVerseIdsList.forEach(vid => {
     const hx = verseToX(vid);
-    const hasExternal = (verseConnectionsMap.get(vid)?.external.length || 0) > 0;
     const hasInternal = (verseConnectionsMap.get(vid)?.internal.length || 0) > 0;
 
-    ctx.fillStyle = hasInternal ? "rgba(99, 102, 241, 0.7)" : "rgba(16, 185, 129, 0.7)";
+    ctx.fillStyle = hasInternal ? "rgba(99, 102, 241, 0.75)" : "rgba(16, 185, 129, 0.65)";
     ctx.beginPath();
     ctx.arc(hx, baselineY, 1.8, 0, Math.PI * 2);
     ctx.fill();
@@ -274,8 +260,8 @@ function draw() {
       const dist = Math.abs(x2 - x1);
 
       // Arc height curve (proportional & bounded)
-      const maxH = canvasHeight - PADDING_TOP - 30;
-      const arcHeight = Math.min(maxH, Math.max(25, Math.pow(dist / usableWidth, 0.72) * (maxH * 1.25)));
+      const maxH = canvasHeight - PADDING_TOP - 28;
+      const arcHeight = Math.min(maxH, Math.max(26, Math.pow(dist / usableWidth, 0.72) * (maxH * 1.25)));
       const cx = (x1 + x2) / 2;
       const cy = baselineY - arcHeight;
 
@@ -297,7 +283,7 @@ function draw() {
       } else if (isBookActive) {
         ctx.strokeStyle = baseColor;
         ctx.lineWidth = 1.8;
-        ctx.globalAlpha = 0.8;
+        ctx.globalAlpha = 0.85;
         ctx.stroke();
         ctx.globalAlpha = 1.0;
       } else if (activeVerse) {
@@ -335,7 +321,7 @@ function draw() {
     // Glow dot on baseline
     ctx.fillStyle = pinColor;
     ctx.shadowColor = pinColor;
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = 14;
     ctx.beginPath();
     ctx.arc(activeX, baselineY, 5, 0, Math.PI * 2);
     ctx.fill();
@@ -347,7 +333,7 @@ function draw() {
         const cx = verseToX(vid);
         ctx.fillStyle = "#38bdf8";
         ctx.shadowColor = "#38bdf8";
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 9;
         ctx.beginPath();
         ctx.arc(cx, baselineY, 3.5, 0, Math.PI * 2);
         ctx.fill();
@@ -414,12 +400,12 @@ function renderAxis() {
   });
 }
 
-// Render the Featured Connections quick-picker pills
+// Render the Featured Connections quick-picker pills with SVG icon
 function renderFeaturedPills() {
   featuredPillsRow.innerHTML = "";
   const lang = getLang();
 
-  FEATURED_CONNECTIONS.forEach((item, idx) => {
+  FEATURED_CONNECTIONS.forEach((item) => {
     const pill = document.createElement("button");
     pill.className = "featured-pill";
     if (selectedVerseId === item.verseId) {
@@ -430,6 +416,7 @@ function renderFeaturedPills() {
     const tag = lang === "pt" ? item.tagPt : item.tagEn;
 
     pill.innerHTML = `
+      ${icons.sparkles}
       <span>${title}</span>
       <span class="featured-pill-tag">${tag}</span>
     `;
@@ -453,12 +440,9 @@ function selectVerse(verseId) {
   const tourIdx = connectedVerseIdsList.indexOf(verseId);
   if (tourIdx !== -1) {
     currentTourIndex = tourIdx;
-    connCounterBadge.textContent = t("connectionCounter", {
-      current: currentTourIndex + 1,
-      total: connectedVerseIdsList.length
-    });
+    connCounterBadge.textContent = `${currentTourIndex + 1} / ${connectedVerseIdsList.length}`;
   } else {
-    connCounterBadge.textContent = `${connectedVerseIdsList.length} Connected Verses`;
+    connCounterBadge.textContent = `${connectedVerseIdsList.length} Connected`;
   }
 
   const verseObj = verses[verseId - 1];
@@ -469,7 +453,7 @@ function selectVerse(verseId) {
     selectedVerseRef.textContent = verseObj.ref;
     selectedVerseBadge.style.display = "inline-block";
     selectedVerseBadge.textContent = book ? book.name : "Scripture";
-    selectedVerseBadge.style.backgroundColor = book ? `${book.color}25` : "";
+    selectedVerseBadge.style.borderColor = book ? `${book.color}80` : "";
     selectedVerseBadge.style.color = book ? book.color : "";
 
     verseTextBox.textContent = `"${verseObj.text}"`;
@@ -480,7 +464,7 @@ function selectVerse(verseId) {
       officialLinkContainer.style.display = "block";
       const langParam = getLang() === "pt" ? "por" : "eng";
       officialLink.href = `https://www.churchofjesuschrist.org/study/scriptures/bofm/${slug}/${verseObj.ch}?lang=${langParam}#${verseObj.v}`;
-      officialLink.textContent = t("readOnOfficial");
+      officialLink.querySelector("span").textContent = t("readOnOfficial");
     } else {
       officialLinkContainer.style.display = "none";
     }
@@ -508,7 +492,7 @@ function selectVerse(verseId) {
       card.className = "connection-card";
       card.innerHTML = `
         <div class="connection-left">
-          <div class="connection-title">🔗 ${targetRefStr}</div>
+          <div class="connection-title">${icons.link} ${targetRefStr}</div>
           ${link.note ? `<div class="connection-note">${link.note}</div>` : ""}
         </div>
         <span class="tag tag-internal">${link.type || "Parallel"}</span>
@@ -526,7 +510,7 @@ function selectVerse(verseId) {
       card.style.cursor = "default";
       card.innerHTML = `
         <div class="connection-left">
-          <div class="connection-title">📖 ${link.externalRef} (${link.externalWork || "Bible"})</div>
+          <div class="connection-title">${icons.bookOpen} ${link.externalRef} (${link.externalWork || "Bible"})</div>
           ${link.note ? `<div class="connection-note">${link.note}</div>` : ""}
         </div>
         <span class="tag tag-external">${link.type || "Biblical Reference"}</span>
@@ -553,8 +537,7 @@ canvas.addEventListener("mousemove", (e) => {
   const mouseX = e.clientX - rect.left;
 
   if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
-    // Snap to nearest connected verse within 16px if close, else regular verse
-    const vId = findNearestConnectedVerse(mouseX, 16);
+    const vId = findNearestConnectedVerse(mouseX, 18);
     hoveredVerseId = vId;
     const vObj = verses[vId - 1];
     const conns = verseConnectionsMap.get(vId) || { internal: [], external: [] };
@@ -562,7 +545,7 @@ canvas.addEventListener("mousemove", (e) => {
 
     tooltip.style.display = "block";
     tooltip.style.left = `${e.clientX}px`;
-    tooltip.style.top = `${e.clientY - 12}px`;
+    tooltip.style.top = `${e.clientY - 14}px`;
     tooltip.innerHTML = `<strong>${vObj ? vObj.ref : `Verse #${vId}`}</strong> &bull; ${total} connection${total === 1 ? '' : 's'}`;
   } else {
     hoveredVerseId = null;
@@ -581,7 +564,7 @@ canvas.addEventListener("click", (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
-    const vId = findNearestConnectedVerse(mouseX, 18);
+    const vId = findNearestConnectedVerse(mouseX, 20);
     selectVerse(vId);
   }
 });
@@ -659,12 +642,12 @@ function updateUILanguage() {
   document.getElementById("btnFilterInternal").textContent = t("filterInternal");
   document.getElementById("btnFilterExternal").textContent = t("filterExternal");
   document.getElementById("connectionsSectionTitle").textContent = t("drawerTitle");
-  document.getElementById("featuredLabel").textContent = `🌟 ${t("featuredTitle")}`;
-  prevConnBtn.textContent = t("prevBtn");
-  nextConnBtn.textContent = t("nextBtn");
-  randomConnBtn.textContent = t("randomBtn");
+  document.getElementById("featuredLabel").innerHTML = `${icons.sparkles} ${t("featuredTitle")}`;
+  prevConnBtn.querySelector(".tour-btn-text").textContent = t("prevBtn");
+  nextConnBtn.querySelector(".tour-btn-text").textContent = t("nextBtn");
+  randomConnBtn.querySelector("span").textContent = t("randomBtn");
   searchInput.placeholder = t("searchPlaceholder");
-  langToggleBtn.textContent = t("langToggle");
+  langText.textContent = t("langToggle");
 
   renderFeaturedPills();
   if (selectedVerseId) {

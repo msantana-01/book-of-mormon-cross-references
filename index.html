@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Book of Mormon Cross-References | Interactive Arc Diagram</title>
   <meta name="description" content="Explore all 6,604 verses and cross-references of the Book of Mormon with an interactive arc visualization, biblical parallels, and chapter study." />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>" />
+  
+  <!-- Typography per UI/UX Pro Max Scholarly Editorial System -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2'><path d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/><path d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/></svg>" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
@@ -14,66 +20,89 @@
   <header>
     <div class="header-container">
       <div class="brand">
-        <h1 id="appTitle">Book of Mormon Cross-References</h1>
-        <p id="appSubtitle">Explore connections, fulfillments, quotations, and biblical parallels across 6,604 verses.</p>
+        <h1 id="appTitle">The Book of Mormon</h1>
+        <p id="appSubtitle">Interactive Arc Diagram of Cross-References, Prophecies & Biblical Parallels</p>
       </div>
-      <div class="badges">
-        <span class="badge badge-primary" id="badgeBooks">15 Books</span>
-        <span class="badge" id="badgeChapters">239 Chapters</span>
-        <span class="badge" id="badgeVerses">6,604 Verses</span>
-        <button id="langToggleBtn" class="lang-btn" aria-label="Toggle Language">Português</button>
+      <div class="header-actions">
+        <div class="badges">
+          <span class="badge badge-gold" id="badgeBooks">15 Books</span>
+          <span class="badge" id="badgeChapters">239 Chapters</span>
+          <span class="badge" id="badgeVerses">6,604 Verses</span>
+        </div>
+        <button id="langToggleBtn" class="lang-btn" aria-label="Toggle Interface Language">
+          <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="langText">Português</span>
+        </button>
       </div>
     </div>
   </header>
 
   <!-- Controls Bar -->
-  <div class="controls-bar">
+  <section class="controls-bar" aria-label="Filter Controls">
     <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" class="search-input" placeholder="Search verse (e.g. Alma 32:21, 1 Ne 3:7) or keyword..." />
+      <span class="search-icon">
+        <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </span>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search verse (e.g. Alma 32:21, 1 Ne 3:7) or keyword..." aria-label="Search Scripture Verse" />
     </div>
 
     <div class="filter-group">
-      <button class="filter-btn active" data-filter="all" id="btnFilterAll">All Connections</button>
-      <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal Arcs (BOM ↔ BOM)</button>
-      <button class="filter-btn" data-filter="external" id="btnFilterExternal">Bible Parallels (OT/NT)</button>
+      <div class="btn-group" role="group" aria-label="Connection Type Filter">
+        <button class="filter-btn active" data-filter="all" id="btnFilterAll">All Connections</button>
+        <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal Arcs</button>
+        <button class="filter-btn" data-filter="external" id="btnFilterExternal">Bible Parallels</button>
+      </div>
       
-      <select id="topicSelect" class="select-input" aria-label="Filter by Topic">
-        <option value="all">All Themes</option>
+      <select id="topicSelect" class="select-input" aria-label="Filter by Doctrinal Theme">
+        <option value="all">All Doctrinal Themes</option>
         <option value="prophecy">Prophecies & Fulfillments</option>
         <option value="christ">Christ's Ministry & Visit</option>
         <option value="faith">Faith & Repentance</option>
         <option value="isaiah">Isaiah Quotations</option>
       </select>
 
-      <select id="bookSelect" class="select-input" aria-label="Select Book">
+      <select id="bookSelect" class="select-input" aria-label="Select Specific Book">
         <option value="all">Whole Book of Mormon</option>
       </select>
     </div>
-  </div>
+  </section>
 
-  <!-- Featured Highlights Carousel & Tour Bar -->
-  <div class="featured-container">
+  <!-- Featured Highlights Carousel & Tour Navigation -->
+  <section class="featured-container" aria-label="Featured Connections">
     <div class="featured-header">
-      <span class="featured-label" id="featuredLabel">🌟 Featured Key Connections:</span>
+      <span class="featured-label" id="featuredLabel">
+        <svg class="ui-icon ui-icon-gold" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+        Featured Connections:
+      </span>
+      
       <!-- Tour controls -->
       <div class="tour-controls">
-        <button id="prevConnBtn" class="tour-btn" title="Previous Connection">◀ Previous</button>
-        <span id="connCounterBadge" class="badge">Connection 1 of 850</span>
-        <button id="nextConnBtn" class="tour-btn" title="Next Connection">Next ▶</button>
-        <button id="randomConnBtn" class="tour-btn tour-btn-accent" title="Jump to Random Connection">🎲 Random</button>
+        <button id="prevConnBtn" class="tour-btn" title="Previous Connection" aria-label="Previous Connection">
+          <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span class="tour-btn-text">Previous</span>
+        </button>
+        <span id="connCounterBadge" class="badge badge-tabular">1 / 850</span>
+        <button id="nextConnBtn" class="tour-btn" title="Next Connection" aria-label="Next Connection">
+          <span class="tour-btn-text">Next</span>
+          <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        <button id="randomConnBtn" class="tour-btn tour-btn-accent" title="Jump to Random Connection" aria-label="Random Connection">
+          <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+          <span>Random</span>
+        </button>
       </div>
     </div>
-    <div class="featured-pills-row" id="featuredPillsRow">
-      <!-- Populated dynamically -->
+    
+    <div class="featured-pills-row" id="featuredPillsRow" role="region" aria-label="Quick Access Connections">
+      <!-- Populated dynamically via main.js -->
     </div>
-  </div>
+  </section>
 
   <!-- Main View Area -->
   <main>
     <div class="canvas-wrapper">
       <canvas id="arcCanvas"></canvas>
-      <div id="tooltip"></div>
+      <div id="tooltip" role="tooltip" aria-hidden="true"></div>
 
       <!-- Axis bar containing the 15 books proportional segments -->
       <div class="axis-container">
@@ -83,13 +112,13 @@
     </div>
 
     <!-- Study Panel / Inspector -->
-    <section class="study-panel" id="studyPanel">
+    <section class="study-panel" id="studyPanel" aria-labelledby="selectedVerseRef">
       <div class="panel-header">
         <h2 id="selectedVerseTitle">
           <span id="selectedVerseRef">Select a Verse</span>
-          <span class="tag tag-internal" id="selectedVerseBadge" style="display: none;">Active</span>
+          <span class="tag tag-book" id="selectedVerseBadge" style="display: none;">Active</span>
         </h2>
-        <span class="badge" id="connectionsCountBadge">0 Connections</span>
+        <span class="badge badge-gold badge-tabular" id="connectionsCountBadge">0 Connections</span>
       </div>
 
       <div class="verse-text-box" id="verseTextBox">
@@ -98,14 +127,15 @@
 
       <div class="connections-section" id="connectionsSection">
         <h3 id="connectionsSectionTitle">Cross-References & Parallels</h3>
-        <div class="connections-list" id="connectionsList">
+        <div class="connections-list" id="connectionsList" role="list">
           <!-- Populated dynamically -->
         </div>
       </div>
 
       <div id="officialLinkContainer" style="display: none;">
         <a href="#" target="_blank" rel="noopener noreferrer" class="official-link-btn" id="officialLink">
-          Read chapter on ChurchofJesusChrist.org ↗
+          <span>Read chapter on ChurchofJesusChrist.org</span>
+          <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         </a>
       </div>
     </section>
