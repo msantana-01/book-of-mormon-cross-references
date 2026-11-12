@@ -11,14 +11,14 @@ let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] 
 let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
 
 let currentViewMode = "dual"; // "dual" | "radial" | "classic"
-let selectedVerseId = 142; // Default to 1 Nephi 3:7 ("I will go and do...")
+let selectedVerseId = 4876; // Default to Helaman 14:2 (Samuel the Lamanite's Sign)
 let hoveredVerseId = null;
 let hoveredBookId = null;
 let currentFilter = "all"; // "all" | "internal" | "external"
 let activeBookFilter = "all";
 let activeTopicFilter = "all";
 
-// Curated Key Connections for 1-Click Exploration
+// Curated Key Connections for 1-Click Exploration (Dynamic verseId lookup via srcRef)
 const FEATURED_CONNECTIONS = [
   {
     id: "samuel-prophecy",
@@ -26,8 +26,8 @@ const FEATURED_CONNECTIONS = [
     titlePt: "Sinal de Samuel → 3 Néfi Cumprido",
     tagEn: "Prophecy",
     tagPt: "Profecia",
-    verseId: 4897, // Helaman 14:2
-    targetId: 4962  // 3 Nephi 1:15
+    srcRef: "Helaman 14:2",
+    tgtRef: "3 Nephi 1:15"
   },
   {
     id: "iron-rod",
@@ -35,8 +35,8 @@ const FEATURED_CONNECTIONS = [
     titlePt: "A Barra de Ferro & Árvore da Vida",
     tagEn: "Typology",
     tagPt: "Tipologia",
-    verseId: 198,   // 1 Nephi 8:19
-    targetId: 288   // 1 Nephi 11:25
+    srcRef: "1 Nephi 8:19",
+    tgtRef: "1 Nephi 11:25"
   },
   {
     id: "alma-conversion",
@@ -44,8 +44,8 @@ const FEATURED_CONNECTIONS = [
     titlePt: "Conversão & Graça de Alma",
     tagEn: "Parallel",
     tagPt: "Paralelo",
-    verseId: 2395,  // Mosiah 27:24
-    targetId: 3543  // Alma 36:18
+    srcRef: "Mosiah 27:24",
+    tgtRef: "Alma 36:18"
   },
   {
     id: "abinadi-noah",
@@ -53,8 +53,8 @@ const FEATURED_CONNECTIONS = [
     titlePt: "Profecia de Abinádi sobre o Rei Noé",
     tagEn: "Fulfillment",
     tagPt: "Cumprimento",
-    verseId: 2110,  // Mosiah 17:15
-    targetId: 2157  // Mosiah 19:20
+    srcRef: "Mosiah 17:15",
+    tgtRef: "Mosiah 19:20"
   },
   {
     id: "christ-appearance",
@@ -62,8 +62,8 @@ const FEATURED_CONNECTIONS = [
     titlePt: "Aparição de Cristo nas Américas",
     tagEn: "Prophecy",
     tagPt: "Profecia",
-    verseId: 1198,  // 2 Nephi 26:1
-    targetId: 5211  // 3 Nephi 11:8
+    srcRef: "2 Nephi 26:1",
+    tgtRef: "3 Nephi 11:8"
   },
   {
     id: "sermon-mount",
@@ -71,8 +71,26 @@ const FEATURED_CONNECTIONS = [
     titlePt: "Sermão da Montanha em 3 Néfi",
     tagEn: "Bible Quoted",
     tagPt: "Citação Bíblica",
-    verseId: 5240,  // 3 Nephi 12:3
-    targetId: null
+    srcRef: "3 Nephi 12:3",
+    tgtRef: null
+  },
+  {
+    id: "abinadi-isaiah",
+    titleEn: "Isaiah 53 Expounded by Abinadi",
+    titlePt: "Isaías 53 Explicado por Abinádi",
+    tagEn: "Isaiah Quote",
+    tagPt: "Citação de Isaías",
+    srcRef: "Mosiah 14:1",
+    tgtRef: null
+  },
+  {
+    id: "alma-faith",
+    titleEn: "Alma's Definition of Faith",
+    titlePt: "A Definição de Fé de Alma",
+    tagEn: "Faith & Bible",
+    tagPt: "Fé & Bíblia",
+    srcRef: "Alma 32:21",
+    tgtRef: null
   },
   {
     id: "moroni-farewell",
@@ -80,8 +98,8 @@ const FEATURED_CONNECTIONS = [
     titlePt: "Exortação Final de Morôni",
     tagEn: "Doctrine",
     tagPt: "Doutrina",
-    verseId: 6008,  // Mormon 9:37
-    targetId: 6444  // Moroni 10:3
+    srcRef: "Mormon 9:37",
+    tgtRef: "Moroni 10:3"
   }
 ];
 
@@ -117,7 +135,6 @@ function getBibleBookX(refStr, width, paddingX) {
       return paddingX + b.pos * usable;
     }
   }
-  // Default fallback middle
   return paddingX + 0.5 * usable;
 }
 
@@ -139,37 +156,6 @@ const CHURCH_BOOK_SLUGS = {
   "Ether": "ether",
   "Moroni": "moro"
 };
-
-// DOM Elements
-const canvas = document.getElementById("arcCanvas");
-const ctx = canvas.getContext("2d");
-const tooltip = document.getElementById("tooltip");
-const axisContainer = document.getElementById("axisContainer");
-const axisBar = document.getElementById("axisBar");
-const bookLabelsRow = document.getElementById("bookLabelsRow");
-const bookSelect = document.getElementById("bookSelect");
-const topicSelect = document.getElementById("topicSelect");
-const searchInput = document.getElementById("searchInput");
-const filterBtns = document.querySelectorAll(".filter-btn");
-const viewBtns = document.querySelectorAll(".view-btn");
-const langToggleBtn = document.getElementById("langToggleBtn");
-const langText = document.getElementById("langText");
-
-const dualTopLabelRow = document.getElementById("dualTopLabelRow");
-const dualBottomLabelRow = document.getElementById("dualBottomLabelRow");
-const featuredPillsRow = document.getElementById("featuredPillsRow");
-const prevConnBtn = document.getElementById("prevConnBtn");
-const nextConnBtn = document.getElementById("nextConnBtn");
-const randomConnBtn = document.getElementById("randomConnBtn");
-const connCounterBadge = document.getElementById("connCounterBadge");
-
-const selectedVerseRef = document.getElementById("selectedVerseRef");
-const selectedVerseBadge = document.getElementById("selectedVerseBadge");
-const connectionsCountBadge = document.getElementById("connectionsCountBadge");
-const verseTextBox = document.getElementById("verseTextBox");
-const connectionsList = document.getElementById("connectionsList");
-const officialLinkContainer = document.getElementById("officialLinkContainer");
-const officialLink = document.getElementById("officialLink");
 
 // Layout constants
 const PADDING_X = 26;
@@ -219,7 +205,6 @@ function findNearestConnectedVerse(mouseX, pixelTolerance = 20) {
 
 // Snapping for radial circular mode
 function radialToVerse(angleRad) {
-  // Normalize angle so -PI/2 (top) is 0
   let norm = angleRad + Math.PI / 2;
   while (norm < 0) norm += Math.PI * 2;
   while (norm >= Math.PI * 2) norm -= Math.PI * 2;
@@ -227,7 +212,6 @@ function radialToVerse(angleRad) {
   const ratio = norm / (Math.PI * 2);
   const vId = Math.max(1, Math.min(6604, Math.round(ratio * 6603) + 1));
 
-  // Snap to nearest connected if within ~60 verses
   let best = vId;
   let minDiff = 60;
   for (const cv of connectedVerseIdsList) {
@@ -288,7 +272,6 @@ function drawDualView() {
     ctx.arc(bx, topY, b.weight ? 3.5 : 2.5, 0, Math.PI * 2);
     ctx.fill();
 
-    // Small label
     ctx.fillStyle = b.color;
     ctx.font = b.weight ? "bold 10px Inter, sans-serif" : "9px Inter, sans-serif";
     ctx.textAlign = "center";
@@ -332,12 +315,10 @@ function drawDualView() {
 
       ctx.beginPath();
       ctx.moveTo(xBom, bottomY);
-      // Gentle S-curve or central control point
       const midY = (topY + bottomY) / 2;
       ctx.bezierCurveTo(xBom, midY + 40, xBible, midY - 40, xBible, topY);
 
       if (isConnectedToActive) {
-        // High-voltage golden beam
         ctx.strokeStyle = "#fbbf24";
         ctx.lineWidth = 3.0;
         ctx.shadowColor = "rgba(245, 158, 11, 0.9)";
@@ -345,7 +326,6 @@ function drawDualView() {
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Top node highlight
         ctx.fillStyle = "#fbbf24";
         ctx.beginPath();
         ctx.arc(xBible, topY, 5, 0, Math.PI * 2);
@@ -364,7 +344,7 @@ function drawDualView() {
     });
   }
 
-  // D. Internal BOM Arcs (curving upward in the lower half)
+  // D. Internal BOM Arcs
   if (currentFilter !== "external") {
     internalLinks.forEach(link => {
       const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
@@ -372,7 +352,6 @@ function drawDualView() {
       const x2 = verseToX(link.target);
       const dist = Math.abs(x2 - x1);
 
-      // Arc height in lower half
       const maxH = (bottomY - topY) * 0.45;
       const arcHeight = Math.min(maxH, Math.max(20, Math.pow(dist / usableWidth, 0.75) * maxH));
       const cx = (x1 + x2) / 2;
@@ -446,7 +425,6 @@ function drawRadialView() {
   const centerOrbR = outerR * 0.38;
 
   const activeVerse = hoveredVerseId || selectedVerseId;
-  const activeVerseConnections = verseConnectionsMap.get(activeVerse) || { internal: [], external: [] };
 
   function verseAngle(vId) {
     return -Math.PI / 2 + ((vId - 1) / 6603) * (Math.PI * 2);
@@ -463,7 +441,6 @@ function drawRadialView() {
     ctx.arc(cx, cy, outerR, a1, a2);
     ctx.stroke();
 
-    // Book label outside the ring
     const midAngle = (a1 + a2) / 2;
     const labelR = outerR + 18;
     const lx = cx + labelR * Math.cos(midAngle);
@@ -501,7 +478,6 @@ function drawRadialView() {
 
     ctx.beginPath();
     ctx.moveTo(x1, y1);
-    // Curve through center with slight pull
     ctx.quadraticCurveTo(cx, cy, x2, y2);
 
     const sourceBook = getBookForVerse(link.source);
@@ -529,7 +505,7 @@ function drawRadialView() {
     }
   });
 
-  // 4. Center Glowing Orb (Sacred Core)
+  // 4. Center Glowing Orb
   ctx.fillStyle = "rgba(15, 23, 42, 0.94)";
   ctx.strokeStyle = "rgba(245, 158, 11, 0.45)";
   ctx.lineWidth = 2;
@@ -538,7 +514,6 @@ function drawRadialView() {
   ctx.fill();
   ctx.stroke();
 
-  // Center Orb Typography
   if (activeVerse) {
     const vObj = verses[activeVerse - 1];
     const conns = verseConnectionsMap.get(activeVerse) || { internal: [], external: [] };
@@ -547,22 +522,18 @@ function drawRadialView() {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    // Book & Ref
     ctx.fillStyle = "#ffffff";
     ctx.font = "600 13px Cinzel, Georgia, serif";
     ctx.fillText(vObj ? vObj.ref : `Verse #${activeVerse}`, cx, cy - 14);
 
-    // Connections count
     ctx.fillStyle = "#38bdf8";
     ctx.font = "bold 11px Inter, sans-serif";
     ctx.fillText(`${total} Connections`, cx, cy + 8);
 
-    // Subtext
     ctx.fillStyle = "#94a3b8";
     ctx.font = "9.5px Inter, sans-serif";
     ctx.fillText(vObj ? (vObj.book) : "The Book of Mormon", cx, cy + 24);
 
-    // Active marker dot on circumference
     const activeAng = verseAngle(activeVerse);
     const ax = cx + outerR * Math.cos(activeAng);
     const ay = cy + outerR * Math.sin(activeAng);
@@ -583,7 +554,6 @@ function drawRadialView() {
 function drawClassicView() {
   const bottomY = canvasHeight - 20;
   const activeVerse = hoveredVerseId || selectedVerseId;
-  const activeVerseConnections = verseConnectionsMap.get(activeVerse) || { internal: [], external: [] };
 
   // Baseline
   ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
@@ -654,7 +624,6 @@ function drawClassicView() {
     }
   });
 
-  // Active verse
   if (activeVerse) {
     const activeX = verseToX(activeVerse);
     const activeBook = getBookForVerse(activeVerse);
@@ -727,7 +696,7 @@ function renderAxis() {
   });
 }
 
-// Render the Featured Connections quick-picker pills
+// Render the Featured Connections quick-picker pills (dynamic verseId resolution)
 function renderFeaturedPills() {
   featuredPillsRow.innerHTML = "";
   const lang = getLang();
@@ -749,9 +718,9 @@ function renderFeaturedPills() {
     `;
 
     pill.addEventListener("click", () => {
-      selectVerse(item.verseId);
-      document.querySelectorAll(".featured-pill").forEach(p => p.classList.remove("active"));
-      pill.classList.add("active");
+      if (item.verseId) {
+        selectVerse(item.verseId);
+      }
     });
 
     featuredPillsRow.appendChild(pill);
@@ -760,7 +729,7 @@ function renderFeaturedPills() {
 
 // Select a verse and update the Study Panel
 function selectVerse(verseId) {
-  if (verseId < 1 || verseId > 6604) return;
+  if (!verseId || verseId < 1 || verseId > 6604) return;
   selectedVerseId = verseId;
 
   // Update sequential tour counter if present
@@ -877,7 +846,6 @@ canvas.addEventListener("mousemove", (e) => {
       vId = radialToVerse(angle);
     }
   } else {
-    // Dual or Classic View
     if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
       vId = findNearestConnectedVerse(mouseX, 18);
     }
@@ -937,7 +905,6 @@ viewBtns.forEach(btn => {
     btn.classList.add("active");
     currentViewMode = btn.dataset.view;
 
-    // Toggle rail headers visibility
     if (currentViewMode === "dual") {
       dualTopLabelRow.style.display = "flex";
       dualBottomLabelRow.style.display = "flex";
@@ -1068,6 +1035,16 @@ async function init() {
     externalLinks = await externalRes.json();
     verses = await versesRes.json();
 
+    // Dynamically resolve verseId & targetId for all featured connections!
+    FEATURED_CONNECTIONS.forEach(item => {
+      const vSrc = verses.find(v => v.ref === item.srcRef);
+      if (vSrc) item.verseId = vSrc.id;
+      if (item.tgtRef) {
+        const vTgt = verses.find(v => v.ref === item.tgtRef);
+        if (vTgt) item.targetId = vTgt.id;
+      }
+    });
+
     // Populate index map
     for (let i = 1; i <= 6604; i++) {
       verseConnectionsMap.set(i, { internal: [], external: [] });
@@ -1101,8 +1078,8 @@ async function init() {
     renderFeaturedPills();
     setupCanvas();
 
-    // Select the first featured connection
-    selectVerse(selectedVerseId);
+    // Select the first featured connection (Helaman 14:2)
+    selectVerse(FEATURED_CONNECTIONS[0].verseId || 4876);
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
   } catch (err) {
     console.error("Error loading scripture data:", err);
