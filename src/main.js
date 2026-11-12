@@ -579,6 +579,15 @@ function drawRadialView() {
   const activeVerse = hoveredVerseId || selectedVerseId;
   const activeBook = getActiveBook();
 
+  function verseAngle(vId) {
+    if (activeBook) {
+      const span = Math.max(1, activeBook.endVerseId - activeBook.startVerseId);
+      const ratio = Math.max(0, Math.min(1, (vId - activeBook.startVerseId) / span));
+      return -Math.PI / 2 + ratio * (Math.PI * 2);
+    }
+    return -Math.PI / 2 + ((vId - 1) / 6603) * (Math.PI * 2);
+  }
+
   // 1. Draw Circumference Segments (Books or Chapters)
   if (activeBook) {
     activeBook.chaptersList.forEach(ch => {

@@ -5,7 +5,6 @@ An interactive, high-performance web visualization exploring biblical cross-refe
 Inspired by Chris Harrison & Christoph Römhild's classic 2007 arc diagram and [trekhleb/bible-cross-references](https://github.com/trekhleb/bible-cross-references), redesigned from the ground up for modern web standards using Vanilla JavaScript, HTML5 Canvas 2D, and Swiss Modernist / Scholarly typography.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
 
 ---
 
@@ -53,7 +52,7 @@ Inspired by Chris Harrison & Christoph Römhild's classic 2007 arc diagram and [
 - **Official Scripture Study Links:**
   - Direct contextual links to read every passage on [ChurchofJesusChrist.org](https://www.churchofjesuschrist.org/study/scriptures/bofm).
 - **100% Static & Free to Host:**
-  - Zero server requirements, 0 API dependencies, instant load times, 100% compatible with Vercel Hobby tier.
+  - Zero server requirements, 0 API dependencies, instant load times, 100% client-side static application.
 
 ---
 
@@ -91,14 +90,14 @@ Open [http://localhost:5173/](http://localhost:5173/) in your browser.
 
 ---
 
-## ☁️ Deploy to Vercel (1-Click)
+## 🌐 Production Build & Deployment
 
-This repository includes a production-ready `vercel.json` configured with caching headers and build commands.
+Since this project is 100% static (HTML, CSS, Vanilla JS, and optimized JSON datasets), the output from `npm run build` generates a self-contained `dist/` directory that can be served from any static web server, CDN, or object storage bucket (such as GitHub Pages, Cloudflare Pages, Netlify, Nginx, or Apache).
 
-1. Push this repository to your GitHub account.
-2. Visit [vercel.com/new](https://vercel.com/new).
-3. Import this repository.
-4. Click **Deploy**. Vercel will deploy the static build in seconds at `*.vercel.app`.
+```bash
+npm run build
+# The compiled files in dist/ are ready for static hosting.
+```
 
 ---
 
