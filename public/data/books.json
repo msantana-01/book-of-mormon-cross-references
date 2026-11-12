@@ -1,0 +1,1616 @@
+[
+  {
+    "id": 1,
+    "name": "1 Nephi",
+    "shortName": "1 Ne.",
+    "chaptersCount": 22,
+    "versesCount": 618,
+    "startVerseId": 1,
+    "endVerseId": 618,
+    "color": "#4F46E5",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 1,
+        "endVerseId": 20,
+        "versesCount": 20
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 21,
+        "endVerseId": 44,
+        "versesCount": 24
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 45,
+        "endVerseId": 75,
+        "versesCount": 31
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 76,
+        "endVerseId": 113,
+        "versesCount": 38
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 114,
+        "endVerseId": 135,
+        "versesCount": 22
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 136,
+        "endVerseId": 141,
+        "versesCount": 6
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 142,
+        "endVerseId": 163,
+        "versesCount": 22
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 164,
+        "endVerseId": 201,
+        "versesCount": 38
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 202,
+        "endVerseId": 207,
+        "versesCount": 6
+      },
+      {
+        "chapter": 10,
+        "startVerseId": 208,
+        "endVerseId": 229,
+        "versesCount": 22
+      },
+      {
+        "chapter": 11,
+        "startVerseId": 230,
+        "endVerseId": 265,
+        "versesCount": 36
+      },
+      {
+        "chapter": 12,
+        "startVerseId": 266,
+        "endVerseId": 288,
+        "versesCount": 23
+      },
+      {
+        "chapter": 13,
+        "startVerseId": 289,
+        "endVerseId": 330,
+        "versesCount": 42
+      },
+      {
+        "chapter": 14,
+        "startVerseId": 331,
+        "endVerseId": 360,
+        "versesCount": 30
+      },
+      {
+        "chapter": 15,
+        "startVerseId": 361,
+        "endVerseId": 396,
+        "versesCount": 36
+      },
+      {
+        "chapter": 16,
+        "startVerseId": 397,
+        "endVerseId": 435,
+        "versesCount": 39
+      },
+      {
+        "chapter": 17,
+        "startVerseId": 436,
+        "endVerseId": 490,
+        "versesCount": 55
+      },
+      {
+        "chapter": 18,
+        "startVerseId": 491,
+        "endVerseId": 515,
+        "versesCount": 25
+      },
+      {
+        "chapter": 19,
+        "startVerseId": 516,
+        "endVerseId": 539,
+        "versesCount": 24
+      },
+      {
+        "chapter": 20,
+        "startVerseId": 540,
+        "endVerseId": 561,
+        "versesCount": 22
+      },
+      {
+        "chapter": 21,
+        "startVerseId": 562,
+        "endVerseId": 587,
+        "versesCount": 26
+      },
+      {
+        "chapter": 22,
+        "startVerseId": 588,
+        "endVerseId": 618,
+        "versesCount": 31
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "2 Nephi",
+    "shortName": "2 Ne.",
+    "chaptersCount": 33,
+    "versesCount": 779,
+    "startVerseId": 619,
+    "endVerseId": 1397,
+    "color": "#6366F1",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 619,
+        "endVerseId": 650,
+        "versesCount": 32
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 651,
+        "endVerseId": 680,
+        "versesCount": 30
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 681,
+        "endVerseId": 705,
+        "versesCount": 25
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 706,
+        "endVerseId": 740,
+        "versesCount": 35
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 741,
+        "endVerseId": 774,
+        "versesCount": 34
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 775,
+        "endVerseId": 792,
+        "versesCount": 18
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 793,
+        "endVerseId": 803,
+        "versesCount": 11
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 804,
+        "endVerseId": 828,
+        "versesCount": 25
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 829,
+        "endVerseId": 882,
+        "versesCount": 54
+      },
+      {
+        "chapter": 10,
+        "startVerseId": 883,
+        "endVerseId": 907,
+        "versesCount": 25
+      },
+      {
+        "chapter": 11,
+        "startVerseId": 908,
+        "endVerseId": 915,
+        "versesCount": 8
+      },
+      {
+        "chapter": 12,
+        "startVerseId": 916,
+        "endVerseId": 937,
+        "versesCount": 22
+      },
+      {
+        "chapter": 13,
+        "startVerseId": 938,
+        "endVerseId": 963,
+        "versesCount": 26
+      },
+      {
+        "chapter": 14,
+        "startVerseId": 964,
+        "endVerseId": 969,
+        "versesCount": 6
+      },
+      {
+        "chapter": 15,
+        "startVerseId": 970,
+        "endVerseId": 999,
+        "versesCount": 30
+      },
+      {
+        "chapter": 16,
+        "startVerseId": 1000,
+        "endVerseId": 1012,
+        "versesCount": 13
+      },
+      {
+        "chapter": 17,
+        "startVerseId": 1013,
+        "endVerseId": 1037,
+        "versesCount": 25
+      },
+      {
+        "chapter": 18,
+        "startVerseId": 1038,
+        "endVerseId": 1059,
+        "versesCount": 22
+      },
+      {
+        "chapter": 19,
+        "startVerseId": 1060,
+        "endVerseId": 1080,
+        "versesCount": 21
+      },
+      {
+        "chapter": 20,
+        "startVerseId": 1081,
+        "endVerseId": 1114,
+        "versesCount": 34
+      },
+      {
+        "chapter": 21,
+        "startVerseId": 1115,
+        "endVerseId": 1130,
+        "versesCount": 16
+      },
+      {
+        "chapter": 22,
+        "startVerseId": 1131,
+        "endVerseId": 1136,
+        "versesCount": 6
+      },
+      {
+        "chapter": 23,
+        "startVerseId": 1137,
+        "endVerseId": 1158,
+        "versesCount": 22
+      },
+      {
+        "chapter": 24,
+        "startVerseId": 1159,
+        "endVerseId": 1190,
+        "versesCount": 32
+      },
+      {
+        "chapter": 25,
+        "startVerseId": 1191,
+        "endVerseId": 1220,
+        "versesCount": 30
+      },
+      {
+        "chapter": 26,
+        "startVerseId": 1221,
+        "endVerseId": 1253,
+        "versesCount": 33
+      },
+      {
+        "chapter": 27,
+        "startVerseId": 1254,
+        "endVerseId": 1288,
+        "versesCount": 35
+      },
+      {
+        "chapter": 28,
+        "startVerseId": 1289,
+        "endVerseId": 1320,
+        "versesCount": 32
+      },
+      {
+        "chapter": 29,
+        "startVerseId": 1321,
+        "endVerseId": 1334,
+        "versesCount": 14
+      },
+      {
+        "chapter": 30,
+        "startVerseId": 1335,
+        "endVerseId": 1352,
+        "versesCount": 18
+      },
+      {
+        "chapter": 31,
+        "startVerseId": 1353,
+        "endVerseId": 1373,
+        "versesCount": 21
+      },
+      {
+        "chapter": 32,
+        "startVerseId": 1374,
+        "endVerseId": 1382,
+        "versesCount": 9
+      },
+      {
+        "chapter": 33,
+        "startVerseId": 1383,
+        "endVerseId": 1397,
+        "versesCount": 15
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Jacob",
+    "shortName": "Jacob",
+    "chaptersCount": 7,
+    "versesCount": 203,
+    "startVerseId": 1398,
+    "endVerseId": 1600,
+    "color": "#8B5CF6",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 1398,
+        "endVerseId": 1416,
+        "versesCount": 19
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 1417,
+        "endVerseId": 1451,
+        "versesCount": 35
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 1452,
+        "endVerseId": 1465,
+        "versesCount": 14
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 1466,
+        "endVerseId": 1483,
+        "versesCount": 18
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 1484,
+        "endVerseId": 1560,
+        "versesCount": 77
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 1561,
+        "endVerseId": 1573,
+        "versesCount": 13
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 1574,
+        "endVerseId": 1600,
+        "versesCount": 27
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Enos",
+    "shortName": "Enos",
+    "chaptersCount": 1,
+    "versesCount": 27,
+    "startVerseId": 1601,
+    "endVerseId": 1627,
+    "color": "#A855F7",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 1601,
+        "endVerseId": 1627,
+        "versesCount": 27
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Jarom",
+    "shortName": "Jarom",
+    "chaptersCount": 1,
+    "versesCount": 15,
+    "startVerseId": 1628,
+    "endVerseId": 1642,
+    "color": "#D946EF",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 1628,
+        "endVerseId": 1642,
+        "versesCount": 15
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Omni",
+    "shortName": "Omni",
+    "chaptersCount": 1,
+    "versesCount": 30,
+    "startVerseId": 1643,
+    "endVerseId": 1672,
+    "color": "#EC4899",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 1643,
+        "endVerseId": 1672,
+        "versesCount": 30
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Words of Mormon",
+    "shortName": "W of M",
+    "chaptersCount": 1,
+    "versesCount": 18,
+    "startVerseId": 1673,
+    "endVerseId": 1690,
+    "color": "#F43F5E",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 1673,
+        "endVerseId": 1690,
+        "versesCount": 18
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Mosiah",
+    "shortName": "Mosiah",
+    "chaptersCount": 29,
+    "versesCount": 785,
+    "startVerseId": 1691,
+    "endVerseId": 2475,
+    "color": "#EF4444",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 1691,
+        "endVerseId": 1708,
+        "versesCount": 18
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 1709,
+        "endVerseId": 1749,
+        "versesCount": 41
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 1750,
+        "endVerseId": 1776,
+        "versesCount": 27
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 1777,
+        "endVerseId": 1806,
+        "versesCount": 30
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 1807,
+        "endVerseId": 1821,
+        "versesCount": 15
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 1822,
+        "endVerseId": 1828,
+        "versesCount": 7
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 1829,
+        "endVerseId": 1861,
+        "versesCount": 33
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 1862,
+        "endVerseId": 1882,
+        "versesCount": 21
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 1883,
+        "endVerseId": 1901,
+        "versesCount": 19
+      },
+      {
+        "chapter": 10,
+        "startVerseId": 1902,
+        "endVerseId": 1923,
+        "versesCount": 22
+      },
+      {
+        "chapter": 11,
+        "startVerseId": 1924,
+        "endVerseId": 1952,
+        "versesCount": 29
+      },
+      {
+        "chapter": 12,
+        "startVerseId": 1953,
+        "endVerseId": 1989,
+        "versesCount": 37
+      },
+      {
+        "chapter": 13,
+        "startVerseId": 1990,
+        "endVerseId": 2024,
+        "versesCount": 35
+      },
+      {
+        "chapter": 14,
+        "startVerseId": 2025,
+        "endVerseId": 2036,
+        "versesCount": 12
+      },
+      {
+        "chapter": 15,
+        "startVerseId": 2037,
+        "endVerseId": 2067,
+        "versesCount": 31
+      },
+      {
+        "chapter": 16,
+        "startVerseId": 2068,
+        "endVerseId": 2082,
+        "versesCount": 15
+      },
+      {
+        "chapter": 17,
+        "startVerseId": 2083,
+        "endVerseId": 2102,
+        "versesCount": 20
+      },
+      {
+        "chapter": 18,
+        "startVerseId": 2103,
+        "endVerseId": 2137,
+        "versesCount": 35
+      },
+      {
+        "chapter": 19,
+        "startVerseId": 2138,
+        "endVerseId": 2166,
+        "versesCount": 29
+      },
+      {
+        "chapter": 20,
+        "startVerseId": 2167,
+        "endVerseId": 2192,
+        "versesCount": 26
+      },
+      {
+        "chapter": 21,
+        "startVerseId": 2193,
+        "endVerseId": 2228,
+        "versesCount": 36
+      },
+      {
+        "chapter": 22,
+        "startVerseId": 2229,
+        "endVerseId": 2244,
+        "versesCount": 16
+      },
+      {
+        "chapter": 23,
+        "startVerseId": 2245,
+        "endVerseId": 2283,
+        "versesCount": 39
+      },
+      {
+        "chapter": 24,
+        "startVerseId": 2284,
+        "endVerseId": 2308,
+        "versesCount": 25
+      },
+      {
+        "chapter": 25,
+        "startVerseId": 2309,
+        "endVerseId": 2332,
+        "versesCount": 24
+      },
+      {
+        "chapter": 26,
+        "startVerseId": 2333,
+        "endVerseId": 2371,
+        "versesCount": 39
+      },
+      {
+        "chapter": 27,
+        "startVerseId": 2372,
+        "endVerseId": 2408,
+        "versesCount": 37
+      },
+      {
+        "chapter": 28,
+        "startVerseId": 2409,
+        "endVerseId": 2428,
+        "versesCount": 20
+      },
+      {
+        "chapter": 29,
+        "startVerseId": 2429,
+        "endVerseId": 2475,
+        "versesCount": 47
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Alma",
+    "shortName": "Alma",
+    "chaptersCount": 63,
+    "versesCount": 1975,
+    "startVerseId": 2476,
+    "endVerseId": 4450,
+    "color": "#F97316",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 2476,
+        "endVerseId": 2508,
+        "versesCount": 33
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 2509,
+        "endVerseId": 2546,
+        "versesCount": 38
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 2547,
+        "endVerseId": 2573,
+        "versesCount": 27
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 2574,
+        "endVerseId": 2593,
+        "versesCount": 20
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 2594,
+        "endVerseId": 2655,
+        "versesCount": 62
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 2656,
+        "endVerseId": 2663,
+        "versesCount": 8
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 2664,
+        "endVerseId": 2690,
+        "versesCount": 27
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 2691,
+        "endVerseId": 2722,
+        "versesCount": 32
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 2723,
+        "endVerseId": 2756,
+        "versesCount": 34
+      },
+      {
+        "chapter": 10,
+        "startVerseId": 2757,
+        "endVerseId": 2788,
+        "versesCount": 32
+      },
+      {
+        "chapter": 11,
+        "startVerseId": 2789,
+        "endVerseId": 2834,
+        "versesCount": 46
+      },
+      {
+        "chapter": 12,
+        "startVerseId": 2835,
+        "endVerseId": 2871,
+        "versesCount": 37
+      },
+      {
+        "chapter": 13,
+        "startVerseId": 2872,
+        "endVerseId": 2902,
+        "versesCount": 31
+      },
+      {
+        "chapter": 14,
+        "startVerseId": 2903,
+        "endVerseId": 2931,
+        "versesCount": 29
+      },
+      {
+        "chapter": 15,
+        "startVerseId": 2932,
+        "endVerseId": 2950,
+        "versesCount": 19
+      },
+      {
+        "chapter": 16,
+        "startVerseId": 2951,
+        "endVerseId": 2971,
+        "versesCount": 21
+      },
+      {
+        "chapter": 17,
+        "startVerseId": 2972,
+        "endVerseId": 3010,
+        "versesCount": 39
+      },
+      {
+        "chapter": 18,
+        "startVerseId": 3011,
+        "endVerseId": 3053,
+        "versesCount": 43
+      },
+      {
+        "chapter": 19,
+        "startVerseId": 3054,
+        "endVerseId": 3089,
+        "versesCount": 36
+      },
+      {
+        "chapter": 20,
+        "startVerseId": 3090,
+        "endVerseId": 3119,
+        "versesCount": 30
+      },
+      {
+        "chapter": 21,
+        "startVerseId": 3120,
+        "endVerseId": 3142,
+        "versesCount": 23
+      },
+      {
+        "chapter": 22,
+        "startVerseId": 3143,
+        "endVerseId": 3177,
+        "versesCount": 35
+      },
+      {
+        "chapter": 23,
+        "startVerseId": 3178,
+        "endVerseId": 3195,
+        "versesCount": 18
+      },
+      {
+        "chapter": 24,
+        "startVerseId": 3196,
+        "endVerseId": 3225,
+        "versesCount": 30
+      },
+      {
+        "chapter": 25,
+        "startVerseId": 3226,
+        "endVerseId": 3242,
+        "versesCount": 17
+      },
+      {
+        "chapter": 26,
+        "startVerseId": 3243,
+        "endVerseId": 3279,
+        "versesCount": 37
+      },
+      {
+        "chapter": 27,
+        "startVerseId": 3280,
+        "endVerseId": 3309,
+        "versesCount": 30
+      },
+      {
+        "chapter": 28,
+        "startVerseId": 3310,
+        "endVerseId": 3323,
+        "versesCount": 14
+      },
+      {
+        "chapter": 29,
+        "startVerseId": 3324,
+        "endVerseId": 3340,
+        "versesCount": 17
+      },
+      {
+        "chapter": 30,
+        "startVerseId": 3341,
+        "endVerseId": 3400,
+        "versesCount": 60
+      },
+      {
+        "chapter": 31,
+        "startVerseId": 3401,
+        "endVerseId": 3438,
+        "versesCount": 38
+      },
+      {
+        "chapter": 32,
+        "startVerseId": 3439,
+        "endVerseId": 3481,
+        "versesCount": 43
+      },
+      {
+        "chapter": 33,
+        "startVerseId": 3482,
+        "endVerseId": 3504,
+        "versesCount": 23
+      },
+      {
+        "chapter": 34,
+        "startVerseId": 3505,
+        "endVerseId": 3545,
+        "versesCount": 41
+      },
+      {
+        "chapter": 35,
+        "startVerseId": 3546,
+        "endVerseId": 3561,
+        "versesCount": 16
+      },
+      {
+        "chapter": 36,
+        "startVerseId": 3562,
+        "endVerseId": 3591,
+        "versesCount": 30
+      },
+      {
+        "chapter": 37,
+        "startVerseId": 3592,
+        "endVerseId": 3638,
+        "versesCount": 47
+      },
+      {
+        "chapter": 38,
+        "startVerseId": 3639,
+        "endVerseId": 3653,
+        "versesCount": 15
+      },
+      {
+        "chapter": 39,
+        "startVerseId": 3654,
+        "endVerseId": 3672,
+        "versesCount": 19
+      },
+      {
+        "chapter": 40,
+        "startVerseId": 3673,
+        "endVerseId": 3698,
+        "versesCount": 26
+      },
+      {
+        "chapter": 41,
+        "startVerseId": 3699,
+        "endVerseId": 3713,
+        "versesCount": 15
+      },
+      {
+        "chapter": 42,
+        "startVerseId": 3714,
+        "endVerseId": 3744,
+        "versesCount": 31
+      },
+      {
+        "chapter": 43,
+        "startVerseId": 3745,
+        "endVerseId": 3798,
+        "versesCount": 54
+      },
+      {
+        "chapter": 44,
+        "startVerseId": 3799,
+        "endVerseId": 3822,
+        "versesCount": 24
+      },
+      {
+        "chapter": 45,
+        "startVerseId": 3823,
+        "endVerseId": 3846,
+        "versesCount": 24
+      },
+      {
+        "chapter": 46,
+        "startVerseId": 3847,
+        "endVerseId": 3887,
+        "versesCount": 41
+      },
+      {
+        "chapter": 47,
+        "startVerseId": 3888,
+        "endVerseId": 3923,
+        "versesCount": 36
+      },
+      {
+        "chapter": 48,
+        "startVerseId": 3924,
+        "endVerseId": 3948,
+        "versesCount": 25
+      },
+      {
+        "chapter": 49,
+        "startVerseId": 3949,
+        "endVerseId": 3978,
+        "versesCount": 30
+      },
+      {
+        "chapter": 50,
+        "startVerseId": 3979,
+        "endVerseId": 4018,
+        "versesCount": 40
+      },
+      {
+        "chapter": 51,
+        "startVerseId": 4019,
+        "endVerseId": 4055,
+        "versesCount": 37
+      },
+      {
+        "chapter": 52,
+        "startVerseId": 4056,
+        "endVerseId": 4095,
+        "versesCount": 40
+      },
+      {
+        "chapter": 53,
+        "startVerseId": 4096,
+        "endVerseId": 4118,
+        "versesCount": 23
+      },
+      {
+        "chapter": 54,
+        "startVerseId": 4119,
+        "endVerseId": 4142,
+        "versesCount": 24
+      },
+      {
+        "chapter": 55,
+        "startVerseId": 4143,
+        "endVerseId": 4177,
+        "versesCount": 35
+      },
+      {
+        "chapter": 56,
+        "startVerseId": 4178,
+        "endVerseId": 4234,
+        "versesCount": 57
+      },
+      {
+        "chapter": 57,
+        "startVerseId": 4235,
+        "endVerseId": 4270,
+        "versesCount": 36
+      },
+      {
+        "chapter": 58,
+        "startVerseId": 4271,
+        "endVerseId": 4311,
+        "versesCount": 41
+      },
+      {
+        "chapter": 59,
+        "startVerseId": 4312,
+        "endVerseId": 4324,
+        "versesCount": 13
+      },
+      {
+        "chapter": 60,
+        "startVerseId": 4325,
+        "endVerseId": 4360,
+        "versesCount": 36
+      },
+      {
+        "chapter": 61,
+        "startVerseId": 4361,
+        "endVerseId": 4381,
+        "versesCount": 21
+      },
+      {
+        "chapter": 62,
+        "startVerseId": 4382,
+        "endVerseId": 4433,
+        "versesCount": 52
+      },
+      {
+        "chapter": 63,
+        "startVerseId": 4434,
+        "endVerseId": 4450,
+        "versesCount": 17
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Helaman",
+    "shortName": "Hel.",
+    "chaptersCount": 16,
+    "versesCount": 497,
+    "startVerseId": 4451,
+    "endVerseId": 4947,
+    "color": "#F59E0B",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 4451,
+        "endVerseId": 4484,
+        "versesCount": 34
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 4485,
+        "endVerseId": 4498,
+        "versesCount": 14
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 4499,
+        "endVerseId": 4535,
+        "versesCount": 37
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 4536,
+        "endVerseId": 4561,
+        "versesCount": 26
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 4562,
+        "endVerseId": 4613,
+        "versesCount": 52
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 4614,
+        "endVerseId": 4654,
+        "versesCount": 41
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 4655,
+        "endVerseId": 4683,
+        "versesCount": 29
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 4684,
+        "endVerseId": 4711,
+        "versesCount": 28
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 4712,
+        "endVerseId": 4752,
+        "versesCount": 41
+      },
+      {
+        "chapter": 10,
+        "startVerseId": 4753,
+        "endVerseId": 4771,
+        "versesCount": 19
+      },
+      {
+        "chapter": 11,
+        "startVerseId": 4772,
+        "endVerseId": 4809,
+        "versesCount": 38
+      },
+      {
+        "chapter": 12,
+        "startVerseId": 4810,
+        "endVerseId": 4835,
+        "versesCount": 26
+      },
+      {
+        "chapter": 13,
+        "startVerseId": 4836,
+        "endVerseId": 4874,
+        "versesCount": 39
+      },
+      {
+        "chapter": 14,
+        "startVerseId": 4875,
+        "endVerseId": 4905,
+        "versesCount": 31
+      },
+      {
+        "chapter": 15,
+        "startVerseId": 4906,
+        "endVerseId": 4922,
+        "versesCount": 17
+      },
+      {
+        "chapter": 16,
+        "startVerseId": 4923,
+        "endVerseId": 4947,
+        "versesCount": 25
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "3 Nephi",
+    "shortName": "3 Ne.",
+    "chaptersCount": 30,
+    "versesCount": 785,
+    "startVerseId": 4948,
+    "endVerseId": 5732,
+    "color": "#10B981",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 4948,
+        "endVerseId": 4977,
+        "versesCount": 30
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 4978,
+        "endVerseId": 4996,
+        "versesCount": 19
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 4997,
+        "endVerseId": 5022,
+        "versesCount": 26
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 5023,
+        "endVerseId": 5055,
+        "versesCount": 33
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 5056,
+        "endVerseId": 5081,
+        "versesCount": 26
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 5082,
+        "endVerseId": 5111,
+        "versesCount": 30
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 5112,
+        "endVerseId": 5137,
+        "versesCount": 26
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 5138,
+        "endVerseId": 5162,
+        "versesCount": 25
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 5163,
+        "endVerseId": 5184,
+        "versesCount": 22
+      },
+      {
+        "chapter": 10,
+        "startVerseId": 5185,
+        "endVerseId": 5203,
+        "versesCount": 19
+      },
+      {
+        "chapter": 11,
+        "startVerseId": 5204,
+        "endVerseId": 5244,
+        "versesCount": 41
+      },
+      {
+        "chapter": 12,
+        "startVerseId": 5245,
+        "endVerseId": 5292,
+        "versesCount": 48
+      },
+      {
+        "chapter": 13,
+        "startVerseId": 5293,
+        "endVerseId": 5326,
+        "versesCount": 34
+      },
+      {
+        "chapter": 14,
+        "startVerseId": 5327,
+        "endVerseId": 5353,
+        "versesCount": 27
+      },
+      {
+        "chapter": 15,
+        "startVerseId": 5354,
+        "endVerseId": 5377,
+        "versesCount": 24
+      },
+      {
+        "chapter": 16,
+        "startVerseId": 5378,
+        "endVerseId": 5397,
+        "versesCount": 20
+      },
+      {
+        "chapter": 17,
+        "startVerseId": 5398,
+        "endVerseId": 5422,
+        "versesCount": 25
+      },
+      {
+        "chapter": 18,
+        "startVerseId": 5423,
+        "endVerseId": 5461,
+        "versesCount": 39
+      },
+      {
+        "chapter": 19,
+        "startVerseId": 5462,
+        "endVerseId": 5497,
+        "versesCount": 36
+      },
+      {
+        "chapter": 20,
+        "startVerseId": 5498,
+        "endVerseId": 5543,
+        "versesCount": 46
+      },
+      {
+        "chapter": 21,
+        "startVerseId": 5544,
+        "endVerseId": 5572,
+        "versesCount": 29
+      },
+      {
+        "chapter": 22,
+        "startVerseId": 5573,
+        "endVerseId": 5589,
+        "versesCount": 17
+      },
+      {
+        "chapter": 23,
+        "startVerseId": 5590,
+        "endVerseId": 5603,
+        "versesCount": 14
+      },
+      {
+        "chapter": 24,
+        "startVerseId": 5604,
+        "endVerseId": 5621,
+        "versesCount": 18
+      },
+      {
+        "chapter": 25,
+        "startVerseId": 5622,
+        "endVerseId": 5627,
+        "versesCount": 6
+      },
+      {
+        "chapter": 26,
+        "startVerseId": 5628,
+        "endVerseId": 5648,
+        "versesCount": 21
+      },
+      {
+        "chapter": 27,
+        "startVerseId": 5649,
+        "endVerseId": 5681,
+        "versesCount": 33
+      },
+      {
+        "chapter": 28,
+        "startVerseId": 5682,
+        "endVerseId": 5721,
+        "versesCount": 40
+      },
+      {
+        "chapter": 29,
+        "startVerseId": 5722,
+        "endVerseId": 5730,
+        "versesCount": 9
+      },
+      {
+        "chapter": 30,
+        "startVerseId": 5731,
+        "endVerseId": 5732,
+        "versesCount": 2
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "4 Nephi",
+    "shortName": "4 Ne.",
+    "chaptersCount": 1,
+    "versesCount": 49,
+    "startVerseId": 5733,
+    "endVerseId": 5781,
+    "color": "#14B8A6",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 5733,
+        "endVerseId": 5781,
+        "versesCount": 49
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Mormon",
+    "shortName": "Morm.",
+    "chaptersCount": 9,
+    "versesCount": 227,
+    "startVerseId": 5782,
+    "endVerseId": 6008,
+    "color": "#06B6D4",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 5782,
+        "endVerseId": 5800,
+        "versesCount": 19
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 5801,
+        "endVerseId": 5829,
+        "versesCount": 29
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 5830,
+        "endVerseId": 5851,
+        "versesCount": 22
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 5852,
+        "endVerseId": 5874,
+        "versesCount": 23
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 5875,
+        "endVerseId": 5898,
+        "versesCount": 24
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 5899,
+        "endVerseId": 5920,
+        "versesCount": 22
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 5921,
+        "endVerseId": 5930,
+        "versesCount": 10
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 5931,
+        "endVerseId": 5971,
+        "versesCount": 41
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 5972,
+        "endVerseId": 6008,
+        "versesCount": 37
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Ether",
+    "shortName": "Ether",
+    "chaptersCount": 15,
+    "versesCount": 433,
+    "startVerseId": 6009,
+    "endVerseId": 6441,
+    "color": "#0EA5E9",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 6009,
+        "endVerseId": 6051,
+        "versesCount": 43
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 6052,
+        "endVerseId": 6076,
+        "versesCount": 25
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 6077,
+        "endVerseId": 6104,
+        "versesCount": 28
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 6105,
+        "endVerseId": 6123,
+        "versesCount": 19
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 6124,
+        "endVerseId": 6129,
+        "versesCount": 6
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 6130,
+        "endVerseId": 6159,
+        "versesCount": 30
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 6160,
+        "endVerseId": 6186,
+        "versesCount": 27
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 6187,
+        "endVerseId": 6212,
+        "versesCount": 26
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 6213,
+        "endVerseId": 6247,
+        "versesCount": 35
+      },
+      {
+        "chapter": 10,
+        "startVerseId": 6248,
+        "endVerseId": 6281,
+        "versesCount": 34
+      },
+      {
+        "chapter": 11,
+        "startVerseId": 6282,
+        "endVerseId": 6304,
+        "versesCount": 23
+      },
+      {
+        "chapter": 12,
+        "startVerseId": 6305,
+        "endVerseId": 6345,
+        "versesCount": 41
+      },
+      {
+        "chapter": 13,
+        "startVerseId": 6346,
+        "endVerseId": 6376,
+        "versesCount": 31
+      },
+      {
+        "chapter": 14,
+        "startVerseId": 6377,
+        "endVerseId": 6407,
+        "versesCount": 31
+      },
+      {
+        "chapter": 15,
+        "startVerseId": 6408,
+        "endVerseId": 6441,
+        "versesCount": 34
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Moroni",
+    "shortName": "Moro.",
+    "chaptersCount": 10,
+    "versesCount": 163,
+    "startVerseId": 6442,
+    "endVerseId": 6604,
+    "color": "#3B82F6",
+    "chaptersList": [
+      {
+        "chapter": 1,
+        "startVerseId": 6442,
+        "endVerseId": 6445,
+        "versesCount": 4
+      },
+      {
+        "chapter": 2,
+        "startVerseId": 6446,
+        "endVerseId": 6448,
+        "versesCount": 3
+      },
+      {
+        "chapter": 3,
+        "startVerseId": 6449,
+        "endVerseId": 6452,
+        "versesCount": 4
+      },
+      {
+        "chapter": 4,
+        "startVerseId": 6453,
+        "endVerseId": 6455,
+        "versesCount": 3
+      },
+      {
+        "chapter": 5,
+        "startVerseId": 6456,
+        "endVerseId": 6457,
+        "versesCount": 2
+      },
+      {
+        "chapter": 6,
+        "startVerseId": 6458,
+        "endVerseId": 6466,
+        "versesCount": 9
+      },
+      {
+        "chapter": 7,
+        "startVerseId": 6467,
+        "endVerseId": 6514,
+        "versesCount": 48
+      },
+      {
+        "chapter": 8,
+        "startVerseId": 6515,
+        "endVerseId": 6544,
+        "versesCount": 30
+      },
+      {
+        "chapter": 9,
+        "startVerseId": 6545,
+        "endVerseId": 6570,
+        "versesCount": 26
+      },
+      {
+        "chapter": 10,
+        "startVerseId": 6571,
+        "endVerseId": 6604,
+        "versesCount": 34
+      }
+    ]
+  }
+]

@@ -1,0 +1,206 @@
+[
+  {
+    "source": 127,
+    "target": 536,
+    "sourceRef": "1 Nephi 5:14",
+    "targetRef": "1 Nephi 19:21",
+    "type": "quotation",
+    "note": "Nephi traces his genealogy and explains the record kept on the plates of brass.",
+    "category": "internal"
+  },
+  {
+    "source": 165,
+    "target": 230,
+    "sourceRef": "1 Nephi 8:2",
+    "targetRef": "1 Nephi 11:1",
+    "type": "prophecy-vision",
+    "note": "Nephi desires to behold and understand the vision seen by his father Lehi.",
+    "category": "internal"
+  },
+  {
+    "source": 182,
+    "target": 254,
+    "sourceRef": "1 Nephi 8:19",
+    "targetRef": "1 Nephi 11:25",
+    "type": "typology",
+    "note": "The iron rod which Lehi saw is interpreted as the word of God leading to the tree of life.",
+    "category": "internal"
+  },
+  {
+    "source": 193,
+    "target": 384,
+    "sourceRef": "1 Nephi 8:30",
+    "targetRef": "1 Nephi 15:24",
+    "type": "fulfillment",
+    "note": "Holding fast to the rod of iron protects against the fiery darts of the adversary.",
+    "category": "internal"
+  },
+  {
+    "source": 588,
+    "target": 1191,
+    "sourceRef": "1 Nephi 22:1",
+    "targetRef": "2 Nephi 25:1",
+    "type": "parallel",
+    "note": "Nephi expounds the words of Isaiah to his brethren.",
+    "category": "internal"
+  },
+  {
+    "source": 677,
+    "target": 3708,
+    "sourceRef": "2 Nephi 2:27",
+    "targetRef": "Alma 41:10",
+    "type": "paraphrase",
+    "topics": "agency",
+    "note": "\"Free to choose liberty and eternal life... or to choose captivity and death\" and \"wickedness never was happiness\" both teach that agency's consequences are built into the choice itself, not arbitrarily assigned afterward.",
+    "category": "internal"
+  },
+  {
+    "source": 1221,
+    "target": 5211,
+    "sourceRef": "2 Nephi 26:1",
+    "targetRef": "3 Nephi 11:8",
+    "type": "fulfillment",
+    "note": "Nephi foretells that Christ will appear unto his seed after His resurrection.",
+    "category": "internal"
+  },
+  {
+    "source": 1754,
+    "target": 5213,
+    "sourceRef": "Mosiah 3:5",
+    "targetRef": "3 Nephi 11:10",
+    "type": "fulfillment",
+    "note": "King Benjamin's angelic prophecy of Christ descending among men is realized.",
+    "category": "internal"
+  },
+  {
+    "source": 1803,
+    "target": 6331,
+    "sourceRef": "Mosiah 4:27",
+    "targetRef": "Ether 12:27",
+    "type": "paraphrase",
+    "topics": "grace",
+    "note": "\"My grace is sufficient for all men that humble themselves\" and \"it is not requisite that a man should run faster than he has strength\" both teach that the Lord's expectations are matched to what His grace actually enables, not to unaided human effort alone.",
+    "category": "internal"
+  },
+  {
+    "source": 1808,
+    "target": 2607,
+    "sourceRef": "Mosiah 5:2",
+    "targetRef": "Alma 5:14",
+    "type": "paraphrase",
+    "topics": "repentance",
+    "note": "Both use the same distinctive phrase for true conversion: Alma asks \"have ye experienced this mighty change in your hearts?\"; King Benjamin's people already had, having \"no more disposition to do evil, but to do good continually.\"",
+    "category": "internal"
+  },
+  {
+    "source": 2025,
+    "target": 2037,
+    "sourceRef": "Mosiah 14:1",
+    "targetRef": "Mosiah 15:1",
+    "type": "prophecy",
+    "note": "Abinadi quotes Isaiah 53 and expounds how God himself shall redeem his people.",
+    "category": "internal"
+  },
+  {
+    "source": 2084,
+    "target": 2103,
+    "sourceRef": "Mosiah 17:2",
+    "targetRef": "Mosiah 18:1",
+    "type": "fulfillment",
+    "note": "Alma repents at the words of Abinadi and secretly begins preaching the gospel at the Waters of Mormon.",
+    "category": "internal"
+  },
+  {
+    "source": 2097,
+    "target": 2157,
+    "sourceRef": "Mosiah 17:15",
+    "targetRef": "Mosiah 19:20",
+    "type": "fulfillment",
+    "note": "Abinadi's prophecy on King Noah's death by fire is fulfilled.",
+    "category": "internal"
+  },
+  {
+    "source": 2395,
+    "target": 3579,
+    "sourceRef": "Mosiah 27:24",
+    "targetRef": "Alma 36:18",
+    "type": "parallel",
+    "note": "Alma the Younger recounts his three-day experience of repentance through remembering Jesus Christ.",
+    "category": "internal"
+  },
+  {
+    "source": 2399,
+    "target": 3646,
+    "sourceRef": "Mosiah 27:28",
+    "targetRef": "Alma 38:8",
+    "type": "parallel",
+    "note": "Alma testifies to his son Shiblon of his miraculous conversion.",
+    "category": "internal"
+  },
+  {
+    "source": 4604,
+    "target": 5421,
+    "sourceRef": "Helaman 5:43",
+    "targetRef": "3 Nephi 17:24",
+    "type": "paraphrase",
+    "topics": "jesus-christ",
+    "note": "Both describe people \"encircled about as if by fire\" from heaven - Nephi and Lehi in a Lamanite prison, and the Nephite children surrounded by angels at Christ's own visit - the same divine manifestation, decades apart.",
+    "category": "internal"
+  },
+  {
+    "source": 4876,
+    "target": 4962,
+    "sourceRef": "Helaman 14:2",
+    "targetRef": "3 Nephi 1:15",
+    "type": "paraphrase",
+    "topics": "prophets",
+    "note": "Samuel the Lamanite prophesies a night and a day and a night without darkness as the sign of Christ's birth - fulfilled precisely as foretold, five years later.",
+    "category": "internal"
+  },
+  {
+    "source": 4894,
+    "target": 5142,
+    "sourceRef": "Helaman 14:20",
+    "targetRef": "3 Nephi 8:5",
+    "type": "paraphrase",
+    "topics": "atonement",
+    "note": "Samuel foretells three days of darkness, storms, and great destruction marking Christ's death on the other side of the world - fulfilled exactly as prophesied at the moment of the crucifixion.",
+    "category": "internal"
+  },
+  {
+    "source": 4899,
+    "target": 5598,
+    "sourceRef": "Helaman 14:25",
+    "targetRef": "3 Nephi 23:9",
+    "type": "fulfillment",
+    "note": "Jesus commands the Nephite record keepers to record that many saints arose from the dead, as prophesied by Samuel.",
+    "category": "internal"
+  },
+  {
+    "source": 5230,
+    "target": 5691,
+    "sourceRef": "3 Nephi 11:27",
+    "targetRef": "3 Nephi 28:10",
+    "type": "doctrine",
+    "note": "The doctrine of Christ: the Father, Son, and Holy Ghost are one.",
+    "category": "internal"
+  },
+  {
+    "source": 5931,
+    "target": 6442,
+    "sourceRef": "Mormon 8:1",
+    "targetRef": "Moroni 1:1",
+    "type": "narrative",
+    "note": "Moroni takes up the record after the destruction of the Nephite nation at Cumorah.",
+    "category": "internal"
+  },
+  {
+    "source": 6008,
+    "target": 6573,
+    "sourceRef": "Mormon 9:37",
+    "targetRef": "Moroni 10:3",
+    "type": "exhortation",
+    "note": "Moroni's concluding farewell and final exhortation to remember God's mercy throughout all generations.",
+    "category": "internal"
+  }
+]

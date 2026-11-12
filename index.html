@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book of Mormon Cross-References | Interactive Arc Diagram</title>
+  <meta name="description" content="Explore all 6,604 verses and cross-references of the Book of Mormon with an interactive arc visualization, biblical parallels, and chapter study." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <h1 id="appTitle">Book of Mormon Cross-References</h1>
+        <p id="appSubtitle">Explore connections, fulfillments, quotations, and biblical parallels across 6,604 verses.</p>
+      </div>
+      <div class="badges">
+        <span class="badge badge-primary" id="badgeBooks">15 Books</span>
+        <span class="badge" id="badgeChapters">239 Chapters</span>
+        <span class="badge" id="badgeVerses">6,604 Verses</span>
+        <button id="langToggleBtn" class="lang-btn" aria-label="Toggle Language">Português</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Controls Bar -->
+  <div class="controls-bar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search verse (e.g. Alma 32:21, 1 Ne 3:7) or keyword..." />
+    </div>
+
+    <div class="filter-group">
+      <button class="filter-btn active" data-filter="all" id="btnFilterAll">All Connections</button>
+      <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal Arcs (BOM ↔ BOM)</button>
+      <button class="filter-btn" data-filter="external" id="btnFilterExternal">Bible Parallels (OT/NT)</button>
+      
+      <select id="bookSelect" class="select-input" aria-label="Select Book">
+        <option value="all">Whole Book of Mormon</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Main View Area -->
+  <main>
+    <div class="canvas-wrapper">
+      <canvas id="arcCanvas"></canvas>
+      <div id="tooltip"></div>
+
+      <!-- Axis bar containing the 15 books proportional segments -->
+      <div class="axis-container">
+        <div class="axis-bar" id="axisBar" title="Click or hover to browse books"></div>
+        <div class="book-labels-row" id="bookLabelsRow"></div>
+      </div>
+    </div>
+
+    <!-- Study Panel / Inspector -->
+    <section class="study-panel" id="studyPanel">
+      <div class="panel-header">
+        <h2 id="selectedVerseTitle">
+          <span id="selectedVerseRef">Select a Verse</span>
+          <span class="tag tag-internal" id="selectedVerseBadge" style="display: none;">Active</span>
+        </h2>
+        <span class="badge" id="connectionsCountBadge">0 Connections</span>
+      </div>
+
+      <div class="verse-text-box" id="verseTextBox">
+        Hover or click on any point along the scripture axis above to inspect verses and connected arcs.
+      </div>
+
+      <div class="connections-section" id="connectionsSection">
+        <h3 id="connectionsSectionTitle">Cross-References & Parallels</h3>
+        <div class="connections-list" id="connectionsList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <div id="officialLinkContainer" style="display: none;">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="official-link-btn" id="officialLink">
+          Read chapter on ChurchofJesusChrist.org ↗
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p id="footerCredits">
+      Public Domain scripture data via <a href="https://scriptures.nephi.org/" target="_blank" rel="noopener">scriptures.nephi.org</a> (LDS Documentation Project) and open scripture research.
+      Inspired by <a href="https://github.com/trekhleb/bible-cross-references" target="_blank" rel="noopener">trekhleb/bible-cross-references</a> and Chris Harrison.
+    </p>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
