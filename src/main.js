@@ -10,6 +10,7 @@ let currentTourIndex = 0;
 let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] }
 let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
 
+let currentViewMode = "dual"; // "dual" | "radial" | "classic"
 let selectedVerseId = 142; // Default to 1 Nephi 3:7 ("I will go and do...")
 let hoveredVerseId = null;
 let hoveredBookId = null;
@@ -84,32 +85,41 @@ const FEATURED_CONNECTIONS = [
   }
 ];
 
-// DOM Elements
-const canvas = document.getElementById("arcCanvas");
-const ctx = canvas.getContext("2d");
-const tooltip = document.getElementById("tooltip");
-const axisBar = document.getElementById("axisBar");
-const bookLabelsRow = document.getElementById("bookLabelsRow");
-const bookSelect = document.getElementById("bookSelect");
-const topicSelect = document.getElementById("topicSelect");
-const searchInput = document.getElementById("searchInput");
-const filterBtns = document.querySelectorAll(".filter-btn");
-const langToggleBtn = document.getElementById("langToggleBtn");
-const langText = document.getElementById("langText");
+// Bible Books Layout for Dual View (Top Rail)
+const BIBLE_BOOKS = [
+  { name: "Genesis", short: "Gen", color: "#f59e0b", pos: 0.04 },
+  { name: "Exodus", short: "Exo", color: "#f59e0b", pos: 0.10 },
+  { name: "Numbers", short: "Num", color: "#f59e0b", pos: 0.15 },
+  { name: "Deuteronomy", short: "Deut", color: "#f59e0b", pos: 0.20 },
+  { name: "Psalms", short: "Ps", color: "#d97706", pos: 0.26 },
+  { name: "Proverbs", short: "Prov", color: "#d97706", pos: 0.31 },
+  { name: "Isaiah", short: "Isa (525 refs)", color: "#fbbf24", pos: 0.40, weight: 2.5 },
+  { name: "Jeremiah", short: "Jer", color: "#d97706", pos: 0.48 },
+  { name: "Ezekiel", short: "Ezek", color: "#d97706", pos: 0.52 },
+  { name: "Micah", short: "Mic", color: "#d97706", pos: 0.56 },
+  { name: "Malachi", short: "Mal", color: "#f59e0b", pos: 0.60 },
+  // New Testament
+  { name: "Matthew", short: "Matt (113 refs)", color: "#10b981", pos: 0.68, weight: 2.0 },
+  { name: "Mark", short: "Mark", color: "#10b981", pos: 0.74 },
+  { name: "Luke", short: "Luke", color: "#10b981", pos: 0.78 },
+  { name: "John", short: "John", color: "#10b981", pos: 0.82 },
+  { name: "Acts", short: "Acts", color: "#059669", pos: 0.86 },
+  { name: "Romans", short: "Rom", color: "#059669", pos: 0.89 },
+  { name: "1 Corinthians", short: "1 Cor", color: "#059669", pos: 0.92 },
+  { name: "Hebrews", short: "Heb", color: "#059669", pos: 0.95 },
+  { name: "Revelation", short: "Rev", color: "#047857", pos: 0.98 }
+];
 
-const featuredPillsRow = document.getElementById("featuredPillsRow");
-const prevConnBtn = document.getElementById("prevConnBtn");
-const nextConnBtn = document.getElementById("nextConnBtn");
-const randomConnBtn = document.getElementById("randomConnBtn");
-const connCounterBadge = document.getElementById("connCounterBadge");
-
-const selectedVerseRef = document.getElementById("selectedVerseRef");
-const selectedVerseBadge = document.getElementById("selectedVerseBadge");
-const connectionsCountBadge = document.getElementById("connectionsCountBadge");
-const verseTextBox = document.getElementById("verseTextBox");
-const connectionsList = document.getElementById("connectionsList");
-const officialLinkContainer = document.getElementById("officialLinkContainer");
-const officialLink = document.getElementById("officialLink");
+function getBibleBookX(refStr, width, paddingX) {
+  const usable = width - paddingX * 2;
+  for (const b of BIBLE_BOOKS) {
+    if (refStr.startsWith(b.name) || refStr.startsWith(b.short)) {
+      return paddingX + b.pos * usable;
+    }
+  }
+  // Default fallback middle
+  return paddingX + 0.5 * usable;
+}
 
 // Canonical Church URL slugs
 const CHURCH_BOOK_SLUGS = {
@@ -130,12 +140,41 @@ const CHURCH_BOOK_SLUGS = {
   "Moroni": "moro"
 };
 
-// Layout calculations
-const PADDING_X = 24;
-const PADDING_TOP = 24;
+// DOM Elements
+const canvas = document.getElementById("arcCanvas");
+const ctx = canvas.getContext("2d");
+const tooltip = document.getElementById("tooltip");
+const axisContainer = document.getElementById("axisContainer");
+const axisBar = document.getElementById("axisBar");
+const bookLabelsRow = document.getElementById("bookLabelsRow");
+const bookSelect = document.getElementById("bookSelect");
+const topicSelect = document.getElementById("topicSelect");
+const searchInput = document.getElementById("searchInput");
+const filterBtns = document.querySelectorAll(".filter-btn");
+const viewBtns = document.querySelectorAll(".view-btn");
+const langToggleBtn = document.getElementById("langToggleBtn");
+const langText = document.getElementById("langText");
+
+const dualTopLabelRow = document.getElementById("dualTopLabelRow");
+const dualBottomLabelRow = document.getElementById("dualBottomLabelRow");
+const featuredPillsRow = document.getElementById("featuredPillsRow");
+const prevConnBtn = document.getElementById("prevConnBtn");
+const nextConnBtn = document.getElementById("nextConnBtn");
+const randomConnBtn = document.getElementById("randomConnBtn");
+const connCounterBadge = document.getElementById("connCounterBadge");
+
+const selectedVerseRef = document.getElementById("selectedVerseRef");
+const selectedVerseBadge = document.getElementById("selectedVerseBadge");
+const connectionsCountBadge = document.getElementById("connectionsCountBadge");
+const verseTextBox = document.getElementById("verseTextBox");
+const connectionsList = document.getElementById("connectionsList");
+const officialLinkContainer = document.getElementById("officialLinkContainer");
+const officialLink = document.getElementById("officialLink");
+
+// Layout constants
+const PADDING_X = 26;
 let usableWidth = 0;
 let canvasHeight = 0;
-let baselineY = 0;
 
 function setupCanvas() {
   const dpr = window.devicePixelRatio || 1;
@@ -146,7 +185,6 @@ function setupCanvas() {
 
   usableWidth = rect.width - PADDING_X * 2;
   canvasHeight = rect.height;
-  baselineY = canvasHeight - 18;
   draw();
 }
 
@@ -160,7 +198,7 @@ function xToVerse(x) {
   return Math.max(1, Math.min(6604, Math.round(ratio * 6603) + 1));
 }
 
-// Find nearest verse with connections within a pixel threshold for magnetic snapping
+// Snapping for horizontal axes
 function findNearestConnectedVerse(mouseX, pixelTolerance = 20) {
   if (connectedVerseIdsList.length === 0) return xToVerse(mouseX);
 
@@ -179,12 +217,52 @@ function findNearestConnectedVerse(mouseX, pixelTolerance = 20) {
   return bestId !== null ? bestId : xToVerse(mouseX);
 }
 
-// Draw the arc diagram with glowing hotspots
+// Snapping for radial circular mode
+function radialToVerse(angleRad) {
+  // Normalize angle so -PI/2 (top) is 0
+  let norm = angleRad + Math.PI / 2;
+  while (norm < 0) norm += Math.PI * 2;
+  while (norm >= Math.PI * 2) norm -= Math.PI * 2;
+
+  const ratio = norm / (Math.PI * 2);
+  const vId = Math.max(1, Math.min(6604, Math.round(ratio * 6603) + 1));
+
+  // Snap to nearest connected if within ~60 verses
+  let best = vId;
+  let minDiff = 60;
+  for (const cv of connectedVerseIdsList) {
+    const d = Math.abs(cv - vId);
+    if (d < minDiff) {
+      minDiff = d;
+      best = cv;
+    }
+  }
+  return best;
+}
+
+// Main Draw Dispatcher
 function draw() {
   const rect = canvas.getBoundingClientRect();
   ctx.clearRect(0, 0, rect.width, rect.height);
 
   if (books.length === 0) return;
+
+  if (currentViewMode === "dual") {
+    drawDualView();
+  } else if (currentViewMode === "radial") {
+    drawRadialView();
+  } else {
+    drawClassicView();
+  }
+}
+
+// -------------------------------------------------------------
+// VIEW 1: DUAL VIEW (Bridge of Testaments: Bible Top, BOM Bottom)
+// -------------------------------------------------------------
+function drawDualView() {
+  const rect = canvas.getBoundingClientRect();
+  const topY = 48;
+  const bottomY = canvasHeight - 28;
 
   const activeVerse = hoveredVerseId || selectedVerseId;
   const activeVerseConnections = verseConnectionsMap.get(activeVerse) || { internal: [], external: [] };
@@ -194,12 +272,35 @@ function draw() {
     connectedVerseIds.add(l.target);
   });
 
-  // 1. Draw Baseline & Book dividers
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+  // A. Top Rail (Holy Bible)
+  ctx.strokeStyle = "rgba(245, 158, 11, 0.25)";
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(PADDING_X, baselineY);
-  ctx.lineTo(PADDING_X + usableWidth, baselineY);
+  ctx.moveTo(PADDING_X, topY);
+  ctx.lineTo(PADDING_X + usableWidth, topY);
+  ctx.stroke();
+
+  // Draw Bible book nodes on top rail
+  BIBLE_BOOKS.forEach(b => {
+    const bx = PADDING_X + b.pos * usableWidth;
+    ctx.fillStyle = b.color;
+    ctx.beginPath();
+    ctx.arc(bx, topY, b.weight ? 3.5 : 2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Small label
+    ctx.fillStyle = b.color;
+    ctx.font = b.weight ? "bold 10px Inter, sans-serif" : "9px Inter, sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText(b.short, bx, topY - 12);
+  });
+
+  // B. Bottom Rail (Book of Mormon)
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PADDING_X, bottomY);
+  ctx.lineTo(PADDING_X + usableWidth, bottomY);
   ctx.stroke();
 
   // Book boundary tick marks
@@ -208,138 +309,364 @@ function draw() {
     ctx.strokeStyle = b.color;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(x, baselineY - 4);
-    ctx.lineTo(x, baselineY + 6);
+    ctx.moveTo(x, bottomY - 4);
+    ctx.lineTo(x, bottomY + 6);
     ctx.stroke();
   });
 
-  // 2. Draw Hotspot Glow Dots (every verse that has connections)
+  // Draw Hotspot Glow Dots
   connectedVerseIdsList.forEach(vid => {
     const hx = verseToX(vid);
-    const hasInternal = (verseConnectionsMap.get(vid)?.internal.length || 0) > 0;
-
-    ctx.fillStyle = hasInternal ? "rgba(99, 102, 241, 0.75)" : "rgba(16, 185, 129, 0.65)";
+    ctx.fillStyle = "rgba(99, 102, 241, 0.75)";
     ctx.beginPath();
-    ctx.arc(hx, baselineY, 1.8, 0, Math.PI * 2);
+    ctx.arc(hx, bottomY, 1.8, 0, Math.PI * 2);
     ctx.fill();
   });
 
-  // 3. Draw Arcs
-  const shouldDrawArcs = currentFilter !== "external";
-  if (shouldDrawArcs) {
-    const linksToDraw = internalLinks.filter(link => {
-      // Book filter
-      if (activeBookFilter !== "all") {
-        const b = books.find(item => item.id === parseInt(activeBookFilter));
-        if (b && (link.source < b.startVerseId || link.source > b.endVerseId) &&
-                 (link.target < b.startVerseId || link.target > b.endVerseId)) {
-          return false;
-        }
+  // C. Cross-Testament Bridging Beams (BOM <-> Bible)
+  if (currentFilter !== "internal") {
+    externalLinks.forEach(link => {
+      const isConnectedToActive = (link.source === activeVerse);
+      const xBom = verseToX(link.source);
+      const xBible = getBibleBookX(link.externalRef, rect.width, PADDING_X);
+
+      ctx.beginPath();
+      ctx.moveTo(xBom, bottomY);
+      // Gentle S-curve or central control point
+      const midY = (topY + bottomY) / 2;
+      ctx.bezierCurveTo(xBom, midY + 40, xBible, midY - 40, xBible, topY);
+
+      if (isConnectedToActive) {
+        // High-voltage golden beam
+        ctx.strokeStyle = "#fbbf24";
+        ctx.lineWidth = 3.0;
+        ctx.shadowColor = "rgba(245, 158, 11, 0.9)";
+        ctx.shadowBlur = 15;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Top node highlight
+        ctx.fillStyle = "#fbbf24";
+        ctx.beginPath();
+        ctx.arc(xBible, topY, 5, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (activeVerse) {
+        ctx.strokeStyle = "#10b981";
+        ctx.lineWidth = 0.6;
+        ctx.globalAlpha = 0.05;
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+      } else {
+        ctx.strokeStyle = "rgba(16, 185, 129, 0.22)";
+        ctx.lineWidth = 0.9;
+        ctx.stroke();
       }
-      // Topic filter
-      if (activeTopicFilter !== "all") {
-        const typeStr = (link.type || "").toLowerCase();
-        const noteStr = (link.note || "").toLowerCase();
-        if (activeTopicFilter === "prophecy" && !typeStr.includes("prophecy") && !typeStr.includes("fulfillment")) return false;
-        if (activeTopicFilter === "christ" && !noteStr.includes("christ") && !noteStr.includes("jesus")) return false;
-        if (activeTopicFilter === "faith" && !noteStr.includes("faith") && !noteStr.includes("repent")) return false;
-        if (activeTopicFilter === "isaiah" && !noteStr.includes("isaiah")) return false;
-      }
-      return true;
     });
+  }
 
-    linksToDraw.forEach(link => {
+  // D. Internal BOM Arcs (curving upward in the lower half)
+  if (currentFilter !== "external") {
+    internalLinks.forEach(link => {
       const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
-      const isBookActive = hoveredBookId ? (
-        (link.source >= hoveredBookId.startVerseId && link.source <= hoveredBookId.endVerseId) ||
-        (link.target >= hoveredBookId.startVerseId && link.target <= hoveredBookId.endVerseId)
-      ) : false;
-
       const x1 = verseToX(link.source);
       const x2 = verseToX(link.target);
       const dist = Math.abs(x2 - x1);
 
-      // Arc height curve (proportional & bounded)
-      const maxH = canvasHeight - PADDING_TOP - 28;
-      const arcHeight = Math.min(maxH, Math.max(26, Math.pow(dist / usableWidth, 0.72) * (maxH * 1.25)));
+      // Arc height in lower half
+      const maxH = (bottomY - topY) * 0.45;
+      const arcHeight = Math.min(maxH, Math.max(20, Math.pow(dist / usableWidth, 0.75) * maxH));
       const cx = (x1 + x2) / 2;
-      const cy = baselineY - arcHeight;
+      const cy = bottomY - arcHeight;
 
       const sourceBook = getBookForVerse(link.source);
       const baseColor = sourceBook ? sourceBook.color : "#6366f1";
 
       ctx.beginPath();
-      ctx.moveTo(x1, baselineY);
-      ctx.quadraticCurveTo(cx, cy, x2, baselineY);
+      ctx.moveTo(x1, bottomY);
+      ctx.quadraticCurveTo(cx, cy, x2, bottomY);
 
       if (isConnectedToActive) {
-        // Vibrant illuminated highlight
         ctx.strokeStyle = "#38bdf8";
         ctx.lineWidth = 2.8;
         ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
         ctx.shadowBlur = 12;
         ctx.stroke();
-        ctx.shadowBlur = 0; // reset
-      } else if (isBookActive) {
-        ctx.strokeStyle = baseColor;
-        ctx.lineWidth = 1.8;
-        ctx.globalAlpha = 0.85;
-        ctx.stroke();
-        ctx.globalAlpha = 1.0;
+        ctx.shadowBlur = 0;
       } else if (activeVerse) {
-        // Dim unselected arcs
         ctx.strokeStyle = baseColor;
-        ctx.lineWidth = 0.8;
-        ctx.globalAlpha = 0.08;
+        ctx.lineWidth = 0.7;
+        ctx.globalAlpha = 0.06;
         ctx.stroke();
         ctx.globalAlpha = 1.0;
       } else {
-        // Idle normal glow
         ctx.strokeStyle = baseColor;
-        ctx.lineWidth = 1.2;
-        ctx.globalAlpha = 0.45;
+        ctx.lineWidth = 1.1;
+        ctx.globalAlpha = 0.4;
         ctx.stroke();
         ctx.globalAlpha = 1.0;
       }
     });
   }
 
-  // 4. Draw Active Verse Pointer & Indicator
+  // Active BOM Verse Dot
   if (activeVerse) {
     const activeX = verseToX(activeVerse);
     const activeBook = getBookForVerse(activeVerse);
     const pinColor = activeBook ? activeBook.color : "#38bdf8";
 
-    // Vertical cursor beam
-    ctx.strokeStyle = "rgba(56, 189, 248, 0.35)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(activeX, PADDING_TOP);
-    ctx.lineTo(activeX, baselineY + 10);
-    ctx.stroke();
-
-    // Glow dot on baseline
     ctx.fillStyle = pinColor;
     ctx.shadowColor = pinColor;
-    ctx.shadowBlur = 14;
+    ctx.shadowBlur = 12;
     ctx.beginPath();
-    ctx.arc(activeX, baselineY, 5, 0, Math.PI * 2);
+    ctx.arc(activeX, bottomY, 5, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
 
-    // Draw connected dots along baseline
     connectedVerseIds.forEach(vid => {
       if (vid !== activeVerse) {
         const cx = verseToX(vid);
         ctx.fillStyle = "#38bdf8";
-        ctx.shadowColor = "#38bdf8";
-        ctx.shadowBlur = 9;
         ctx.beginPath();
-        ctx.arc(cx, baselineY, 3.5, 0, Math.PI * 2);
+        ctx.arc(cx, bottomY, 3.5, 0, Math.PI * 2);
         ctx.fill();
-        ctx.shadowBlur = 0;
       }
     });
+  }
+}
+
+// -------------------------------------------------------------
+// VIEW 2: RADIAL VIEW (Sacred Scripture Ring / Mandala)
+// -------------------------------------------------------------
+function drawRadialView() {
+  const rect = canvas.getBoundingClientRect();
+  const cx = rect.width / 2;
+  const cy = rect.height / 2;
+  const outerR = Math.min(rect.width, rect.height) * 0.42;
+  const innerR = outerR - 14;
+  const centerOrbR = outerR * 0.38;
+
+  const activeVerse = hoveredVerseId || selectedVerseId;
+  const activeVerseConnections = verseConnectionsMap.get(activeVerse) || { internal: [], external: [] };
+
+  function verseAngle(vId) {
+    return -Math.PI / 2 + ((vId - 1) / 6603) * (Math.PI * 2);
+  }
+
+  // 1. Draw Circumference Book Segments
+  books.forEach(b => {
+    const a1 = verseAngle(b.startVerseId);
+    const a2 = verseAngle(b.endVerseId);
+
+    ctx.strokeStyle = b.color;
+    ctx.lineWidth = (hoveredBookId && hoveredBookId.id === b.id) ? 14 : 9;
+    ctx.beginPath();
+    ctx.arc(cx, cy, outerR, a1, a2);
+    ctx.stroke();
+
+    // Book label outside the ring
+    const midAngle = (a1 + a2) / 2;
+    const labelR = outerR + 18;
+    const lx = cx + labelR * Math.cos(midAngle);
+    const ly = cy + labelR * Math.sin(midAngle);
+
+    ctx.fillStyle = b.color;
+    ctx.font = "bold 9.5px Inter, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(b.shortName, lx, ly);
+  });
+
+  // 2. Hotspots on the Ring
+  connectedVerseIdsList.forEach(vid => {
+    const ang = verseAngle(vid);
+    const hx = cx + innerR * Math.cos(ang);
+    const hy = cy + innerR * Math.sin(ang);
+
+    ctx.fillStyle = "rgba(245, 158, 11, 0.7)";
+    ctx.beginPath();
+    ctx.arc(hx, hy, 2, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // 3. Draw Chords Criss-Crossing Through the Center
+  internalLinks.forEach(link => {
+    const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
+    const a1 = verseAngle(link.source);
+    const a2 = verseAngle(link.target);
+
+    const x1 = cx + innerR * Math.cos(a1);
+    const y1 = cy + innerR * Math.sin(a1);
+    const x2 = cx + innerR * Math.cos(a2);
+    const y2 = cy + innerR * Math.sin(a2);
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    // Curve through center with slight pull
+    ctx.quadraticCurveTo(cx, cy, x2, y2);
+
+    const sourceBook = getBookForVerse(link.source);
+    const baseColor = sourceBook ? sourceBook.color : "#6366f1";
+
+    if (isConnectedToActive) {
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2.8;
+      ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
+      ctx.shadowBlur = 14;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    } else if (activeVerse) {
+      ctx.strokeStyle = baseColor;
+      ctx.lineWidth = 0.6;
+      ctx.globalAlpha = 0.05;
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+    } else {
+      ctx.strokeStyle = baseColor;
+      ctx.lineWidth = 1.1;
+      ctx.globalAlpha = 0.35;
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+    }
+  });
+
+  // 4. Center Glowing Orb (Sacred Core)
+  ctx.fillStyle = "rgba(15, 23, 42, 0.94)";
+  ctx.strokeStyle = "rgba(245, 158, 11, 0.45)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cx, cy, centerOrbR, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+
+  // Center Orb Typography
+  if (activeVerse) {
+    const vObj = verses[activeVerse - 1];
+    const conns = verseConnectionsMap.get(activeVerse) || { internal: [], external: [] };
+    const total = conns.internal.length + conns.external.length;
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    // Book & Ref
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "600 13px Cinzel, Georgia, serif";
+    ctx.fillText(vObj ? vObj.ref : `Verse #${activeVerse}`, cx, cy - 14);
+
+    // Connections count
+    ctx.fillStyle = "#38bdf8";
+    ctx.font = "bold 11px Inter, sans-serif";
+    ctx.fillText(`${total} Connections`, cx, cy + 8);
+
+    // Subtext
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "9.5px Inter, sans-serif";
+    ctx.fillText(vObj ? (vObj.book) : "The Book of Mormon", cx, cy + 24);
+
+    // Active marker dot on circumference
+    const activeAng = verseAngle(activeVerse);
+    const ax = cx + outerR * Math.cos(activeAng);
+    const ay = cy + outerR * Math.sin(activeAng);
+
+    ctx.fillStyle = "#f59e0b";
+    ctx.shadowColor = "#f59e0b";
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.arc(ax, ay, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+  }
+}
+
+// -------------------------------------------------------------
+// VIEW 3: CLASSIC VIEW (Traditional Chris Harrison Arc Diagram)
+// -------------------------------------------------------------
+function drawClassicView() {
+  const bottomY = canvasHeight - 20;
+  const activeVerse = hoveredVerseId || selectedVerseId;
+  const activeVerseConnections = verseConnectionsMap.get(activeVerse) || { internal: [], external: [] };
+
+  // Baseline
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PADDING_X, bottomY);
+  ctx.lineTo(PADDING_X + usableWidth, bottomY);
+  ctx.stroke();
+
+  // Book boundary tick marks
+  books.forEach(b => {
+    const x = verseToX(b.startVerseId);
+    ctx.strokeStyle = b.color;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x, bottomY - 4);
+    ctx.lineTo(x, bottomY + 6);
+    ctx.stroke();
+  });
+
+  // Hotspots
+  connectedVerseIdsList.forEach(vid => {
+    const hx = verseToX(vid);
+    ctx.fillStyle = "rgba(99, 102, 241, 0.75)";
+    ctx.beginPath();
+    ctx.arc(hx, bottomY, 1.8, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // Arcs
+  internalLinks.forEach(link => {
+    const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
+    const x1 = verseToX(link.source);
+    const x2 = verseToX(link.target);
+    const dist = Math.abs(x2 - x1);
+
+    const maxH = canvasHeight - 40;
+    const arcHeight = Math.min(maxH, Math.max(25, Math.pow(dist / usableWidth, 0.72) * (maxH * 1.25)));
+    const cx = (x1 + x2) / 2;
+    const cy = bottomY - arcHeight;
+
+    const sourceBook = getBookForVerse(link.source);
+    const baseColor = sourceBook ? sourceBook.color : "#6366f1";
+
+    ctx.beginPath();
+    ctx.moveTo(x1, bottomY);
+    ctx.quadraticCurveTo(cx, cy, x2, bottomY);
+
+    if (isConnectedToActive) {
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2.8;
+      ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
+      ctx.shadowBlur = 12;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    } else if (activeVerse) {
+      ctx.strokeStyle = baseColor;
+      ctx.lineWidth = 0.8;
+      ctx.globalAlpha = 0.08;
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+    } else {
+      ctx.strokeStyle = baseColor;
+      ctx.lineWidth = 1.2;
+      ctx.globalAlpha = 0.45;
+      ctx.stroke();
+      ctx.globalAlpha = 1.0;
+    }
+  });
+
+  // Active verse
+  if (activeVerse) {
+    const activeX = verseToX(activeVerse);
+    const activeBook = getBookForVerse(activeVerse);
+    const pinColor = activeBook ? activeBook.color : "#38bdf8";
+
+    ctx.fillStyle = pinColor;
+    ctx.shadowColor = pinColor;
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.arc(activeX, bottomY, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
   }
 }
 
@@ -400,7 +727,7 @@ function renderAxis() {
   });
 }
 
-// Render the Featured Connections quick-picker pills with SVG icon
+// Render the Featured Connections quick-picker pills
 function renderFeaturedPills() {
   featuredPillsRow.innerHTML = "";
   const lang = getLang();
@@ -531,13 +858,32 @@ function selectVerse(verseId) {
   draw();
 }
 
-// Mouse events on canvas with magnetic snapping to connected verses
+// Mouse events on canvas with mode-aware coordinates
 canvas.addEventListener("mousemove", (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
 
-  if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
-    const vId = findNearestConnectedVerse(mouseX, 18);
+  let vId = null;
+
+  if (currentViewMode === "radial") {
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2);
+    const outerR = Math.min(rect.width, rect.height) * 0.42;
+
+    if (dist >= outerR * 0.25 && dist <= outerR * 1.25) {
+      const angle = Math.atan2(mouseY - cy, mouseX - cx);
+      vId = radialToVerse(angle);
+    }
+  } else {
+    // Dual or Classic View
+    if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
+      vId = findNearestConnectedVerse(mouseX, 18);
+    }
+  }
+
+  if (vId) {
     hoveredVerseId = vId;
     const vObj = verses[vId - 1];
     const conns = verseConnectionsMap.get(vId) || { internal: [], external: [] };
@@ -563,10 +909,51 @@ canvas.addEventListener("mouseleave", () => {
 canvas.addEventListener("click", (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
-  if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
-    const vId = findNearestConnectedVerse(mouseX, 20);
-    selectVerse(vId);
+  const mouseY = e.clientY - rect.top;
+
+  if (currentViewMode === "radial") {
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2);
+    const outerR = Math.min(rect.width, rect.height) * 0.42;
+
+    if (dist >= outerR * 0.25 && dist <= outerR * 1.25) {
+      const angle = Math.atan2(mouseY - cy, mouseX - cx);
+      const vId = radialToVerse(angle);
+      selectVerse(vId);
+    }
+  } else {
+    if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
+      const vId = findNearestConnectedVerse(mouseX, 20);
+      selectVerse(vId);
+    }
   }
+});
+
+// View mode switcher buttons
+viewBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    viewBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentViewMode = btn.dataset.view;
+
+    // Toggle rail headers visibility
+    if (currentViewMode === "dual") {
+      dualTopLabelRow.style.display = "flex";
+      dualBottomLabelRow.style.display = "flex";
+      axisContainer.style.display = "block";
+    } else if (currentViewMode === "radial") {
+      dualTopLabelRow.style.display = "none";
+      dualBottomLabelRow.style.display = "none";
+      axisContainer.style.display = "none";
+    } else {
+      dualTopLabelRow.style.display = "none";
+      dualBottomLabelRow.style.display = "none";
+      axisContainer.style.display = "block";
+    }
+
+    draw();
+  });
 });
 
 // Tour controls navigation
@@ -643,6 +1030,12 @@ function updateUILanguage() {
   document.getElementById("btnFilterExternal").textContent = t("filterExternal");
   document.getElementById("connectionsSectionTitle").textContent = t("drawerTitle");
   document.getElementById("featuredLabel").innerHTML = `${icons.sparkles} ${t("featuredTitle")}`;
+  document.getElementById("viewModeLabel").textContent = t("viewModeLabel");
+  document.getElementById("labelViewDual").textContent = t("viewDual");
+  document.getElementById("labelViewRadial").textContent = t("viewRadial");
+  document.getElementById("labelViewClassic").textContent = t("viewClassic");
+  document.getElementById("bibleTopTitle").textContent = `📖 ${t("bibleTopTitle")}`;
+  document.getElementById("bomBottomTitle").textContent = `📜 ${t("bomBottomTitle")}`;
   prevConnBtn.querySelector(".tour-btn-text").textContent = t("prevBtn");
   nextConnBtn.querySelector(".tour-btn-text").textContent = t("nextBtn");
   randomConnBtn.querySelector("span").textContent = t("randomBtn");
@@ -708,7 +1101,7 @@ async function init() {
     renderFeaturedPills();
     setupCanvas();
 
-    // Select the first featured connection or 1 Nephi 3:7
+    // Select the first featured connection
     selectVerse(selectedVerseId);
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
   } catch (err) {

@@ -21,7 +21,7 @@
     <div class="header-container">
       <div class="brand">
         <h1 id="appTitle">The Book of Mormon</h1>
-        <p id="appSubtitle">Interactive Arc Diagram of Cross-References, Prophecies & Biblical Parallels</p>
+        <p id="appSubtitle">Interactive Visualizer of Cross-References, Prophecies & Biblical Parallels</p>
       </div>
       <div class="header-actions">
         <div class="badges">
@@ -46,11 +46,30 @@
       <input type="text" id="searchInput" class="search-input" placeholder="Search verse (e.g. Alma 32:21, 1 Ne 3:7) or keyword..." aria-label="Search Scripture Verse" />
     </div>
 
+    <!-- View Mode Selector (Dual Bridge / Radial Ring / Classic Arcs) -->
+    <div class="view-mode-container" role="region" aria-label="View Mode Switcher">
+      <span class="view-mode-label" id="viewModeLabel">Diagram Style:</span>
+      <div class="btn-group" role="group" aria-label="Choose Diagram Visualization Style">
+        <button class="view-btn active" data-view="dual" id="btnViewDual" title="Bible on top, Book of Mormon on bottom with connecting beams">
+          <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5"></path><path d="M20 19V5"></path><path d="M4 10h16"></path><path d="M4 19c4-6 12-6 16 0"></path></svg>
+          <span id="labelViewDual">Bridge (Bible ↔ BOM)</span>
+        </button>
+        <button class="view-btn" data-view="radial" id="btnViewRadial" title="Circular mandala ring with chords">
+          <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m12 3 3 9-6-3 9 3-6-9"></path></svg>
+          <span id="labelViewRadial">Sacred Ring</span>
+        </button>
+        <button class="view-btn" data-view="classic" id="btnViewClassic" title="Traditional Chris Harrison arc diagram">
+          <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 19C3 10.163 10.163 3 19 3"></path><circle cx="3" cy="19" r="1"></circle><circle cx="19" cy="3" r="1"></circle></svg>
+          <span id="labelViewClassic">Classic Arcs</span>
+        </button>
+      </div>
+    </div>
+
     <div class="filter-group">
       <div class="btn-group" role="group" aria-label="Connection Type Filter">
-        <button class="filter-btn active" data-filter="all" id="btnFilterAll">All Connections</button>
-        <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal Arcs</button>
-        <button class="filter-btn" data-filter="external" id="btnFilterExternal">Bible Parallels</button>
+        <button class="filter-btn active" data-filter="all" id="btnFilterAll">All</button>
+        <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal</button>
+        <button class="filter-btn" data-filter="external" id="btnFilterExternal">Biblical</button>
       </div>
       
       <select id="topicSelect" class="select-input" aria-label="Filter by Doctrinal Theme">
@@ -101,11 +120,21 @@
   <!-- Main View Area -->
   <main>
     <div class="canvas-wrapper">
+      <!-- Dual View Top Rail Title -->
+      <div id="dualTopLabelRow" class="dual-label-row">
+        <span class="dual-rail-title" id="bibleTopTitle">📖 The Holy Bible (Old & New Testament)</span>
+      </div>
+
       <canvas id="arcCanvas"></canvas>
       <div id="tooltip" role="tooltip" aria-hidden="true"></div>
 
+      <!-- Dual View Bottom Rail Title -->
+      <div id="dualBottomLabelRow" class="dual-label-row">
+        <span class="dual-rail-title" id="bomBottomTitle">📜 The Book of Mormon (15 Books)</span>
+      </div>
+
       <!-- Axis bar containing the 15 books proportional segments -->
-      <div class="axis-container">
+      <div class="axis-container" id="axisContainer">
         <div class="axis-bar" id="axisBar" title="Click or hover to browse books"></div>
         <div class="book-labels-row" id="bookLabelsRow"></div>
       </div>

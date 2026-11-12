@@ -29,17 +29,23 @@ export const translations = {
     doctrineNote: "Doctrinal Insight",
     aboutCredits: "Data based on public domain records (scriptures.nephi.org / LDS Documentation Project, bomdb, and open scripture research).",
     langToggle: "Português",
-    // New UI strings
     featuredTitle: "Featured Key Connections:",
-    prevBtn: "◀ Previous",
-    nextBtn: "Next ▶",
-    randomBtn: "🎲 Random Connection",
+    prevBtn: "Previous",
+    nextBtn: "Next",
+    randomBtn: "Random",
     connectionCounter: "Connection {current} of {total}",
-    allTopics: "All Themes",
+    allTopics: "All Doctrinal Themes",
     topicProphecy: "Prophecies & Fulfillments",
     topicChrist: "Christ's Ministry & Visit",
     topicFaith: "Faith & Repentance",
-    topicIsaiah: "Isaiah Quotations"
+    topicIsaiah: "Isaiah Quotations",
+    // View modes
+    viewModeLabel: "Diagram Style:",
+    viewDual: "Bridge (Bible ↔ BOM)",
+    viewRadial: "Sacred Ring",
+    viewClassic: "Classic Arcs",
+    bibleTopTitle: "The Holy Bible (Old & New Testament)",
+    bomBottomTitle: "The Book of Mormon (15 Books)"
   },
   pt: {
     title: "Referências Cruzadas do Livro de Mórmon",
@@ -71,17 +77,23 @@ export const translations = {
     doctrineNote: "Nota Doutrinária",
     aboutCredits: "Dados baseados em registros de domínio público (scriptures.nephi.org / LDS Documentation Project, bomdb e pesquisa de escrituras abertas).",
     langToggle: "English",
-    // New UI strings
     featuredTitle: "Conexões em Destaque:",
-    prevBtn: "◀ Anterior",
-    nextBtn: "Próxima ▶",
-    randomBtn: "🎲 Conexão Aleatória",
+    prevBtn: "Anterior",
+    nextBtn: "Próxima",
+    randomBtn: "Aleatória",
     connectionCounter: "Conexão {current} de {total}",
     allTopics: "Todos os Temas",
     topicProphecy: "Profecias & Cumprimentos",
     topicChrist: "Ministério & Visita de Cristo",
     topicFaith: "Fé & Arrependimento",
-    topicIsaiah: "Citações de Isaías"
+    topicIsaiah: "Citações de Isaías",
+    // View modes
+    viewModeLabel: "Estilo do Gráfico:",
+    viewDual: "Ponte (Bíblia ↔ LM)",
+    viewRadial: "Anel Sagrado",
+    viewClassic: "Arcos Clássicos",
+    bibleTopTitle: "A Bíblia Sagrada (Antigo & Novo Testamento)",
+    bomBottomTitle: "O Livro de Mórmon (15 Livros)"
   }
 };
 
