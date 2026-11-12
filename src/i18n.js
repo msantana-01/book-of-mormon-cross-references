@@ -43,7 +43,6 @@ export const translations = {
     viewModeLabel: "Diagram Style:",
     viewDual: "Bridge (Bible ↔ BOM)",
     viewRadial: "Sacred Ring",
-    viewClassic: "Classic Arcs",
     bibleTopTitle: "The Holy Bible (Old & New Testament)",
     bomBottomTitle: "The Book of Mormon (15 Books)"
   },
@@ -91,7 +90,6 @@ export const translations = {
     viewModeLabel: "Estilo do Gráfico:",
     viewDual: "Ponte (Bíblia ↔ LM)",
     viewRadial: "Anel Sagrado",
-    viewClassic: "Arcos Clássicos",
     bibleTopTitle: "A Bíblia Sagrada (Antigo & Novo Testamento)",
     bomBottomTitle: "O Livro de Mórmon (15 Livros)"
   }

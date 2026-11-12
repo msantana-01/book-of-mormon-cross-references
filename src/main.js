@@ -10,7 +10,7 @@ let currentTourIndex = 0;
 let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] }
 let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
 
-let currentViewMode = "dual"; // "dual" | "radial" | "classic"
+let currentViewMode = "dual"; // "dual" | "radial"
 let selectedVerseId = 4876; // Default to Helaman 14:2 (Samuel the Lamanite's Sign)
 let hoveredVerseId = null;
 let hoveredBookId = null;
@@ -264,10 +264,8 @@ function draw() {
 
   if (currentViewMode === "dual") {
     drawDualView();
-  } else if (currentViewMode === "radial") {
-    drawRadialView();
   } else {
-    drawClassicView();
+    drawRadialView();
   }
 }
 
@@ -579,96 +577,6 @@ function drawRadialView() {
   }
 }
 
-// -------------------------------------------------------------
-// VIEW 3: CLASSIC VIEW (Traditional Chris Harrison Arc Diagram)
-// -------------------------------------------------------------
-function drawClassicView() {
-  const bottomY = canvasHeight - 20;
-  const activeVerse = hoveredVerseId || selectedVerseId;
-
-  // Baseline
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(PADDING_X, bottomY);
-  ctx.lineTo(PADDING_X + usableWidth, bottomY);
-  ctx.stroke();
-
-  // Book boundary tick marks
-  books.forEach(b => {
-    const x = verseToX(b.startVerseId);
-    ctx.strokeStyle = b.color;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(x, bottomY - 4);
-    ctx.lineTo(x, bottomY + 6);
-    ctx.stroke();
-  });
-
-  // Hotspots
-  connectedVerseIdsList.forEach(vid => {
-    const hx = verseToX(vid);
-    ctx.fillStyle = "rgba(99, 102, 241, 0.75)";
-    ctx.beginPath();
-    ctx.arc(hx, bottomY, 1.8, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  // Arcs
-  internalLinks.forEach(link => {
-    const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
-    const x1 = verseToX(link.source);
-    const x2 = verseToX(link.target);
-    const dist = Math.abs(x2 - x1);
-
-    const maxH = canvasHeight - 40;
-    const arcHeight = Math.min(maxH, Math.max(25, Math.pow(dist / usableWidth, 0.72) * (maxH * 1.25)));
-    const cx = (x1 + x2) / 2;
-    const cy = bottomY - arcHeight;
-
-    const sourceBook = getBookForVerse(link.source);
-    const baseColor = sourceBook ? sourceBook.color : "#6366f1";
-
-    ctx.beginPath();
-    ctx.moveTo(x1, bottomY);
-    ctx.quadraticCurveTo(cx, cy, x2, bottomY);
-
-    if (isConnectedToActive) {
-      ctx.strokeStyle = "#38bdf8";
-      ctx.lineWidth = 2.8;
-      ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
-      ctx.shadowBlur = 12;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-    } else if (activeVerse) {
-      ctx.strokeStyle = baseColor;
-      ctx.lineWidth = 0.8;
-      ctx.globalAlpha = 0.08;
-      ctx.stroke();
-      ctx.globalAlpha = 1.0;
-    } else {
-      ctx.strokeStyle = baseColor;
-      ctx.lineWidth = 1.2;
-      ctx.globalAlpha = 0.45;
-      ctx.stroke();
-      ctx.globalAlpha = 1.0;
-    }
-  });
-
-  if (activeVerse) {
-    const activeX = verseToX(activeVerse);
-    const activeBook = getBookForVerse(activeVerse);
-    const pinColor = activeBook ? activeBook.color : "#38bdf8";
-
-    ctx.fillStyle = pinColor;
-    ctx.shadowColor = pinColor;
-    ctx.shadowBlur = 12;
-    ctx.beginPath();
-    ctx.arc(activeX, bottomY, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-  }
-}
 
 function getBookForVerse(verseId) {
   return books.find(b => verseId >= b.startVerseId && verseId <= b.endVerseId);
@@ -940,14 +848,10 @@ viewBtns.forEach(btn => {
       dualTopLabelRow.style.display = "flex";
       dualBottomLabelRow.style.display = "flex";
       axisContainer.style.display = "block";
-    } else if (currentViewMode === "radial") {
-      dualTopLabelRow.style.display = "none";
-      dualBottomLabelRow.style.display = "none";
-      axisContainer.style.display = "none";
     } else {
       dualTopLabelRow.style.display = "none";
       dualBottomLabelRow.style.display = "none";
-      axisContainer.style.display = "block";
+      axisContainer.style.display = "none";
     }
 
     draw();
@@ -1031,7 +935,6 @@ function updateUILanguage() {
   document.getElementById("viewModeLabel").textContent = t("viewModeLabel");
   document.getElementById("labelViewDual").textContent = t("viewDual");
   document.getElementById("labelViewRadial").textContent = t("viewRadial");
-  document.getElementById("labelViewClassic").textContent = t("viewClassic");
   document.getElementById("bibleTopTitle").textContent = `📖 ${t("bibleTopTitle")}`;
   document.getElementById("bomBottomTitle").textContent = `📜 ${t("bomBottomTitle")}`;
   prevConnBtn.querySelector(".tour-btn-text").textContent = t("prevBtn");
