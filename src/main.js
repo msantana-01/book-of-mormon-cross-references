@@ -1285,8 +1285,26 @@ async function init() {
     renderFeaturedPills();
     setupCanvas();
 
-    // Select the first featured connection (Helaman 14:2)
-    selectVerse(FEATURED_CONNECTIONS[0].verseId || 4876);
+    // Check URL parameters for direct link sharing
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramView = urlParams.get("view");
+    const paramBook = urlParams.get("book");
+
+    if (paramView === "radial") {
+      viewBtns.forEach(b => b.classList.toggle("active", b.dataset.view === "radial"));
+      currentViewMode = "radial";
+      dualTopLabelRow.style.display = "none";
+      dualBottomLabelRow.style.display = "none";
+      axisContainer.style.display = "none";
+    }
+
+    if (paramBook) {
+      zoomToBook(paramBook);
+    } else {
+      // Select the first featured connection (Helaman 14:2)
+      selectVerse(FEATURED_CONNECTIONS[0].verseId || 4876);
+    }
+
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
   } catch (err) {
     console.error("Error loading scripture data:", err);
