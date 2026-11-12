@@ -38,9 +38,34 @@
       <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal Arcs (BOM ↔ BOM)</button>
       <button class="filter-btn" data-filter="external" id="btnFilterExternal">Bible Parallels (OT/NT)</button>
       
+      <select id="topicSelect" class="select-input" aria-label="Filter by Topic">
+        <option value="all">All Themes</option>
+        <option value="prophecy">Prophecies & Fulfillments</option>
+        <option value="christ">Christ's Ministry & Visit</option>
+        <option value="faith">Faith & Repentance</option>
+        <option value="isaiah">Isaiah Quotations</option>
+      </select>
+
       <select id="bookSelect" class="select-input" aria-label="Select Book">
         <option value="all">Whole Book of Mormon</option>
       </select>
+    </div>
+  </div>
+
+  <!-- Featured Highlights Carousel & Tour Bar -->
+  <div class="featured-container">
+    <div class="featured-header">
+      <span class="featured-label" id="featuredLabel">🌟 Featured Key Connections:</span>
+      <!-- Tour controls -->
+      <div class="tour-controls">
+        <button id="prevConnBtn" class="tour-btn" title="Previous Connection">◀ Previous</button>
+        <span id="connCounterBadge" class="badge">Connection 1 of 850</span>
+        <button id="nextConnBtn" class="tour-btn" title="Next Connection">Next ▶</button>
+        <button id="randomConnBtn" class="tour-btn tour-btn-accent" title="Jump to Random Connection">🎲 Random</button>
+      </div>
+    </div>
+    <div class="featured-pills-row" id="featuredPillsRow">
+      <!-- Populated dynamically -->
     </div>
   </div>
 

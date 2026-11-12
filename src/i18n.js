@@ -28,7 +28,18 @@ export const translations = {
     jumpTo: "Jump to",
     doctrineNote: "Doctrinal Insight",
     aboutCredits: "Data based on public domain records (scriptures.nephi.org / LDS Documentation Project, bomdb, and open scripture research).",
-    langToggle: "Português"
+    langToggle: "Português",
+    // New UI strings
+    featuredTitle: "Featured Key Connections:",
+    prevBtn: "◀ Previous",
+    nextBtn: "Next ▶",
+    randomBtn: "🎲 Random Connection",
+    connectionCounter: "Connection {current} of {total}",
+    allTopics: "All Themes",
+    topicProphecy: "Prophecies & Fulfillments",
+    topicChrist: "Christ's Ministry & Visit",
+    topicFaith: "Faith & Repentance",
+    topicIsaiah: "Isaiah Quotations"
   },
   pt: {
     title: "Referências Cruzadas do Livro de Mórmon",
@@ -59,7 +70,18 @@ export const translations = {
     jumpTo: "Ir para",
     doctrineNote: "Nota Doutrinária",
     aboutCredits: "Dados baseados em registros de domínio público (scriptures.nephi.org / LDS Documentation Project, bomdb e pesquisa de escrituras abertas).",
-    langToggle: "English"
+    langToggle: "English",
+    // New UI strings
+    featuredTitle: "Conexões em Destaque:",
+    prevBtn: "◀ Anterior",
+    nextBtn: "Próxima ▶",
+    randomBtn: "🎲 Conexão Aleatória",
+    connectionCounter: "Conexão {current} de {total}",
+    allTopics: "Todos os Temas",
+    topicProphecy: "Profecias & Cumprimentos",
+    topicChrist: "Ministério & Visita de Cristo",
+    topicFaith: "Fé & Arrependimento",
+    topicIsaiah: "Citações de Isaías"
   }
 };
 

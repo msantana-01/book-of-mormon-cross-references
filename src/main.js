@@ -5,12 +5,98 @@ let books = [];
 let verses = [];
 let internalLinks = [];
 let externalLinks = [];
+let allConnectionsList = []; // Array of { verseId, conns } for sequential touring
+let currentTourIndex = 0;
 let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] }
-let selectedVerseId = 142; // Default to 1 Nephi 3:7 ("I will go and do...")
+let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
+
+let selectedVerseId = 142; // Default to 1 Nephi 3:7
 let hoveredVerseId = null;
 let hoveredBookId = null;
 let currentFilter = "all"; // "all" | "internal" | "external"
 let activeBookFilter = "all";
+let activeTopicFilter = "all";
+
+// Curated Key Connections for 1-Click Exploration
+const FEATURED_CONNECTIONS = [
+  {
+    id: "samuel-prophecy",
+    titleEn: "Samuel's Sign → Fulfilled",
+    titlePt: "Sinal de Samuel → Cumprimento",
+    srcRef: "Helaman 14:2",
+    tgtRef: "3 Nephi 1:15",
+    tagEn: "Prophecy",
+    tagPt: "Profecia",
+    verseId: 4897, // Helaman 14:2
+    targetId: 4962  // 3 Nephi 1:15
+  },
+  {
+    id: "iron-rod",
+    titleEn: "The Iron Rod & Tree of Life",
+    titlePt: "A Barra de Ferro & Árvore da Vida",
+    srcRef: "1 Nephi 8:19",
+    tgtRef: "1 Nephi 11:25",
+    tagEn: "Typology",
+    tagPt: "Tipologia",
+    verseId: 198,
+    targetId: 288
+  },
+  {
+    id: "alma-conversion",
+    titleEn: "Alma's Repentance & Grace",
+    titlePt: "Conversão & Graça de Alma",
+    srcRef: "Mosiah 27:24",
+    tgtRef: "Alma 36:18",
+    tagEn: "Parallel",
+    tagPt: "Paralelo",
+    verseId: 2395,
+    targetId: 3543
+  },
+  {
+    id: "abinadi-noah",
+    titleEn: "Abinadi's Prophecy on King Noah",
+    titlePt: "Profecia de Abinádi sobre o Rei Noé",
+    srcRef: "Mosiah 17:15",
+    tgtRef: "Mosiah 19:20",
+    tagEn: "Fulfillment",
+    tagPt: "Cumprimento",
+    verseId: 2110,
+    targetId: 2157
+  },
+  {
+    id: "christ-appearance",
+    titleEn: "Christ Appears in the Americas",
+    titlePt: "Aparição de Cristo nas Américas",
+    srcRef: "2 Nephi 26:1",
+    tgtRef: "3 Nephi 11:8",
+    tagEn: "Prophecy",
+    tagPt: "Profecia",
+    verseId: 1198,
+    targetId: 5211
+  },
+  {
+    id: "sermon-mount",
+    titleEn: "Sermon on the Mount in 3 Nephi",
+    titlePt: "Sermão da Montanha em 3 Néfi",
+    srcRef: "3 Nephi 12:3",
+    tgtRef: "Matthew 5:3",
+    tagEn: "Bible Quoted",
+    tagPt: "Citação Bíblica",
+    verseId: 5240,
+    targetId: null
+  },
+  {
+    id: "moroni-farewell",
+    titleEn: "Moroni's Final Exhortation",
+    titlePt: "Exortação Final de Morôni",
+    srcRef: "Mormon 9:37",
+    tgtRef: "Moroni 10:3",
+    tagEn: "Doctrine",
+    tagPt: "Doutrina",
+    verseId: 6008,
+    targetId: 6444
+  }
+];
 
 // DOM Elements
 const canvas = document.getElementById("arcCanvas");
@@ -19,9 +105,16 @@ const tooltip = document.getElementById("tooltip");
 const axisBar = document.getElementById("axisBar");
 const bookLabelsRow = document.getElementById("bookLabelsRow");
 const bookSelect = document.getElementById("bookSelect");
+const topicSelect = document.getElementById("topicSelect");
 const searchInput = document.getElementById("searchInput");
 const filterBtns = document.querySelectorAll(".filter-btn");
 const langToggleBtn = document.getElementById("langToggleBtn");
+
+const featuredPillsRow = document.getElementById("featuredPillsRow");
+const prevConnBtn = document.getElementById("prevConnBtn");
+const nextConnBtn = document.getElementById("nextConnBtn");
+const randomConnBtn = document.getElementById("randomConnBtn");
+const connCounterBadge = document.getElementById("connCounterBadge");
 
 const selectedVerseRef = document.getElementById("selectedVerseRef");
 const selectedVerseBadge = document.getElementById("selectedVerseBadge");
@@ -80,7 +173,26 @@ function xToVerse(x) {
   return Math.max(1, Math.min(6604, Math.round(ratio * 6603) + 1));
 }
 
-// Draw the arc diagram
+// Find nearest verse with connections within a pixel threshold for magnetic snapping
+function findNearestConnectedVerse(mouseX, pixelTolerance = 18) {
+  if (connectedVerseIdsList.length === 0) return xToVerse(mouseX);
+
+  let bestId = null;
+  let minDiff = Infinity;
+
+  for (const vid of connectedVerseIdsList) {
+    const vx = verseToX(vid);
+    const diff = Math.abs(vx - mouseX);
+    if (diff < minDiff && diff <= pixelTolerance) {
+      minDiff = diff;
+      bestId = vid;
+    }
+  }
+
+  return bestId !== null ? bestId : xToVerse(mouseX);
+}
+
+// Draw the arc diagram with glowing hotspots
 function draw() {
   const rect = canvas.getBoundingClientRect();
   ctx.clearRect(0, 0, rect.width, rect.height);
@@ -114,16 +226,38 @@ function draw() {
     ctx.stroke();
   });
 
-  // 2. Draw Arcs
+  // 2. Draw Hotspot Glow Dots (every verse that has connections)
+  connectedVerseIdsList.forEach(vid => {
+    const hx = verseToX(vid);
+    const hasExternal = (verseConnectionsMap.get(vid)?.external.length || 0) > 0;
+    const hasInternal = (verseConnectionsMap.get(vid)?.internal.length || 0) > 0;
+
+    ctx.fillStyle = hasInternal ? "rgba(99, 102, 241, 0.7)" : "rgba(16, 185, 129, 0.7)";
+    ctx.beginPath();
+    ctx.arc(hx, baselineY, 1.8, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // 3. Draw Arcs
   const shouldDrawArcs = currentFilter !== "external";
   if (shouldDrawArcs) {
     const linksToDraw = internalLinks.filter(link => {
+      // Book filter
       if (activeBookFilter !== "all") {
         const b = books.find(item => item.id === parseInt(activeBookFilter));
         if (b && (link.source < b.startVerseId || link.source > b.endVerseId) &&
                  (link.target < b.startVerseId || link.target > b.endVerseId)) {
           return false;
         }
+      }
+      // Topic filter
+      if (activeTopicFilter !== "all") {
+        const typeStr = (link.type || "").toLowerCase();
+        const noteStr = (link.note || "").toLowerCase();
+        if (activeTopicFilter === "prophecy" && !typeStr.includes("prophecy") && !typeStr.includes("fulfillment")) return false;
+        if (activeTopicFilter === "christ" && !noteStr.includes("christ") && !noteStr.includes("jesus")) return false;
+        if (activeTopicFilter === "faith" && !noteStr.includes("faith") && !noteStr.includes("repent")) return false;
+        if (activeTopicFilter === "isaiah" && !noteStr.includes("isaiah")) return false;
       }
       return true;
     });
@@ -156,8 +290,8 @@ function draw() {
         // Vibrant illuminated highlight
         ctx.strokeStyle = "#38bdf8";
         ctx.lineWidth = 2.8;
-        ctx.shadowColor = "rgba(56, 189, 248, 0.8)";
-        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
+        ctx.shadowBlur = 12;
         ctx.stroke();
         ctx.shadowBlur = 0; // reset
       } else if (isBookActive) {
@@ -184,7 +318,7 @@ function draw() {
     });
   }
 
-  // 3. Draw Active Verse Pointer & Indicator
+  // 4. Draw Active Verse Pointer & Indicator
   if (activeVerse) {
     const activeX = verseToX(activeVerse);
     const activeBook = getBookForVerse(activeVerse);
@@ -203,7 +337,7 @@ function draw() {
     ctx.shadowColor = pinColor;
     ctx.shadowBlur = 12;
     ctx.beginPath();
-    ctx.arc(activeX, baselineY, 4.5, 0, Math.PI * 2);
+    ctx.arc(activeX, baselineY, 5, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
 
@@ -212,9 +346,12 @@ function draw() {
       if (vid !== activeVerse) {
         const cx = verseToX(vid);
         ctx.fillStyle = "#38bdf8";
+        ctx.shadowColor = "#38bdf8";
+        ctx.shadowBlur = 8;
         ctx.beginPath();
-        ctx.arc(cx, baselineY, 3, 0, Math.PI * 2);
+        ctx.arc(cx, baselineY, 3.5, 0, Math.PI * 2);
         ctx.fill();
+        ctx.shadowBlur = 0;
       }
     });
   }
@@ -277,10 +414,52 @@ function renderAxis() {
   });
 }
 
+// Render the Featured Connections quick-picker pills
+function renderFeaturedPills() {
+  featuredPillsRow.innerHTML = "";
+  const lang = getLang();
+
+  FEATURED_CONNECTIONS.forEach((item, idx) => {
+    const pill = document.createElement("button");
+    pill.className = "featured-pill";
+    if (selectedVerseId === item.verseId) {
+      pill.classList.add("active");
+    }
+
+    const title = lang === "pt" ? item.titlePt : item.titleEn;
+    const tag = lang === "pt" ? item.tagPt : item.tagEn;
+
+    pill.innerHTML = `
+      <span>${title}</span>
+      <span class="featured-pill-tag">${tag}</span>
+    `;
+
+    pill.addEventListener("click", () => {
+      selectVerse(item.verseId);
+      document.querySelectorAll(".featured-pill").forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+    });
+
+    featuredPillsRow.appendChild(pill);
+  });
+}
+
 // Select a verse and update the Study Panel
 function selectVerse(verseId) {
   if (verseId < 1 || verseId > 6604) return;
   selectedVerseId = verseId;
+
+  // Update sequential tour counter if present
+  const tourIdx = connectedVerseIdsList.indexOf(verseId);
+  if (tourIdx !== -1) {
+    currentTourIndex = tourIdx;
+    connCounterBadge.textContent = t("connectionCounter", {
+      current: currentTourIndex + 1,
+      total: connectedVerseIdsList.length
+    });
+  } else {
+    connCounterBadge.textContent = `${connectedVerseIdsList.length} Connected Verses`;
+  }
 
   const verseObj = verses[verseId - 1];
   const book = getBookForVerse(verseId);
@@ -356,17 +535,26 @@ function selectVerse(verseId) {
     });
   }
 
+  // Update pills highlight if matching
+  document.querySelectorAll(".featured-pill").forEach((pill, idx) => {
+    if (FEATURED_CONNECTIONS[idx]?.verseId === verseId) {
+      pill.classList.add("active");
+    } else {
+      pill.classList.remove("active");
+    }
+  });
+
   draw();
 }
 
-// Mouse events on canvas
+// Mouse events on canvas with magnetic snapping to connected verses
 canvas.addEventListener("mousemove", (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
 
   if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
-    const vId = xToVerse(mouseX);
+    // Snap to nearest connected verse within 16px if close, else regular verse
+    const vId = findNearestConnectedVerse(mouseX, 16);
     hoveredVerseId = vId;
     const vObj = verses[vId - 1];
     const conns = verseConnectionsMap.get(vId) || { internal: [], external: [] };
@@ -375,7 +563,7 @@ canvas.addEventListener("mousemove", (e) => {
     tooltip.style.display = "block";
     tooltip.style.left = `${e.clientX}px`;
     tooltip.style.top = `${e.clientY - 12}px`;
-    tooltip.innerHTML = `<strong>${vObj ? vObj.ref : `Verse #${vId}`}</strong> &bull; ${total} connections`;
+    tooltip.innerHTML = `<strong>${vObj ? vObj.ref : `Verse #${vId}`}</strong> &bull; ${total} connection${total === 1 ? '' : 's'}`;
   } else {
     hoveredVerseId = null;
     tooltip.style.display = "none";
@@ -393,9 +581,28 @@ canvas.addEventListener("click", (e) => {
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
-    const vId = xToVerse(mouseX);
+    const vId = findNearestConnectedVerse(mouseX, 18);
     selectVerse(vId);
   }
+});
+
+// Tour controls navigation
+prevConnBtn.addEventListener("click", () => {
+  if (connectedVerseIdsList.length === 0) return;
+  currentTourIndex = (currentTourIndex - 1 + connectedVerseIdsList.length) % connectedVerseIdsList.length;
+  selectVerse(connectedVerseIdsList[currentTourIndex]);
+});
+
+nextConnBtn.addEventListener("click", () => {
+  if (connectedVerseIdsList.length === 0) return;
+  currentTourIndex = (currentTourIndex + 1) % connectedVerseIdsList.length;
+  selectVerse(connectedVerseIdsList[currentTourIndex]);
+});
+
+randomConnBtn.addEventListener("click", () => {
+  if (connectedVerseIdsList.length === 0) return;
+  currentTourIndex = Math.floor(Math.random() * connectedVerseIdsList.length);
+  selectVerse(connectedVerseIdsList[currentTourIndex]);
 });
 
 // Search input handling
@@ -403,7 +610,6 @@ searchInput.addEventListener("input", (e) => {
   const q = e.target.value.trim().toLowerCase();
   if (!q) return;
 
-  // Search exact reference match first (e.g. "alma 32:21")
   const matchedVerse = verses.find(v => v.ref.toLowerCase().includes(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.includes(q));
   if (matchedVerse) {
     selectVerse(matchedVerse.id);
@@ -430,6 +636,12 @@ bookSelect.addEventListener("change", (e) => {
   draw();
 });
 
+// Topic selector
+topicSelect.addEventListener("change", (e) => {
+  activeTopicFilter = e.target.value;
+  draw();
+});
+
 // Language toggle button
 langToggleBtn.addEventListener("click", () => {
   const newLang = getLang() === "en" ? "pt" : "en";
@@ -447,9 +659,14 @@ function updateUILanguage() {
   document.getElementById("btnFilterInternal").textContent = t("filterInternal");
   document.getElementById("btnFilterExternal").textContent = t("filterExternal");
   document.getElementById("connectionsSectionTitle").textContent = t("drawerTitle");
+  document.getElementById("featuredLabel").textContent = `🌟 ${t("featuredTitle")}`;
+  prevConnBtn.textContent = t("prevBtn");
+  nextConnBtn.textContent = t("nextBtn");
+  randomConnBtn.textContent = t("randomBtn");
   searchInput.placeholder = t("searchPlaceholder");
   langToggleBtn.textContent = t("langToggle");
 
+  renderFeaturedPills();
   if (selectedVerseId) {
     selectVerse(selectedVerseId);
   }
@@ -495,10 +712,22 @@ async function init() {
       }
     });
 
+    // Build sorted list of connected verse IDs
+    const connectedSet = new Set();
+    verseConnectionsMap.forEach((conns, vid) => {
+      if (conns.internal.length > 0 || conns.external.length > 0) {
+        connectedSet.add(vid);
+      }
+    });
+    connectedVerseIdsList = Array.from(connectedSet).sort((a, b) => a - b);
+
     renderAxis();
+    renderFeaturedPills();
     setupCanvas();
+
+    // Select the first featured connection or 1 Nephi 3:7
     selectVerse(selectedVerseId);
-    console.log("Book of Mormon Cross-Reference Visualizer loaded successfully.");
+    console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
   } catch (err) {
     console.error("Error loading scripture data:", err);
   }

@@ -149,7 +149,7 @@ header {
   flex-wrap: wrap;
 }
 
-.filter-btn, .select-input, .lang-btn {
+.filter-btn, .select-input, .lang-btn, .tour-btn {
   background: rgba(15, 23, 42, 0.8);
   border: 1px solid var(--border-color);
   color: var(--text-muted);
@@ -160,7 +160,7 @@ header {
   transition: all 0.2s;
 }
 
-.filter-btn:hover, .lang-btn:hover {
+.filter-btn:hover, .lang-btn:hover, .tour-btn:hover {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-main);
   border-color: rgba(255, 255, 255, 0.2);
@@ -170,6 +170,90 @@ header {
   background: rgba(99, 102, 241, 0.2);
   color: #c7d2fe;
   border-color: var(--primary);
+}
+
+.tour-btn-accent {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+.tour-btn-accent:hover {
+  background: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
+}
+
+/* Featured Highlights Carousel */
+.featured-container {
+  max-width: 1400px;
+  margin: 0.75rem auto 0;
+  padding: 0 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.featured-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.featured-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #a5b4fc;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tour-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.featured-pills-row {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  scrollbar-width: thin;
+}
+
+.featured-pill {
+  white-space: nowrap;
+  font-size: 0.78rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: #e2e8f0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.featured-pill:hover, .featured-pill.active {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: var(--primary);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px var(--primary-glow);
+}
+
+.featured-pill-tag {
+  font-size: 0.68rem;
+  color: var(--accent);
+  font-weight: 600;
 }
 
 /* Main Layout */
@@ -275,6 +359,8 @@ main {
   align-items: center;
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .panel-header h2 {
@@ -439,5 +525,9 @@ footer a:hover {
   .canvas-wrapper {
     min-height: 340px;
     padding: 0.5rem;
+  }
+  .featured-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
