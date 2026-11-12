@@ -157,6 +157,37 @@ const CHURCH_BOOK_SLUGS = {
   "Moroni": "moro"
 };
 
+// DOM Elements
+const canvas = document.getElementById("arcCanvas");
+const ctx = canvas.getContext("2d");
+const tooltip = document.getElementById("tooltip");
+const axisContainer = document.getElementById("axisContainer");
+const axisBar = document.getElementById("axisBar");
+const bookLabelsRow = document.getElementById("bookLabelsRow");
+const bookSelect = document.getElementById("bookSelect");
+const topicSelect = document.getElementById("topicSelect");
+const searchInput = document.getElementById("searchInput");
+const filterBtns = document.querySelectorAll(".filter-btn");
+const viewBtns = document.querySelectorAll(".view-btn");
+const langToggleBtn = document.getElementById("langToggleBtn");
+const langText = document.getElementById("langText");
+
+const dualTopLabelRow = document.getElementById("dualTopLabelRow");
+const dualBottomLabelRow = document.getElementById("dualBottomLabelRow");
+const featuredPillsRow = document.getElementById("featuredPillsRow");
+const prevConnBtn = document.getElementById("prevConnBtn");
+const nextConnBtn = document.getElementById("nextConnBtn");
+const randomConnBtn = document.getElementById("randomConnBtn");
+const connCounterBadge = document.getElementById("connCounterBadge");
+
+const selectedVerseRef = document.getElementById("selectedVerseRef");
+const selectedVerseBadge = document.getElementById("selectedVerseBadge");
+const connectionsCountBadge = document.getElementById("connectionsCountBadge");
+const verseTextBox = document.getElementById("verseTextBox");
+const connectionsList = document.getElementById("connectionsList");
+const officialLinkContainer = document.getElementById("officialLinkContainer");
+const officialLink = document.getElementById("officialLink");
+
 // Layout constants
 const PADDING_X = 26;
 let usableWidth = 0;
