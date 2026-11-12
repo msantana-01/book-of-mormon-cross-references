@@ -969,9 +969,11 @@ function selectVerse(verseId) {
     }
   }
 
-  // Render connections list
+  // Render connections list (filtered by currentFilter)
   connectionsList.innerHTML = "";
-  const totalCount = connections.internal.length + connections.external.length;
+  const filteredInternal = currentFilter === "external" ? [] : connections.internal;
+  const filteredExternal = currentFilter === "internal" ? [] : connections.external;
+  const totalCount = filteredInternal.length + filteredExternal.length;
   connectionsCountBadge.textContent = t("connectionsCount", { n: totalCount });
 
   if (totalCount === 0) {
@@ -982,7 +984,7 @@ function selectVerse(verseId) {
     connectionsList.appendChild(emptyMsg);
   } else {
     // Internal links
-    connections.internal.forEach(link => {
+    filteredInternal.forEach(link => {
       const isSource = link.source === verseId;
       const targetId = isSource ? link.target : link.source;
       const targetRefStr = isSource ? link.targetRef : link.sourceRef;
@@ -1003,7 +1005,7 @@ function selectVerse(verseId) {
     });
 
     // External links (Bible)
-    connections.external.forEach(link => {
+    filteredExternal.forEach(link => {
       const card = document.createElement("div");
       card.className = "connection-card";
       card.style.cursor = "default";
@@ -1170,7 +1172,11 @@ filterBtns.forEach(btn => {
     filterBtns.forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     currentFilter = btn.dataset.filter;
-    draw();
+    if (selectedVerseId) {
+      selectVerse(selectedVerseId);
+    } else {
+      draw();
+    }
   });
 });
 
