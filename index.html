@@ -86,37 +86,6 @@
     </div>
   </section>
 
-  <!-- Featured Highlights Carousel & Tour Navigation -->
-  <section class="featured-container" aria-label="Featured Connections">
-    <div class="featured-header">
-      <span class="featured-label" id="featuredLabel">
-        <svg class="ui-icon ui-icon-gold" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
-        Featured Connections:
-      </span>
-      
-      <!-- Tour controls -->
-      <div class="tour-controls">
-        <button id="prevConnBtn" class="tour-btn" title="Previous Connection" aria-label="Previous Connection">
-          <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          <span class="tour-btn-text">Previous</span>
-        </button>
-        <span id="connCounterBadge" class="badge badge-tabular">1 / 850</span>
-        <button id="nextConnBtn" class="tour-btn" title="Next Connection" aria-label="Next Connection">
-          <span class="tour-btn-text">Next</span>
-          <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-        <button id="randomConnBtn" class="tour-btn tour-btn-accent" title="Jump to Random Connection" aria-label="Random Connection">
-          <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
-          <span>Random</span>
-        </button>
-      </div>
-    </div>
-    
-    <div class="featured-pills-row" id="featuredPillsRow" role="region" aria-label="Quick Access Connections">
-      <!-- Populated dynamically via main.js -->
-    </div>
-  </section>
-
   <!-- Main View Area -->
   <main>
     <div class="canvas-wrapper">
@@ -166,6 +135,37 @@
           <span>Read chapter on ChurchofJesusChrist.org</span>
           <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
         </a>
+      </div>
+    </section>
+
+    <!-- Featured Highlights Carousel & Tour Navigation (Placed UNDER the citations) -->
+    <section class="featured-container" aria-label="Featured Connections & Tour">
+      <div class="featured-header">
+        <span class="featured-label" id="featuredLabel">
+          <svg class="ui-icon ui-icon-gold" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+          Featured Connections:
+        </span>
+        
+        <!-- Tour controls -->
+        <div class="tour-controls">
+          <button id="prevConnBtn" class="tour-btn" title="Previous Connection" aria-label="Previous Connection">
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span class="tour-btn-text">Previous</span>
+          </button>
+          <span id="connCounterBadge" class="badge badge-tabular">1 / 850</span>
+          <button id="nextConnBtn" class="tour-btn" title="Next Connection" aria-label="Next Connection">
+            <span class="tour-btn-text">Next</span>
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <button id="randomConnBtn" class="tour-btn tour-btn-accent" title="Jump to Random Connection" aria-label="Random Connection">
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+            <span>Random</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="featured-pills-row" id="featuredPillsRow" role="region" aria-label="Quick Access Connections">
+        <!-- Populated dynamically via main.js -->
       </div>
     </section>
   </main>

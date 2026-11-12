@@ -309,105 +309,6 @@ header {
   border-color: var(--border-hover);
 }
 
-/* Featured Highlights Carousel & Tour Bar */
-.featured-container {
-  max-width: 1400px;
-  margin: 0.85rem auto 0;
-  padding: 0 1.5rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.featured-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.featured-label {
-  font-size: 0.825rem;
-  font-weight: 600;
-  color: #fcd34d;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  letter-spacing: -0.01em;
-}
-
-.tour-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  flex-wrap: wrap;
-}
-
-.tour-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.8rem;
-  min-height: 36px;
-  font-size: 0.78rem;
-}
-
-.tour-btn-accent {
-  background: rgba(56, 189, 248, 0.14);
-  border-color: rgba(56, 189, 248, 0.4);
-  color: #7dd3fc;
-}
-
-.tour-btn-accent:hover {
-  background: rgba(56, 189, 248, 0.25);
-  color: #ffffff;
-  border-color: #38bdf8;
-}
-
-.featured-pills-row {
-  display: flex;
-  gap: 0.6rem;
-  overflow-x: auto;
-  padding: 0.2rem 0.2rem 0.5rem 0.2rem;
-  scrollbar-width: thin;
-}
-
-.featured-pill {
-  white-space: nowrap;
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 0.45rem 0.85rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border-color);
-  color: #e2e8f0;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-  min-height: 38px;
-}
-
-.featured-pill:hover, .featured-pill.active {
-  background: rgba(245, 158, 11, 0.2);
-  border-color: var(--gold);
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px var(--gold-glow);
-}
-
-.featured-pill-tag {
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: var(--cyan);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
 /* Main Layout */
 main {
   flex: 1;
@@ -665,6 +566,109 @@ main {
 .official-link-btn:hover {
   color: #bae6fd;
   text-decoration: underline;
+}
+
+/* Featured Highlights Carousel & Tour Bar (Inside main, UNDER citations) */
+.featured-container {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.35rem 1.5rem;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.featured-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.featured-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fcd34d;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  letter-spacing: -0.01em;
+}
+
+.tour-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.tour-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  min-height: 38px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.tour-btn-accent {
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #7dd3fc;
+}
+
+.tour-btn-accent:hover {
+  background: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+
+.featured-pills-row {
+  display: flex;
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding: 0.2rem 0.2rem 0.5rem 0.2rem;
+  scrollbar-width: thin;
+}
+
+.featured-pill {
+  white-space: nowrap;
+  font-size: 0.825rem;
+  font-weight: 500;
+  padding: 0.5rem 0.95rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: #e2e8f0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  min-height: 40px;
+}
+
+.featured-pill:hover, .featured-pill.active {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: var(--gold);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--gold-glow);
+}
+
+.featured-pill-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* Tooltip */
