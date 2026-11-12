@@ -44,7 +44,10 @@ export const translations = {
     viewDual: "Bridge (Bible ↔ BOM)",
     viewRadial: "Sacred Ring",
     bibleTopTitle: "The Holy Bible (Old & New Testament)",
-    bomBottomTitle: "The Book of Mormon (15 Books)"
+    bomBottomTitle: "The Book of Mormon (15 Books)",
+    zoomReset: "Reset to All 15 Books",
+    zoomedTitle: "{book} ({ch} Chapters, {v} Verses)",
+    chapterLabel: "Ch {n}"
   },
   pt: {
     title: "Referências Cruzadas do Livro de Mórmon",
@@ -91,7 +94,10 @@ export const translations = {
     viewDual: "Ponte (Bíblia ↔ LM)",
     viewRadial: "Anel Sagrado",
     bibleTopTitle: "A Bíblia Sagrada (Antigo & Novo Testamento)",
-    bomBottomTitle: "O Livro de Mórmon (15 Livros)"
+    bomBottomTitle: "O Livro de Mórmon (15 Livros)",
+    zoomReset: "Ver Todo o Livro de Mórmon",
+    zoomedTitle: "{book} ({ch} Capítulos, {v} Versículos)",
+    chapterLabel: "Cap {n}"
   }
 };
 

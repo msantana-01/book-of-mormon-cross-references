@@ -174,6 +174,9 @@ const langText = document.getElementById("langText");
 
 const dualTopLabelRow = document.getElementById("dualTopLabelRow");
 const dualBottomLabelRow = document.getElementById("dualBottomLabelRow");
+const bomBottomTitle = document.getElementById("bomBottomTitle");
+const zoomResetBtn = document.getElementById("zoomResetBtn");
+const zoomResetText = document.getElementById("zoomResetText");
 const featuredPillsRow = document.getElementById("featuredPillsRow");
 const prevConnBtn = document.getElementById("prevConnBtn");
 const nextConnBtn = document.getElementById("nextConnBtn");
@@ -193,6 +196,26 @@ const PADDING_X = 26;
 let usableWidth = 0;
 let canvasHeight = 0;
 
+function getActiveBook() {
+  if (activeBookFilter === "all") return null;
+  const bId = parseInt(activeBookFilter, 10);
+  return books.find(b => b.id === bId) || null;
+}
+
+function adjustColorBrightness(hex, percent) {
+  let num = parseInt(hex.replace("#", ""), 16);
+  let amt = Math.round(2.55 * percent);
+  let R = (num >> 16) + amt;
+  let G = (num >> 8 & 0x00FF) + amt;
+  let B = (num & 0x0000FF) + amt;
+  return "#" + (
+    0x1000000 +
+    (R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
+    (G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
+    (B < 255 ? (B < 0 ? 0 : B) : 255)
+  ).toString(16).slice(1);
+}
+
 function setupCanvas() {
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
@@ -206,23 +229,46 @@ function setupCanvas() {
 }
 
 function verseToX(verseId) {
+  const activeBook = getActiveBook();
+  if (activeBook) {
+    if (verseId >= activeBook.startVerseId && verseId <= activeBook.endVerseId) {
+      const span = Math.max(1, activeBook.endVerseId - activeBook.startVerseId);
+      const ratio = (verseId - activeBook.startVerseId) / span;
+      return PADDING_X + ratio * usableWidth;
+    }
+    if (verseId < activeBook.startVerseId) {
+      return PADDING_X - 16;
+    }
+    return PADDING_X + usableWidth + 16;
+  }
   return PADDING_X + ((verseId - 1) / 6603) * usableWidth;
 }
 
 function xToVerse(x) {
+  const activeBook = getActiveBook();
   const clampedX = Math.max(PADDING_X, Math.min(PADDING_X + usableWidth, x));
   const ratio = (clampedX - PADDING_X) / usableWidth;
+
+  if (activeBook) {
+    const span = activeBook.endVerseId - activeBook.startVerseId;
+    return Math.max(activeBook.startVerseId, Math.min(activeBook.endVerseId, Math.round(activeBook.startVerseId + ratio * span)));
+  }
   return Math.max(1, Math.min(6604, Math.round(ratio * 6603) + 1));
 }
 
-// Snapping for horizontal axes
-function findNearestConnectedVerse(mouseX, pixelTolerance = 20) {
-  if (connectedVerseIdsList.length === 0) return xToVerse(mouseX);
+// Snapping for horizontal axes (zoomed book aware)
+function findNearestConnectedVerse(mouseX, pixelTolerance = 25) {
+  const activeBook = getActiveBook();
+  const relevantVerseIds = activeBook
+    ? connectedVerseIdsList.filter(vid => vid >= activeBook.startVerseId && vid <= activeBook.endVerseId)
+    : connectedVerseIdsList;
+
+  if (relevantVerseIds.length === 0) return xToVerse(mouseX);
 
   let bestId = null;
   let minDiff = Infinity;
 
-  for (const vid of connectedVerseIdsList) {
+  for (const vid of relevantVerseIds) {
     const vx = verseToX(vid);
     const diff = Math.abs(vx - mouseX);
     if (diff < minDiff && diff <= pixelTolerance) {
@@ -234,15 +280,33 @@ function findNearestConnectedVerse(mouseX, pixelTolerance = 20) {
   return bestId !== null ? bestId : xToVerse(mouseX);
 }
 
-// Snapping for radial circular mode
+// Snapping for radial circular mode (zoomed book aware)
 function radialToVerse(angleRad) {
   let norm = angleRad + Math.PI / 2;
   while (norm < 0) norm += Math.PI * 2;
   while (norm >= Math.PI * 2) norm -= Math.PI * 2;
 
   const ratio = norm / (Math.PI * 2);
-  const vId = Math.max(1, Math.min(6604, Math.round(ratio * 6603) + 1));
+  const activeBook = getActiveBook();
 
+  if (activeBook) {
+    const span = activeBook.endVerseId - activeBook.startVerseId;
+    const vId = Math.max(activeBook.startVerseId, Math.min(activeBook.endVerseId, Math.round(activeBook.startVerseId + ratio * span)));
+
+    const bookConnected = connectedVerseIdsList.filter(v => v >= activeBook.startVerseId && v <= activeBook.endVerseId);
+    let best = vId;
+    let minDiff = 30;
+    for (const cv of bookConnected) {
+      const d = Math.abs(cv - vId);
+      if (d < minDiff) {
+        minDiff = d;
+        best = cv;
+      }
+    }
+    return best;
+  }
+
+  const vId = Math.max(1, Math.min(6604, Math.round(ratio * 6603) + 1));
   let best = vId;
   let minDiff = 60;
   for (const cv of connectedVerseIdsList) {
@@ -308,36 +372,77 @@ function drawDualView() {
   });
 
   // B. Bottom Rail (Book of Mormon)
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
-  ctx.lineWidth = 1;
+  const activeBook = getActiveBook();
+  ctx.strokeStyle = activeBook ? activeBook.color : "rgba(255, 255, 255, 0.15)";
+  ctx.lineWidth = activeBook ? 2 : 1;
   ctx.beginPath();
   ctx.moveTo(PADDING_X, bottomY);
   ctx.lineTo(PADDING_X + usableWidth, bottomY);
   ctx.stroke();
 
-  // Book boundary tick marks
-  books.forEach(b => {
-    const x = verseToX(b.startVerseId);
-    ctx.strokeStyle = b.color;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(x, bottomY - 4);
-    ctx.lineTo(x, bottomY + 6);
-    ctx.stroke();
-  });
+  if (activeBook) {
+    // Zoomed Book: Draw Chapter boundaries and Chapter labels
+    activeBook.chaptersList.forEach(ch => {
+      const x = verseToX(ch.startVerseId);
+      ctx.strokeStyle = activeBook.color;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(x, bottomY - 5);
+      ctx.lineTo(x, bottomY + 5);
+      ctx.stroke();
 
-  // Draw Hotspot Glow Dots
-  connectedVerseIdsList.forEach(vid => {
-    const hx = verseToX(vid);
-    ctx.fillStyle = "rgba(99, 102, 241, 0.75)";
-    ctx.beginPath();
-    ctx.arc(hx, bottomY, 1.8, 0, Math.PI * 2);
-    ctx.fill();
-  });
+      const shouldShowLabel = activeBook.chaptersCount <= 16
+        ? true
+        : (ch.chapter === 1 || ch.chapter === activeBook.chaptersCount || ch.chapter % 5 === 0);
+
+      if (shouldShowLabel) {
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "9px Inter, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(`Ch ${ch.chapter}`, x, bottomY + 16);
+      }
+    });
+
+    // Draw Hotspots only in active book
+    connectedVerseIdsList.forEach(vid => {
+      if (vid >= activeBook.startVerseId && vid <= activeBook.endVerseId) {
+        const hx = verseToX(vid);
+        ctx.fillStyle = "#38bdf8";
+        ctx.beginPath();
+        ctx.arc(hx, bottomY, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+  } else {
+    // Whole Book of Mormon: Book boundary tick marks
+    books.forEach(b => {
+      const x = verseToX(b.startVerseId);
+      ctx.strokeStyle = b.color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(x, bottomY - 4);
+      ctx.lineTo(x, bottomY + 6);
+      ctx.stroke();
+    });
+
+    // Draw Hotspot Glow Dots
+    connectedVerseIdsList.forEach(vid => {
+      const hx = verseToX(vid);
+      ctx.fillStyle = "rgba(99, 102, 241, 0.75)";
+      ctx.beginPath();
+      ctx.arc(hx, bottomY, 1.8, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
 
   // C. Cross-Testament Bridging Beams (BOM <-> Bible)
   if (currentFilter !== "internal") {
     externalLinks.forEach(link => {
+      // In zoomed mode, only show links from active book
+      if (activeBook && (link.source < activeBook.startVerseId || link.source > activeBook.endVerseId)) {
+        return;
+      }
+
       const isConnectedToActive = (link.source === activeVerse);
       const xBom = verseToX(link.source);
       const xBible = getBibleBookX(link.externalRef, rect.width, PADDING_X);
@@ -349,7 +454,7 @@ function drawDualView() {
 
       if (isConnectedToActive) {
         ctx.strokeStyle = "#fbbf24";
-        ctx.lineWidth = 3.0;
+        ctx.lineWidth = 3.2;
         ctx.shadowColor = "rgba(245, 158, 11, 0.9)";
         ctx.shadowBlur = 15;
         ctx.stroke();
@@ -357,17 +462,17 @@ function drawDualView() {
 
         ctx.fillStyle = "#fbbf24";
         ctx.beginPath();
-        ctx.arc(xBible, topY, 5, 0, Math.PI * 2);
+        ctx.arc(xBible, topY, 5.5, 0, Math.PI * 2);
         ctx.fill();
       } else if (activeVerse) {
         ctx.strokeStyle = "#10b981";
-        ctx.lineWidth = 0.6;
-        ctx.globalAlpha = 0.05;
+        ctx.lineWidth = activeBook ? 1.0 : 0.6;
+        ctx.globalAlpha = activeBook ? 0.20 : 0.05;
         ctx.stroke();
         ctx.globalAlpha = 1.0;
       } else {
-        ctx.strokeStyle = "rgba(16, 185, 129, 0.22)";
-        ctx.lineWidth = 0.9;
+        ctx.strokeStyle = "rgba(16, 185, 129, 0.35)";
+        ctx.lineWidth = activeBook ? 1.2 : 0.9;
         ctx.stroke();
       }
     });
@@ -376,11 +481,29 @@ function drawDualView() {
   // D. Internal BOM Arcs
   if (currentFilter !== "external") {
     internalLinks.forEach(link => {
-      const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
-      const x1 = verseToX(link.source);
-      const x2 = verseToX(link.target);
-      const dist = Math.abs(x2 - x1);
+      const sourceInBook = activeBook ? (link.source >= activeBook.startVerseId && link.source <= activeBook.endVerseId) : true;
+      const targetInBook = activeBook ? (link.target >= activeBook.startVerseId && link.target <= activeBook.endVerseId) : true;
 
+      // In zoomed mode, link must involve the activeBook
+      if (activeBook && !sourceInBook && !targetInBook) {
+        return;
+      }
+
+      const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
+
+      let x1 = verseToX(link.source);
+      let x2 = verseToX(link.target);
+
+      if (activeBook) {
+        if (!sourceInBook) {
+          x1 = link.source < activeBook.startVerseId ? PADDING_X - 12 : PADDING_X + usableWidth + 12;
+        }
+        if (!targetInBook) {
+          x2 = link.target < activeBook.startVerseId ? PADDING_X - 12 : PADDING_X + usableWidth + 12;
+        }
+      }
+
+      const dist = Math.abs(x2 - x1);
       const maxH = (bottomY - topY) * 0.45;
       const arcHeight = Math.min(maxH, Math.max(20, Math.pow(dist / usableWidth, 0.75) * maxH));
       const cx = (x1 + x2) / 2;
@@ -419,8 +542,8 @@ function drawDualView() {
   // Active BOM Verse Dot
   if (activeVerse) {
     const activeX = verseToX(activeVerse);
-    const activeBook = getBookForVerse(activeVerse);
-    const pinColor = activeBook ? activeBook.color : "#38bdf8";
+    const activeBookObj = getBookForVerse(activeVerse);
+    const pinColor = activeBookObj ? activeBookObj.color : "#38bdf8";
 
     ctx.fillStyle = pinColor;
     ctx.shadowColor = pinColor;
@@ -454,48 +577,98 @@ function drawRadialView() {
   const centerOrbR = outerR * 0.38;
 
   const activeVerse = hoveredVerseId || selectedVerseId;
+  const activeBook = getActiveBook();
 
-  function verseAngle(vId) {
-    return -Math.PI / 2 + ((vId - 1) / 6603) * (Math.PI * 2);
+  // 1. Draw Circumference Segments (Books or Chapters)
+  if (activeBook) {
+    activeBook.chaptersList.forEach(ch => {
+      const a1 = verseAngle(ch.startVerseId);
+      const a2 = verseAngle(ch.endVerseId);
+
+      const isOdd = ch.chapter % 2 === 1;
+      ctx.strokeStyle = isOdd ? activeBook.color : adjustColorBrightness(activeBook.color, -25);
+      ctx.lineWidth = (hoveredBookId && hoveredBookId.chapter === ch.chapter) ? 14 : 9;
+      ctx.beginPath();
+      ctx.arc(cx, cy, outerR, a1, a2);
+      ctx.stroke();
+
+      const shouldLabel = activeBook.chaptersCount <= 16
+        ? true
+        : (ch.chapter === 1 || ch.chapter === activeBook.chaptersCount || ch.chapter % 5 === 0);
+
+      if (shouldLabel) {
+        const midAngle = (a1 + a2) / 2;
+        const labelR = outerR + 18;
+        const lx = cx + labelR * Math.cos(midAngle);
+        const ly = cy + labelR * Math.sin(midAngle);
+
+        ctx.fillStyle = "#e2e8f0";
+        ctx.font = "bold 9px Inter, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`Ch ${ch.chapter}`, lx, ly);
+      }
+    });
+
+    // Hotspots on the Ring for active book
+    connectedVerseIdsList.forEach(vid => {
+      if (vid >= activeBook.startVerseId && vid <= activeBook.endVerseId) {
+        const ang = verseAngle(vid);
+        const hx = cx + innerR * Math.cos(ang);
+        const hy = cy + innerR * Math.sin(ang);
+
+        ctx.fillStyle = "#38bdf8";
+        ctx.beginPath();
+        ctx.arc(hx, hy, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+  } else {
+    // Whole Book of Mormon: Draw 15 Book Segments
+    books.forEach(b => {
+      const a1 = verseAngle(b.startVerseId);
+      const a2 = verseAngle(b.endVerseId);
+
+      ctx.strokeStyle = b.color;
+      ctx.lineWidth = (hoveredBookId && hoveredBookId.id === b.id) ? 14 : 9;
+      ctx.beginPath();
+      ctx.arc(cx, cy, outerR, a1, a2);
+      ctx.stroke();
+
+      const midAngle = (a1 + a2) / 2;
+      const labelR = outerR + 18;
+      const lx = cx + labelR * Math.cos(midAngle);
+      const ly = cy + labelR * Math.sin(midAngle);
+
+      ctx.fillStyle = b.color;
+      ctx.font = "bold 9.5px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(b.shortName, lx, ly);
+    });
+
+    // Hotspots on the Ring for all books
+    connectedVerseIdsList.forEach(vid => {
+      const ang = verseAngle(vid);
+      const hx = cx + innerR * Math.cos(ang);
+      const hy = cy + innerR * Math.sin(ang);
+
+      ctx.fillStyle = "rgba(245, 158, 11, 0.7)";
+      ctx.beginPath();
+      ctx.arc(hx, hy, 2, 0, Math.PI * 2);
+      ctx.fill();
+    });
   }
-
-  // 1. Draw Circumference Book Segments
-  books.forEach(b => {
-    const a1 = verseAngle(b.startVerseId);
-    const a2 = verseAngle(b.endVerseId);
-
-    ctx.strokeStyle = b.color;
-    ctx.lineWidth = (hoveredBookId && hoveredBookId.id === b.id) ? 14 : 9;
-    ctx.beginPath();
-    ctx.arc(cx, cy, outerR, a1, a2);
-    ctx.stroke();
-
-    const midAngle = (a1 + a2) / 2;
-    const labelR = outerR + 18;
-    const lx = cx + labelR * Math.cos(midAngle);
-    const ly = cy + labelR * Math.sin(midAngle);
-
-    ctx.fillStyle = b.color;
-    ctx.font = "bold 9.5px Inter, sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(b.shortName, lx, ly);
-  });
-
-  // 2. Hotspots on the Ring
-  connectedVerseIdsList.forEach(vid => {
-    const ang = verseAngle(vid);
-    const hx = cx + innerR * Math.cos(ang);
-    const hy = cy + innerR * Math.sin(ang);
-
-    ctx.fillStyle = "rgba(245, 158, 11, 0.7)";
-    ctx.beginPath();
-    ctx.arc(hx, hy, 2, 0, Math.PI * 2);
-    ctx.fill();
-  });
 
   // 3. Draw Chords Criss-Crossing Through the Center
   internalLinks.forEach(link => {
+    const sourceInBook = activeBook ? (link.source >= activeBook.startVerseId && link.source <= activeBook.endVerseId) : true;
+    const targetInBook = activeBook ? (link.target >= activeBook.startVerseId && link.target <= activeBook.endVerseId) : true;
+
+    if (activeBook && !sourceInBook && !targetInBook) {
+      return;
+    }
+
     const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
     const a1 = verseAngle(link.source);
     const a2 = verseAngle(link.target);
@@ -561,7 +734,7 @@ function drawRadialView() {
 
     ctx.fillStyle = "#94a3b8";
     ctx.font = "9.5px Inter, sans-serif";
-    ctx.fillText(vObj ? (vObj.book) : "The Book of Mormon", cx, cy + 24);
+    ctx.fillText(activeBook ? `${activeBook.name} (${activeBook.chaptersCount} Ch)` : (vObj ? vObj.book : "The Book of Mormon"), cx, cy + 24);
 
     const activeAng = verseAngle(activeVerse);
     const ax = cx + outerR * Math.cos(activeAng);
@@ -582,57 +755,118 @@ function getBookForVerse(verseId) {
   return books.find(b => verseId >= b.startVerseId && verseId <= b.endVerseId);
 }
 
-// Render the 15-book Axis bar below canvas
-function renderAxis() {
-  axisBar.innerHTML = "";
-  bookLabelsRow.innerHTML = "";
-
+function populateBookSelect() {
+  while (bookSelect.options.length > 1) {
+    bookSelect.remove(1);
+  }
   books.forEach(b => {
-    const pct = (b.versesCount / 6604) * 100;
-
-    // Segment
-    const seg = document.createElement("div");
-    seg.className = "book-segment";
-    seg.style.width = `${pct}%`;
-    seg.style.backgroundColor = b.color;
-    seg.title = `${b.name} (${b.chaptersCount} ch, ${b.versesCount} v)`;
-    seg.addEventListener("click", () => {
-      selectVerse(b.startVerseId);
-    });
-    seg.addEventListener("mouseenter", () => {
-      hoveredBookId = b;
-      draw();
-    });
-    seg.addEventListener("mouseleave", () => {
-      hoveredBookId = null;
-      draw();
-    });
-    axisBar.appendChild(seg);
-
-    // Label pill
-    const pill = document.createElement("button");
-    pill.className = "book-label-pill";
-    pill.textContent = b.shortName;
-    pill.style.borderBottom = `2px solid ${b.color}`;
-    pill.addEventListener("click", () => {
-      selectVerse(b.startVerseId);
-    });
-    pill.addEventListener("mouseenter", () => {
-      hoveredBookId = b;
-      draw();
-    });
-    pill.addEventListener("mouseleave", () => {
-      hoveredBookId = null;
-      draw();
-    });
-    bookLabelsRow.appendChild(pill);
-
-    // Dropdown option
     const opt = document.createElement("option");
     opt.value = b.id;
     opt.textContent = `${b.name} (${b.chaptersCount} ch)`;
     bookSelect.appendChild(opt);
   });
+}
+
+// Render the Axis bar below canvas (whole BOM or chapters of zoomed book)
+function renderAxis() {
+  axisBar.innerHTML = "";
+  bookLabelsRow.innerHTML = "";
+
+  const activeBook = getActiveBook();
+
+  if (activeBook) {
+    bomBottomTitle.innerHTML = `📜 <strong>${activeBook.name}</strong> (${activeBook.chaptersCount} ch, ${activeBook.versesCount} v)`;
+    zoomResetBtn.style.display = "inline-flex";
+    zoomResetText.textContent = t("zoomReset");
+
+    activeBook.chaptersList.forEach(ch => {
+      const pct = (ch.versesCount / activeBook.versesCount) * 100;
+      const seg = document.createElement("div");
+      seg.className = "chapter-segment";
+      seg.style.width = `${pct}%`;
+      const isOdd = ch.chapter % 2 === 1;
+      seg.style.backgroundColor = isOdd ? activeBook.color : adjustColorBrightness(activeBook.color, -25);
+      seg.title = `${activeBook.name} ${ch.chapter} (${ch.versesCount} verses)`;
+
+      seg.addEventListener("click", () => {
+        selectVerse(ch.startVerseId);
+      });
+      axisBar.appendChild(seg);
+
+      const pill = document.createElement("button");
+      pill.className = "chapter-label-pill";
+      pill.dataset.chapter = String(ch.chapter);
+      pill.textContent = t("chapterLabel", { n: ch.chapter });
+      if (verses[selectedVerseId - 1]?.book === activeBook.name && verses[selectedVerseId - 1]?.ch === ch.chapter) {
+        pill.classList.add("active");
+      }
+      pill.addEventListener("click", () => {
+        selectVerse(ch.startVerseId);
+      });
+      bookLabelsRow.appendChild(pill);
+    });
+  } else {
+    bomBottomTitle.textContent = `📜 ${t("bomBottomTitle")}`;
+    zoomResetBtn.style.display = "none";
+
+    books.forEach(b => {
+      const pct = (b.versesCount / 6604) * 100;
+
+      const seg = document.createElement("div");
+      seg.className = "book-segment";
+      seg.style.width = `${pct}%`;
+      seg.style.backgroundColor = b.color;
+      seg.title = `${b.name} (${b.chaptersCount} ch, ${b.versesCount} v) - Click to zoom in`;
+      seg.addEventListener("click", () => {
+        zoomToBook(b.id);
+      });
+      seg.addEventListener("mouseenter", () => {
+        hoveredBookId = b;
+        draw();
+      });
+      seg.addEventListener("mouseleave", () => {
+        hoveredBookId = null;
+        draw();
+      });
+      axisBar.appendChild(seg);
+
+      const pill = document.createElement("button");
+      pill.className = "book-label-pill";
+      pill.textContent = b.shortName;
+      pill.style.borderBottom = `2px solid ${b.color}`;
+      pill.title = `Zoom into ${b.name}`;
+      pill.addEventListener("click", () => {
+        zoomToBook(b.id);
+      });
+      pill.addEventListener("mouseenter", () => {
+        hoveredBookId = b;
+        draw();
+      });
+      pill.addEventListener("mouseleave", () => {
+        hoveredBookId = null;
+        draw();
+      });
+      bookLabelsRow.appendChild(pill);
+    });
+  }
+}
+
+function zoomToBook(bookId) {
+  activeBookFilter = String(bookId);
+  bookSelect.value = String(bookId);
+  const b = books.find(item => item.id === parseInt(bookId, 10));
+  if (b) {
+    selectVerse(b.startVerseId);
+  }
+  renderAxis();
+  draw();
+}
+
+function resetZoom() {
+  activeBookFilter = "all";
+  bookSelect.value = "all";
+  renderAxis();
+  draw();
 }
 
 // Render the Featured Connections quick-picker pills (dynamic verseId resolution)
@@ -671,18 +905,39 @@ function selectVerse(verseId) {
   if (!verseId || verseId < 1 || verseId > 6604) return;
   selectedVerseId = verseId;
 
-  // Update sequential tour counter if present
-  const tourIdx = connectedVerseIdsList.indexOf(verseId);
+  // Update sequential tour counter if present (book-aware)
+  const activeBook = getActiveBook();
+  const relevantList = activeBook
+    ? connectedVerseIdsList.filter(vid => vid >= activeBook.startVerseId && vid <= activeBook.endVerseId)
+    : connectedVerseIdsList;
+
+  const tourIdx = relevantList.indexOf(verseId);
   if (tourIdx !== -1) {
     currentTourIndex = tourIdx;
-    connCounterBadge.textContent = `${currentTourIndex + 1} / ${connectedVerseIdsList.length}`;
+    connCounterBadge.textContent = activeBook
+      ? `${currentTourIndex + 1} / ${relevantList.length} in ${activeBook.shortName}`
+      : `${currentTourIndex + 1} / ${connectedVerseIdsList.length}`;
   } else {
-    connCounterBadge.textContent = `${connectedVerseIdsList.length} Connected`;
+    connCounterBadge.textContent = activeBook
+      ? `${relevantList.length} in ${activeBook.shortName}`
+      : `${connectedVerseIdsList.length} Connected`;
   }
 
   const verseObj = verses[verseId - 1];
   const book = getBookForVerse(verseId);
   const connections = verseConnectionsMap.get(verseId) || { internal: [], external: [] };
+
+  // Highlight active chapter pill if zoomed in
+  if (activeBook && verseObj) {
+    document.querySelectorAll(".chapter-label-pill").forEach(p => {
+      if (p.dataset.chapter === String(verseObj.ch)) {
+        p.classList.add("active");
+        p.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      } else {
+        p.classList.remove("active");
+      }
+    });
+  }
 
   if (verseObj) {
     selectedVerseRef.textContent = verseObj.ref;
@@ -858,23 +1113,35 @@ viewBtns.forEach(btn => {
   });
 });
 
-// Tour controls navigation
+// Tour controls navigation (book-aware)
 prevConnBtn.addEventListener("click", () => {
-  if (connectedVerseIdsList.length === 0) return;
-  currentTourIndex = (currentTourIndex - 1 + connectedVerseIdsList.length) % connectedVerseIdsList.length;
-  selectVerse(connectedVerseIdsList[currentTourIndex]);
+  const activeBook = getActiveBook();
+  const list = activeBook
+    ? connectedVerseIdsList.filter(vid => vid >= activeBook.startVerseId && vid <= activeBook.endVerseId)
+    : connectedVerseIdsList;
+  if (list.length === 0) return;
+  currentTourIndex = (currentTourIndex - 1 + list.length) % list.length;
+  selectVerse(list[currentTourIndex]);
 });
 
 nextConnBtn.addEventListener("click", () => {
-  if (connectedVerseIdsList.length === 0) return;
-  currentTourIndex = (currentTourIndex + 1) % connectedVerseIdsList.length;
-  selectVerse(connectedVerseIdsList[currentTourIndex]);
+  const activeBook = getActiveBook();
+  const list = activeBook
+    ? connectedVerseIdsList.filter(vid => vid >= activeBook.startVerseId && vid <= activeBook.endVerseId)
+    : connectedVerseIdsList;
+  if (list.length === 0) return;
+  currentTourIndex = (currentTourIndex + 1) % list.length;
+  selectVerse(list[currentTourIndex]);
 });
 
 randomConnBtn.addEventListener("click", () => {
-  if (connectedVerseIdsList.length === 0) return;
-  currentTourIndex = Math.floor(Math.random() * connectedVerseIdsList.length);
-  selectVerse(connectedVerseIdsList[currentTourIndex]);
+  const activeBook = getActiveBook();
+  const list = activeBook
+    ? connectedVerseIdsList.filter(vid => vid >= activeBook.startVerseId && vid <= activeBook.endVerseId)
+    : connectedVerseIdsList;
+  if (list.length === 0) return;
+  currentTourIndex = Math.floor(Math.random() * list.length);
+  selectVerse(list[currentTourIndex]);
 });
 
 // Search input handling
@@ -898,14 +1165,18 @@ filterBtns.forEach(btn => {
   });
 });
 
-// Book selector
+// Book selector (zooms in on chosen book)
 bookSelect.addEventListener("change", (e) => {
-  activeBookFilter = e.target.value;
-  if (activeBookFilter !== "all") {
-    const b = books.find(item => item.id === parseInt(activeBookFilter));
-    if (b) selectVerse(b.startVerseId);
+  if (e.target.value === "all") {
+    resetZoom();
+  } else {
+    zoomToBook(e.target.value);
   }
-  draw();
+});
+
+// Zoom Reset Button
+zoomResetBtn.addEventListener("click", () => {
+  resetZoom();
 });
 
 // Topic selector
@@ -936,13 +1207,14 @@ function updateUILanguage() {
   document.getElementById("labelViewDual").textContent = t("viewDual");
   document.getElementById("labelViewRadial").textContent = t("viewRadial");
   document.getElementById("bibleTopTitle").textContent = `📖 ${t("bibleTopTitle")}`;
-  document.getElementById("bomBottomTitle").textContent = `📜 ${t("bomBottomTitle")}`;
+  zoomResetText.textContent = t("zoomReset");
   prevConnBtn.querySelector(".tour-btn-text").textContent = t("prevBtn");
   nextConnBtn.querySelector(".tour-btn-text").textContent = t("nextBtn");
   randomConnBtn.querySelector("span").textContent = t("randomBtn");
   searchInput.placeholder = t("searchPlaceholder");
   langText.textContent = t("langToggle");
 
+  renderAxis();
   renderFeaturedPills();
   if (selectedVerseId) {
     selectVerse(selectedVerseId);
@@ -1008,6 +1280,7 @@ async function init() {
     });
     connectedVerseIdsList = Array.from(connectedSet).sort((a, b) => a - b);
 
+    populateBookSelect();
     renderAxis();
     renderFeaturedPills();
     setupCanvas();
