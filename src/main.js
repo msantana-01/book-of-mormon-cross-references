@@ -1338,15 +1338,26 @@ function getBookForVerse(verseId) {
 }
 
 function populateBookSelect() {
-  while (bookSelect.options.length > 1) {
-    bookSelect.remove(1);
-  }
+  const currentVal = bookSelect.value;
+  bookSelect.innerHTML = "";
+
+  const allOpt = document.createElement("option");
+  allOpt.value = "all";
+  allOpt.textContent = t("allBooks");
+  bookSelect.appendChild(allOpt);
+
+  const isPt = getLang() === "pt";
+  const chLabel = isPt ? "cap" : "ch";
+
   books.forEach(b => {
     const opt = document.createElement("option");
     opt.value = b.id;
-    opt.textContent = `${b.name} (${b.chaptersCount} ch)`;
+    const name = getBookDisplayName(b.name);
+    opt.textContent = `${name} (${b.chaptersCount} ${chLabel})`;
     bookSelect.appendChild(opt);
   });
+
+  bookSelect.value = currentVal || "all";
 }
 
 // Render the Axis bar below canvas (whole BOM or chapters of zoomed book)
@@ -1978,9 +1989,40 @@ function updateUILanguage() {
   document.getElementById("badgeBooks").textContent = t("statsBooks");
   document.getElementById("badgeChapters").textContent = t("statsChapters");
   document.getElementById("badgeVerses").textContent = t("statsVerses");
-  document.getElementById("btnFilterAll").textContent = t("filterAll");
-  document.getElementById("btnFilterInternal").textContent = t("filterInternal");
-  document.getElementById("btnFilterExternal").textContent = t("filterExternal");
+  const btnFilterAll = document.getElementById("btnFilterAll");
+  const btnFilterInternal = document.getElementById("btnFilterInternal");
+  const btnFilterExternal = document.getElementById("btnFilterExternal");
+
+  if (btnFilterAll) {
+    btnFilterAll.textContent = t("filterAll");
+    btnFilterAll.title = t("filterAllTooltip");
+  }
+  if (btnFilterInternal) {
+    btnFilterInternal.textContent = t("filterInternal");
+    btnFilterInternal.title = t("filterInternalTooltip");
+  }
+  if (btnFilterExternal) {
+    btnFilterExternal.textContent = t("filterExternal");
+    btnFilterExternal.title = t("filterExternalTooltip");
+  }
+
+  // Update topicSelect options text
+  const topicSelect = document.getElementById("topicSelect");
+  if (topicSelect) {
+    const topicKeys = {
+      "all": "allTopics",
+      "prophecy": "topicProphecy",
+      "christ": "topicChrist",
+      "faith": "topicFaith",
+      "isaiah": "topicIsaiah"
+    };
+    Array.from(topicSelect.options).forEach(opt => {
+      const k = topicKeys[opt.value];
+      if (k) opt.textContent = t(k);
+    });
+  }
+
+  populateBookSelect();
   document.getElementById("connectionsSectionTitle").textContent = t("drawerTitle");
   document.getElementById("featuredLabel").innerHTML = `${icons.sparkles} ${t("featuredTitle")}`;
   document.getElementById("viewModeLabel").textContent = t("viewModeLabel");
