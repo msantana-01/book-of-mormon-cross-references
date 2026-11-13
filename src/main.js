@@ -330,6 +330,15 @@ const verseTextBox = document.getElementById("verseTextBox");
 const connectionsList = document.getElementById("connectionsList");
 const officialLinkContainer = document.getElementById("officialLinkContainer");
 const officialLink = document.getElementById("officialLink");
+const studyPanel = document.getElementById("studyPanel");
+const backToDiagramBtn = document.getElementById("backToDiagramBtn");
+const backToDiagramText = document.getElementById("backToDiagramText");
+
+function scrollToStudyPanel() {
+  if (studyPanel) {
+    studyPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
 
 // Layout constants
 const PADDING_X = 26;
@@ -1254,7 +1263,7 @@ function renderThreadsChapter(scrollToTop = true) {
       <span class="threads-verse-num">${v.v}</span>
       <span class="threads-verse-text">
         ${v.text}
-        ${totalConns > 0 ? `<span class="threads-verse-pill" title="${totalConns} ${t('connectionsCount', { n: totalConns })}">${icons.link} ${totalConns}</span>` : ""}
+        ${totalConns > 0 ? `<span class="threads-verse-pill" title="${t('verseConnectionsTooltip', { n: totalConns })}">${icons.link} ${totalConns}</span>` : ""}
       </span>
     `;
 
@@ -1269,7 +1278,7 @@ function renderThreadsChapter(scrollToTop = true) {
     });
 
     item.addEventListener("click", () => {
-      selectVerse(v.id);
+      selectVerse(v.id, true);
     });
 
     threadsVersesList.appendChild(item);
@@ -1462,7 +1471,7 @@ function renderFeaturedPills() {
 
     pill.addEventListener("click", () => {
       if (item.verseId) {
-        selectVerse(item.verseId);
+        selectVerse(item.verseId, true);
       }
     });
 
@@ -1471,7 +1480,7 @@ function renderFeaturedPills() {
 }
 
 // Select a verse and update the Study Panel
-function selectVerse(verseId) {
+function selectVerse(verseId, shouldScroll = false) {
   if (!verseId || verseId < 1 || verseId > 6604) return;
   selectedVerseId = verseId;
 
@@ -1642,6 +1651,13 @@ function selectVerse(verseId) {
   } else {
     draw();
   }
+
+  // Auto-scroll to Study Panel when user explicitly clicks/selects a verse
+  if (shouldScroll) {
+    setTimeout(() => {
+      scrollToStudyPanel();
+    }, 120);
+  }
 }
 
 // Mouse events on canvas with mode-aware coordinates
@@ -1705,12 +1721,12 @@ canvas.addEventListener("click", (e) => {
     if (dist >= outerR * 0.25 && dist <= outerR * 1.25) {
       const angle = Math.atan2(mouseY - cy, mouseX - cx);
       const vId = radialToVerse(angle);
-      selectVerse(vId);
+      selectVerse(vId, true);
     }
   } else {
     if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
       const vId = findNearestConnectedVerse(mouseX, 20);
-      selectVerse(vId);
+      selectVerse(vId, true);
     }
   }
 });
@@ -1823,6 +1839,17 @@ threadsCanvas.addEventListener("mouseleave", () => {
   }
 });
 
+// Back to Diagram / Reading button
+if (backToDiagramBtn) {
+  backToDiagramBtn.addEventListener("click", () => {
+    if (currentViewMode === "threads" && threadsContainer) {
+      threadsContainer.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (canvasWrapper) {
+      canvasWrapper.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+}
+
 // Tour controls navigation (book-aware)
 prevConnBtn.addEventListener("click", () => {
   const activeBook = getActiveBook();
@@ -1925,6 +1952,7 @@ function updateUILanguage() {
   if (threadsNextText) threadsNextText.textContent = t("threadsNextCh");
   if (threadsSpineHeaderTitle) threadsSpineHeaderTitle.textContent = t("threadsSpineTitle");
   if (threadsHoverHintText) threadsHoverHintText.textContent = t("threadsHoverHint");
+  if (backToDiagramText) backToDiagramText.textContent = t("backToDiagram");
   document.getElementById("bibleTopTitle").textContent = `📖 ${t("bibleTopTitle")}`;
   zoomResetText.textContent = t("zoomReset");
   prevConnBtn.querySelector(".tour-btn-text").textContent = t("prevBtn");

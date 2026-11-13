@@ -481,6 +481,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  scroll-margin-top: 1.5rem;
 }
 
 .panel-header {
@@ -491,6 +492,35 @@ main {
   padding-bottom: 1rem;
   flex-wrap: wrap;
   gap: 0.65rem;
+}
+
+.panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.back-to-diagram-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--cyan);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+}
+
+.back-to-diagram-btn:hover {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: var(--cyan);
+  color: #bae6fd;
+  transform: translateY(-1px);
 }
 
 .panel-header h2 {
