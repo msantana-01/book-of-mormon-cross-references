@@ -58,6 +58,10 @@
           <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m12 3 3 9-6-3 9 3-6-9"></path></svg>
           <span id="labelViewRadial">Sacred Ring</span>
         </button>
+        <button class="view-btn" data-view="threads" id="btnViewThreads" title="Verse-by-verse chapter reading with connecting threads to scriptures">
+          <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h6a4 4 0 0 1 4 4v10"></path><path d="M21 19h-6a4 4 0 0 1-4-4V5"></path><circle cx="3" cy="5" r="1.5"></circle><circle cx="21" cy="19" r="1.5"></circle></svg>
+          <span id="labelViewThreads">Threads</span>
+        </button>
       </div>
     </div>
 
@@ -108,6 +112,59 @@
         <div class="book-labels-row" id="bookLabelsRow"></div>
       </div>
     </div>
+
+    <!-- Threads Reading & Cross-Reference Stage (Visible when Diagram Style = Threads) -->
+    <section id="threadsContainer" class="threads-container" style="display: none;" aria-label="Chapter Reading and Living Threads">
+      <!-- Chapter Navigation Header -->
+      <div class="threads-toolbar">
+        <div class="threads-nav-controls">
+          <button id="threadsPrevChBtn" class="tour-btn" title="Previous Chapter">
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span id="threadsPrevText">Prev Ch</span>
+          </button>
+
+          <div class="threads-select-group">
+            <select id="threadsBookSelect" class="select-input select-input-accent" aria-label="Select Book to Read"></select>
+            <select id="threadsChapterSelect" class="select-input select-input-accent" aria-label="Select Chapter"></select>
+          </div>
+
+          <button id="threadsNextChBtn" class="tour-btn" title="Next Chapter">
+            <span id="threadsNextText">Next Ch</span>
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+
+        <div class="threads-stats-area">
+          <span class="badge badge-gold badge-tabular" id="threadsStatsBadge">1 Nephi 1 • 20 Verses</span>
+        </div>
+      </div>
+
+      <!-- Threads Dual-Pane Stage -->
+      <div class="threads-stage" id="threadsStage">
+        <!-- Left: Chapter Reading Pane -->
+        <div class="threads-reading-pane" id="threadsReadingPane" role="region" aria-label="Scripture Chapter Reading">
+          <div class="threads-chapter-header">
+            <h2 id="threadsChapterHeaderTitle">1 Nephi 1</h2>
+            <p id="threadsChapterHeaderSub" class="text-muted">Explore verse-by-verse cross-references and living prophetic threads</p>
+          </div>
+          <div class="threads-verses-list" id="threadsVersesList">
+            <!-- Populated dynamically with verse items -->
+          </div>
+        </div>
+
+        <!-- Right: Living Threads & Scripture Spine Canvas -->
+        <div class="threads-canvas-pane" id="threadsCanvasPane">
+          <div class="threads-spine-header">
+            <span id="threadsSpineHeaderTitle">Scripture Spine</span>
+            <span class="threads-hint" id="threadsHoverHintText">Hover or click to illuminate</span>
+          </div>
+          <div class="threads-canvas-box" id="threadsCanvasBox">
+            <canvas id="threadsCanvas"></canvas>
+            <div id="threadsSpineTooltip" class="threads-spine-tooltip" role="tooltip" aria-hidden="true" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Study Panel / Inspector -->
     <section class="study-panel" id="studyPanel" aria-labelledby="selectedVerseRef">

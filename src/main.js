@@ -1,4 +1,4 @@
-import { t, getLang, setLang } from "./i18n.js";
+import { t, getLang, setLang, getBookDisplayName } from "./i18n.js";
 import { icons } from "./icons.js";
 
 // State
@@ -10,13 +10,20 @@ let currentTourIndex = 0;
 let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] }
 let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
 
-let currentViewMode = "dual"; // "dual" | "radial"
+let currentViewMode = "dual"; // "dual" | "radial" | "threads"
 let selectedVerseId = 4876; // Default to Helaman 14:2 (Samuel the Lamanite's Sign)
 let hoveredVerseId = null;
 let hoveredBookId = null;
 let currentFilter = "all"; // "all" | "internal" | "external"
 let activeBookFilter = "all";
 let activeTopicFilter = "all";
+
+// Threads View State (Inspired by trekhleb/bible-cross-references)
+let threadsCurrentBookId = 1; // 1 Nephi default
+let threadsCurrentChapter = 1;
+let threadsHoveredSpineBook = null;
+let threadsHoveredVerseId = null;
+let threadsSpineSegments = [];
 
 // Curated Key Connections for 1-Click Exploration (Dynamic verseId lookup via srcRef)
 const FEATURED_CONNECTIONS = [
@@ -138,6 +145,42 @@ function getBibleBookX(refStr, width, paddingX) {
   return paddingX + 0.5 * usable;
 }
 
+// Scripture Spine Bible canon segments for Threads view
+const SPINE_BIBLE_BOOKS = [
+  // Old Testament
+  { name: "Genesis", short: "Gen", color: "#f59e0b", weight: 1.0 },
+  { name: "Exodus", short: "Exo", color: "#f59e0b", weight: 1.1 },
+  { name: "Numbers", short: "Num", color: "#f59e0b", weight: 0.9 },
+  { name: "Psalms", short: "Ps", color: "#d97706", weight: 1.1 },
+  { name: "Proverbs", short: "Prov", color: "#d97706", weight: 0.9 },
+  { name: "Isaiah", short: "Isa", color: "#fbbf24", weight: 2.2 },
+  { name: "Jeremiah", short: "Jer", color: "#d97706", weight: 1.0 },
+  { name: "Ezekiel", short: "Ezek", color: "#d97706", weight: 0.9 },
+  { name: "Micah", short: "Mic", color: "#d97706", weight: 0.9 },
+  { name: "Malachi", short: "Mal", color: "#f59e0b", weight: 1.1 },
+  // New Testament
+  { name: "Matthew", short: "Matt", color: "#10b981", weight: 1.8 },
+  { name: "Mark", short: "Mark", color: "#10b981", weight: 0.9 },
+  { name: "Luke", short: "Luke", color: "#10b981", weight: 1.2 },
+  { name: "John", short: "John", color: "#10b981", weight: 1.3 },
+  { name: "Acts", short: "Acts", color: "#059669", weight: 1.1 },
+  { name: "Romans", short: "Rom", color: "#059669", weight: 0.9 },
+  { name: "1 Corinthians", short: "1 Cor", color: "#059669", weight: 0.9 },
+  { name: "Hebrews", short: "Heb", color: "#059669", weight: 1.0 },
+  { name: "Revelation", short: "Rev", color: "#047857", weight: 0.9 }
+];
+
+function parseBibleBookName(refStr) {
+  if (!refStr) return null;
+  const trimmed = refStr.trim();
+  for (const b of SPINE_BIBLE_BOOKS) {
+    if (trimmed.startsWith(b.name) || trimmed.startsWith(b.short)) {
+      return b.name;
+    }
+  }
+  return null;
+}
+
 // Canonical Church URL slugs
 const CHURCH_BOOK_SLUGS = {
   "1 Nephi": "1-ne",
@@ -233,6 +276,7 @@ function getBibleStudyUrl(externalRefStr) {
 }
 
 // DOM Elements
+const canvasWrapper = document.querySelector(".canvas-wrapper");
 const canvas = document.getElementById("arcCanvas");
 const ctx = canvas.getContext("2d");
 const tooltip = document.getElementById("tooltip");
@@ -246,6 +290,27 @@ const filterBtns = document.querySelectorAll(".filter-btn");
 const viewBtns = document.querySelectorAll(".view-btn");
 const langToggleBtn = document.getElementById("langToggleBtn");
 const langText = document.getElementById("langText");
+
+// Threads View DOM Elements
+const threadsContainer = document.getElementById("threadsContainer");
+const threadsPrevChBtn = document.getElementById("threadsPrevChBtn");
+const threadsNextChBtn = document.getElementById("threadsNextChBtn");
+const threadsBookSelect = document.getElementById("threadsBookSelect");
+const threadsChapterSelect = document.getElementById("threadsChapterSelect");
+const threadsStatsBadge = document.getElementById("threadsStatsBadge");
+const threadsReadingPane = document.getElementById("threadsReadingPane");
+const threadsChapterHeaderTitle = document.getElementById("threadsChapterHeaderTitle");
+const threadsChapterHeaderSub = document.getElementById("threadsChapterHeaderSub");
+const threadsVersesList = document.getElementById("threadsVersesList");
+const threadsCanvasBox = document.getElementById("threadsCanvasBox");
+const threadsCanvas = document.getElementById("threadsCanvas");
+const threadsCtx = threadsCanvas ? threadsCanvas.getContext("2d") : null;
+const threadsSpineTooltip = document.getElementById("threadsSpineTooltip");
+const threadsSpineHeaderTitle = document.getElementById("threadsSpineHeaderTitle");
+const threadsHoverHintText = document.getElementById("threadsHoverHintText");
+const labelViewThreads = document.getElementById("labelViewThreads");
+const threadsPrevText = document.getElementById("threadsPrevText");
+const threadsNextText = document.getElementById("threadsNextText");
 
 const dualTopLabelRow = document.getElementById("dualTopLabelRow");
 const dualBottomLabelRow = document.getElementById("dualBottomLabelRow");
@@ -396,6 +461,10 @@ function radialToVerse(angleRad) {
 
 // Main Draw Dispatcher
 function draw() {
+  if (currentViewMode === "threads") {
+    drawThreadsCanvas();
+    return;
+  }
   const rect = canvas.getBoundingClientRect();
   ctx.clearRect(0, 0, rect.width, rect.height);
 
@@ -834,6 +903,423 @@ function drawRadialView() {
   }
 }
 
+// -------------------------------------------------------------
+// VIEW 3: THREADS VIEW (Chapter Reading & Living Scripture Threads)
+// Inspired by trekhleb/bible-cross-references
+// -------------------------------------------------------------
+function calculateSpineLayout(canvasH, canvasW) {
+  threadsSpineSegments = [];
+  const paddingY = 18;
+  const usableH = Math.max(200, canvasH - paddingY * 2);
+
+  // Allocate 42% of spine to Bible, 58% to Book of Mormon
+  const bibleTotalH = usableH * 0.42;
+  const bomTotalH = usableH * 0.58;
+  const bibleStartY = paddingY;
+  const bomStartY = paddingY + bibleTotalH;
+
+  // 1. Bible segments
+  const totalBibleWeight = SPINE_BIBLE_BOOKS.reduce((acc, b) => acc + (b.weight || 1), 0);
+  let curY = bibleStartY;
+  SPINE_BIBLE_BOOKS.forEach(b => {
+    const segH = ((b.weight || 1) / totalBibleWeight) * bibleTotalH;
+    threadsSpineSegments.push({
+      name: b.name,
+      short: b.short,
+      displayName: b.name,
+      color: b.color,
+      top: curY,
+      bottom: curY + segH,
+      center: curY + segH / 2,
+      category: "bible",
+      bookObj: null
+    });
+    curY += segH;
+  });
+
+  // 2. Book of Mormon segments
+  const totalBomVerses = 6604;
+  curY = bomStartY;
+  books.forEach(b => {
+    const segH = (b.versesCount / totalBomVerses) * bomTotalH;
+    threadsSpineSegments.push({
+      name: b.name,
+      short: b.shortName || b.name,
+      displayName: getBookDisplayName(b.name),
+      color: b.color,
+      top: curY,
+      bottom: curY + segH,
+      center: curY + segH / 2,
+      category: "bom",
+      bookObj: b
+    });
+    curY += segH;
+  });
+}
+
+function countConnectionsToBookInCurrentChapter(bookName) {
+  const chapterVerses = verses.filter(v => v.bookId === threadsCurrentBookId && v.ch === threadsCurrentChapter);
+  let count = 0;
+  chapterVerses.forEach(v => {
+    const conns = verseConnectionsMap.get(v.id);
+    if (!conns) return;
+    conns.internal.forEach(link => {
+      const isSrc = link.source === v.id;
+      const tgtId = isSrc ? link.target : link.source;
+      const b = getBookForVerse(tgtId);
+      if (b && (b.name === bookName || getBookDisplayName(b.name) === bookName)) count++;
+    });
+    conns.external.forEach(link => {
+      const bName = parseBibleBookName(link.externalRef);
+      if (bName && bName === bookName) count++;
+    });
+  });
+  return count;
+}
+
+function drawThreadsCanvas() {
+  if (currentViewMode !== "threads" || !threadsCanvas || !threadsCtx || !threadsCanvasBox) return;
+
+  const rect = threadsCanvasBox.getBoundingClientRect();
+  const width = Math.floor(rect.width);
+  const height = Math.floor(rect.height);
+  if (width <= 0 || height <= 0) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  threadsCanvas.width = width * dpr;
+  threadsCanvas.height = height * dpr;
+  threadsCtx.setTransform(1, 0, 0, 1, 0, 0);
+  threadsCtx.scale(dpr, dpr);
+
+  threadsCtx.clearRect(0, 0, width, height);
+
+  calculateSpineLayout(height, width);
+
+  const spineBarWidth = width < 340 ? 8 : 10;
+  const labelSpace = width < 340 ? 60 : 75;
+  const spineBarLeft = Math.max(90, width - labelSpace - spineBarWidth);
+  const gutterWidth = spineBarLeft;
+
+  // Recalculate verse anchors from rendered reading pane DOM
+  const paneRect = threadsReadingPane.getBoundingClientRect();
+  const verseElements = threadsVersesList.querySelectorAll(".threads-verse-item");
+  const anchors = [];
+
+  verseElements.forEach(el => {
+    const vId = parseInt(el.dataset.verseId, 10);
+    const vRect = el.getBoundingClientRect();
+    const y = (vRect.top - paneRect.top) + (vRect.height / 2);
+    // Include if within visible vertical bounds with buffer
+    if (y >= -40 && y <= height + 40) {
+      anchors.push({ verseId: vId, y, el });
+    }
+  });
+
+  const activeVerse = hoveredVerseId || selectedVerseId;
+  const hasAnyEmphasis = activeVerse !== null || threadsHoveredVerseId !== null || threadsHoveredSpineBook !== null;
+
+  // Collect threads
+  const threadsToDraw = [];
+
+  anchors.forEach(anchor => {
+    const conns = verseConnectionsMap.get(anchor.verseId);
+    if (!conns) return;
+
+    // Filter connections
+    const filteredInternal = currentFilter === "external" ? [] : conns.internal;
+    const filteredExternal = currentFilter === "internal" ? [] : conns.external;
+
+    // 1. Internal BOM threads
+    filteredInternal.forEach(link => {
+      const isSource = link.source === anchor.verseId;
+      const targetId = isSource ? link.target : link.source;
+      const targetBook = getBookForVerse(targetId);
+      if (!targetBook) return;
+
+      const bomSeg = threadsSpineSegments.find(s => s.category === "bom" && s.bookObj && s.bookObj.id === targetBook.id);
+      if (!bomSeg) return;
+
+      const segRange = bomSeg.bottom - bomSeg.top;
+      const ratio = targetBook.versesCount > 1
+        ? (targetId - targetBook.startVerseId) / targetBook.versesCount
+        : 0.5;
+      const targetY = bomSeg.top + Math.max(1, Math.min(segRange - 1, ratio * segRange));
+
+      const isEmphasized =
+        (anchor.verseId === activeVerse) ||
+        (anchor.verseId === threadsHoveredVerseId) ||
+        (threadsHoveredSpineBook && (bomSeg.name === threadsHoveredSpineBook || targetBook.name === threadsHoveredSpineBook));
+
+      threadsToDraw.push({
+        y1: anchor.y,
+        y2: targetY,
+        color: targetBook.color || "#38bdf8",
+        isEmphasized,
+        targetName: targetBook.name,
+        verseId: anchor.verseId
+      });
+    });
+
+    // 2. External Bible threads
+    filteredExternal.forEach(link => {
+      const bName = parseBibleBookName(link.externalRef);
+      if (!bName) return;
+
+      const bibleSeg = threadsSpineSegments.find(s => s.category === "bible" && s.name === bName);
+      if (!bibleSeg) return;
+
+      const targetY = bibleSeg.center;
+      const isEmphasized =
+        (anchor.verseId === activeVerse) ||
+        (anchor.verseId === threadsHoveredVerseId) ||
+        (threadsHoveredSpineBook && bibleSeg.name === threadsHoveredSpineBook);
+
+      threadsToDraw.push({
+        y1: anchor.y,
+        y2: targetY,
+        color: "#10b981", // Emerald green for Bible
+        isEmphasized,
+        targetName: bName,
+        verseId: anchor.verseId
+      });
+    });
+  });
+
+  // Sort threads: faint ones first, emphasized ones on top
+  threadsToDraw.sort((a, b) => Number(a.isEmphasized) - Number(b.isEmphasized));
+
+  const bend = gutterWidth * 0.52;
+
+  // Draw threads
+  threadsToDraw.forEach(th => {
+    threadsCtx.save();
+    if (th.isEmphasized) {
+      threadsCtx.globalAlpha = 0.95;
+      threadsCtx.strokeStyle = th.color;
+      threadsCtx.lineWidth = 2.4;
+      threadsCtx.shadowColor = th.color;
+      threadsCtx.shadowBlur = 10;
+    } else if (hasAnyEmphasis) {
+      threadsCtx.globalAlpha = 0.06;
+      threadsCtx.strokeStyle = th.color;
+      threadsCtx.lineWidth = 0.8;
+    } else {
+      threadsCtx.globalAlpha = 0.32;
+      threadsCtx.strokeStyle = th.color;
+      threadsCtx.lineWidth = 1.1;
+    }
+
+    threadsCtx.beginPath();
+    threadsCtx.moveTo(0, th.y1);
+    threadsCtx.bezierCurveTo(bend, th.y1, spineBarLeft - bend, th.y2, spineBarLeft, th.y2);
+    threadsCtx.stroke();
+
+    // Landing tick
+    threadsCtx.fillStyle = th.color;
+    threadsCtx.fillRect(spineBarLeft - 4, th.y2 - 1, 4, 2);
+    threadsCtx.restore();
+  });
+
+  // Draw Spine Bar
+  threadsSpineSegments.forEach(seg => {
+    const isHovered = threadsHoveredSpineBook === seg.name;
+    const segH = Math.max(seg.bottom - seg.top, 1.5);
+
+    threadsCtx.fillStyle = seg.color;
+    threadsCtx.globalAlpha = isHovered ? 1.0 : (seg.category === "bible" ? 0.85 : 0.95);
+    threadsCtx.fillRect(spineBarLeft, seg.top, spineBarWidth, segH);
+
+    // Separator line between segments
+    threadsCtx.strokeStyle = "rgba(0, 0, 0, 0.4)";
+    threadsCtx.lineWidth = 0.5;
+    threadsCtx.strokeRect(spineBarLeft, seg.top, spineBarWidth, segH);
+
+    // Label on the right
+    if (segH >= 11 || isHovered) {
+      threadsCtx.font = isHovered ? "bold 10px Inter, system-ui, sans-serif" : "9px Inter, system-ui, sans-serif";
+      threadsCtx.textAlign = "left";
+      threadsCtx.textBaseline = "middle";
+      threadsCtx.fillStyle = isHovered ? "#ffffff" : "#94a3b8";
+      threadsCtx.globalAlpha = isHovered ? 1.0 : 0.8;
+
+      const labelText = width < 340 ? seg.short : seg.displayName;
+      threadsCtx.fillText(labelText, spineBarLeft + spineBarWidth + 6, seg.center);
+    }
+  });
+
+  threadsCtx.globalAlpha = 1.0;
+
+  // Draw "You Are Here" indicator on current chapter
+  const currentBookObj = books.find(b => b.id === threadsCurrentBookId);
+  if (currentBookObj) {
+    const chData = currentBookObj.chaptersList ? currentBookObj.chaptersList.find(c => c.chapter === threadsCurrentChapter) : null;
+    if (chData) {
+      const bomSeg = threadsSpineSegments.find(s => s.category === "bom" && s.bookObj && s.bookObj.id === currentBookObj.id);
+      if (bomSeg) {
+        const segRange = bomSeg.bottom - bomSeg.top;
+        const startRatio = (chData.startVerseId - currentBookObj.startVerseId) / currentBookObj.versesCount;
+        const endRatio = (chData.endVerseId - currentBookObj.startVerseId) / currentBookObj.versesCount;
+        const topY = bomSeg.top + startRatio * segRange;
+        const botY = bomSeg.top + endRatio * segRange;
+        const h = Math.max(botY - topY, 6);
+
+        threadsCtx.strokeStyle = "#fbbf24"; // Gold bracket
+        threadsCtx.lineWidth = 2.5;
+        threadsCtx.shadowColor = "#fbbf24";
+        threadsCtx.shadowBlur = 8;
+        threadsCtx.strokeRect(spineBarLeft - 2, topY - 1, spineBarWidth + 4, h + 2);
+        threadsCtx.shadowBlur = 0;
+      }
+    }
+  }
+}
+
+function renderThreadsChapter(scrollToTop = true) {
+  if (!verses || verses.length === 0 || !books || books.length === 0) return;
+
+  const currentBookObj = books.find(b => b.id === threadsCurrentBookId) || books[0];
+  const bookDisplayName = getBookDisplayName(currentBookObj.name);
+
+  // Populate book dropdown if empty or language changed
+  if (threadsBookSelect.options.length !== books.length) {
+    threadsBookSelect.innerHTML = "";
+    books.forEach(b => {
+      const opt = document.createElement("option");
+      opt.value = b.id;
+      opt.textContent = getBookDisplayName(b.name);
+      if (b.id === threadsCurrentBookId) opt.selected = true;
+      threadsBookSelect.appendChild(opt);
+    });
+  } else {
+    threadsBookSelect.value = threadsCurrentBookId;
+  }
+
+  // Populate chapter dropdown
+  threadsChapterSelect.innerHTML = "";
+  for (let ch = 1; ch <= currentBookObj.chaptersCount; ch++) {
+    const opt = document.createElement("option");
+    opt.value = ch;
+    opt.textContent = t("threadsSelectChapter", { n: ch });
+    if (ch === threadsCurrentChapter) opt.selected = true;
+    threadsChapterSelect.appendChild(opt);
+  }
+
+  // Filter verses for this book & chapter
+  const chapterVerses = verses.filter(v => v.bookId === threadsCurrentBookId && v.ch === threadsCurrentChapter);
+
+  // Header & subtitle
+  threadsChapterHeaderTitle.textContent = `${bookDisplayName} ${threadsCurrentChapter}`;
+  threadsChapterHeaderSub.textContent = t("threadsHoverHint");
+
+  // Calculate connections in chapter
+  let totalConnectionsInChapter = 0;
+  chapterVerses.forEach(v => {
+    const conns = verseConnectionsMap.get(v.id);
+    if (conns) {
+      const nInt = currentFilter === "external" ? 0 : conns.internal.length;
+      const nExt = currentFilter === "internal" ? 0 : conns.external.length;
+      totalConnectionsInChapter += (nInt + nExt);
+    }
+  });
+
+  threadsStatsBadge.textContent = t("threadsReadingStats", {
+    book: bookDisplayName,
+    ch: threadsCurrentChapter,
+    verses: chapterVerses.length,
+    links: totalConnectionsInChapter
+  });
+
+  // Render verses list
+  threadsVersesList.innerHTML = "";
+  const activeVerse = hoveredVerseId || selectedVerseId;
+
+  chapterVerses.forEach(v => {
+    const item = document.createElement("div");
+    item.className = "threads-verse-item";
+    item.dataset.verseId = v.id;
+    if (v.id === activeVerse) {
+      item.classList.add("active");
+    }
+
+    const conns = verseConnectionsMap.get(v.id);
+    const nInt = conns ? (currentFilter === "external" ? 0 : conns.internal.length) : 0;
+    const nExt = conns ? (currentFilter === "internal" ? 0 : conns.external.length) : 0;
+    const totalConns = nInt + nExt;
+
+    if (totalConns > 0) {
+      item.classList.add("has-connections");
+    }
+
+    item.innerHTML = `
+      <span class="threads-verse-num">${v.v}</span>
+      <span class="threads-verse-text">
+        ${v.text}
+        ${totalConns > 0 ? `<span class="threads-verse-pill" title="${totalConns} ${t('connectionsCount', { n: totalConns })}">${icons.link} ${totalConns}</span>` : ""}
+      </span>
+    `;
+
+    item.addEventListener("mouseenter", () => {
+      threadsHoveredVerseId = v.id;
+      drawThreadsCanvas();
+    });
+
+    item.addEventListener("mouseleave", () => {
+      threadsHoveredVerseId = null;
+      drawThreadsCanvas();
+    });
+
+    item.addEventListener("click", () => {
+      selectVerse(v.id);
+    });
+
+    threadsVersesList.appendChild(item);
+  });
+
+  if (scrollToTop) {
+    threadsReadingPane.scrollTop = 0;
+  }
+
+  // Draw canvas after DOM layout settles
+  requestAnimationFrame(() => {
+    drawThreadsCanvas();
+  });
+}
+
+function changeThreadsChapter(delta) {
+  const currentBookObj = books.find(b => b.id === threadsCurrentBookId);
+  if (!currentBookObj) return;
+
+  let newCh = threadsCurrentChapter + delta;
+  if (newCh >= 1 && newCh <= currentBookObj.chaptersCount) {
+    threadsCurrentChapter = newCh;
+  } else if (newCh < 1) {
+    // Go to previous book
+    const prevBookIdx = books.findIndex(b => b.id === threadsCurrentBookId) - 1;
+    if (prevBookIdx >= 0) {
+      threadsCurrentBookId = books[prevBookIdx].id;
+      threadsCurrentChapter = books[prevBookIdx].chaptersCount;
+    }
+  } else if (newCh > currentBookObj.chaptersCount) {
+    // Go to next book
+    const nextBookIdx = books.findIndex(b => b.id === threadsCurrentBookId) + 1;
+    if (nextBookIdx < books.length) {
+      threadsCurrentBookId = books[nextBookIdx].id;
+      threadsCurrentChapter = 1;
+    }
+  }
+
+  // Pick first verse of new chapter as selected
+  const firstVerse = verses.find(v => v.bookId === threadsCurrentBookId && v.ch === threadsCurrentChapter);
+  if (firstVerse) {
+    selectedVerseId = firstVerse.id;
+  }
+
+  renderThreadsChapter(true);
+  if (selectedVerseId) {
+    selectVerse(selectedVerseId);
+  }
+}
+
 
 function getBookForVerse(verseId) {
   return books.find(b => verseId >= b.startVerseId && verseId <= b.endVerseId);
@@ -1138,7 +1624,24 @@ function selectVerse(verseId) {
     }
   });
 
-  draw();
+  if (currentViewMode === "threads" && verseObj) {
+    if (threadsCurrentBookId !== verseObj.bookId || threadsCurrentChapter !== verseObj.ch) {
+      threadsCurrentBookId = verseObj.bookId;
+      threadsCurrentChapter = verseObj.ch;
+      renderThreadsChapter(false);
+    }
+    // Highlight active verse in reading pane
+    document.querySelectorAll(".threads-verse-item").forEach(item => {
+      item.classList.toggle("active", parseInt(item.dataset.verseId, 10) === verseId);
+    });
+    const activeEl = threadsVersesList.querySelector(`[data-verse-id="${verseId}"]`);
+    if (activeEl) {
+      activeEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    drawThreadsCanvas();
+  } else {
+    draw();
+  }
 }
 
 // Mouse events on canvas with mode-aware coordinates
@@ -1220,17 +1723,104 @@ viewBtns.forEach(btn => {
     currentViewMode = btn.dataset.view;
 
     if (currentViewMode === "dual") {
+      canvasWrapper.style.display = "block";
+      threadsContainer.style.display = "none";
       dualTopLabelRow.style.display = "flex";
       dualBottomLabelRow.style.display = "flex";
       axisContainer.style.display = "block";
-    } else {
+      draw();
+    } else if (currentViewMode === "radial") {
+      canvasWrapper.style.display = "block";
+      threadsContainer.style.display = "none";
       dualTopLabelRow.style.display = "none";
       dualBottomLabelRow.style.display = "none";
       axisContainer.style.display = "none";
+      draw();
+    } else if (currentViewMode === "threads") {
+      canvasWrapper.style.display = "none";
+      threadsContainer.style.display = "flex";
+      if (selectedVerseId) {
+        const v = verses.find(x => x.id === selectedVerseId);
+        if (v) {
+          threadsCurrentBookId = v.bookId;
+          threadsCurrentChapter = v.ch;
+        }
+      }
+      renderThreadsChapter(true);
     }
-
-    draw();
   });
+});
+
+// Threads View Event Listeners
+threadsPrevChBtn.addEventListener("click", () => changeThreadsChapter(-1));
+threadsNextChBtn.addEventListener("click", () => changeThreadsChapter(1));
+
+threadsBookSelect.addEventListener("change", (e) => {
+  threadsCurrentBookId = parseInt(e.target.value, 10);
+  threadsCurrentChapter = 1;
+  const firstVerse = verses.find(v => v.bookId === threadsCurrentBookId && v.ch === threadsCurrentChapter);
+  if (firstVerse) selectedVerseId = firstVerse.id;
+  renderThreadsChapter(true);
+  if (selectedVerseId) selectVerse(selectedVerseId);
+});
+
+threadsChapterSelect.addEventListener("change", (e) => {
+  threadsCurrentChapter = parseInt(e.target.value, 10);
+  const firstVerse = verses.find(v => v.bookId === threadsCurrentBookId && v.ch === threadsCurrentChapter);
+  if (firstVerse) selectedVerseId = firstVerse.id;
+  renderThreadsChapter(true);
+  if (selectedVerseId) selectVerse(selectedVerseId);
+});
+
+threadsReadingPane.addEventListener("scroll", () => {
+  if (currentViewMode === "threads") {
+    requestAnimationFrame(drawThreadsCanvas);
+  }
+}, { passive: true });
+
+threadsCanvas.addEventListener("mousemove", (e) => {
+  if (currentViewMode !== "threads") return;
+  const rect = threadsCanvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  const spineBarWidth = rect.width < 340 ? 8 : 10;
+  const labelSpace = rect.width < 340 ? 60 : 75;
+  const spineBarLeft = Math.max(90, rect.width - labelSpace - spineBarWidth);
+
+  // If mouse is near or on the spine
+  if (mouseX >= spineBarLeft - 10 && mouseX <= rect.width) {
+    const seg = threadsSpineSegments.find(s => mouseY >= s.top && mouseY <= s.bottom);
+    if (seg) {
+      if (threadsHoveredSpineBook !== seg.name) {
+        threadsHoveredSpineBook = seg.name;
+        const count = countConnectionsToBookInCurrentChapter(seg.name);
+        threadsSpineTooltip.style.display = "block";
+        threadsSpineTooltip.style.left = `${mouseX}px`;
+        threadsSpineTooltip.style.top = `${mouseY}px`;
+        threadsSpineTooltip.textContent = t("threadsSpineTooltip", { name: seg.displayName, count });
+        drawThreadsCanvas();
+      } else {
+        threadsSpineTooltip.style.left = `${mouseX}px`;
+        threadsSpineTooltip.style.top = `${mouseY}px`;
+      }
+      return;
+    }
+  }
+
+  if (threadsHoveredSpineBook !== null) {
+    threadsHoveredSpineBook = null;
+    threadsSpineTooltip.style.display = "none";
+    drawThreadsCanvas();
+  }
+});
+
+threadsCanvas.addEventListener("mouseleave", () => {
+  if (threadsHoveredSpineBook !== null) {
+    threadsHoveredSpineBook = null;
+    threadsSpineTooltip.style.display = "none";
+    drawThreadsCanvas();
+  }
 });
 
 // Tour controls navigation (book-aware)
@@ -1330,6 +1920,11 @@ function updateUILanguage() {
   document.getElementById("viewModeLabel").textContent = t("viewModeLabel");
   document.getElementById("labelViewDual").textContent = t("viewDual");
   document.getElementById("labelViewRadial").textContent = t("viewRadial");
+  if (labelViewThreads) labelViewThreads.textContent = t("viewThreads");
+  if (threadsPrevText) threadsPrevText.textContent = t("threadsPrevCh");
+  if (threadsNextText) threadsNextText.textContent = t("threadsNextCh");
+  if (threadsSpineHeaderTitle) threadsSpineHeaderTitle.textContent = t("threadsSpineTitle");
+  if (threadsHoverHintText) threadsHoverHintText.textContent = t("threadsHoverHint");
   document.getElementById("bibleTopTitle").textContent = `📖 ${t("bibleTopTitle")}`;
   zoomResetText.textContent = t("zoomReset");
   prevConnBtn.querySelector(".tour-btn-text").textContent = t("prevBtn");
@@ -1340,6 +1935,9 @@ function updateUILanguage() {
 
   renderAxis();
   renderFeaturedPills();
+  if (currentViewMode === "threads") {
+    renderThreadsChapter(false);
+  }
   if (selectedVerseId) {
     selectVerse(selectedVerseId);
   }
@@ -1347,7 +1945,11 @@ function updateUILanguage() {
 
 // Responsive resize
 window.addEventListener("resize", () => {
-  setupCanvas();
+  if (currentViewMode === "threads") {
+    drawThreadsCanvas();
+  } else {
+    setupCanvas();
+  }
 });
 
 // Initial Data Load
@@ -1420,6 +2022,12 @@ async function init() {
       dualTopLabelRow.style.display = "none";
       dualBottomLabelRow.style.display = "none";
       axisContainer.style.display = "none";
+    } else if (paramView === "threads") {
+      viewBtns.forEach(b => b.classList.toggle("active", b.dataset.view === "threads"));
+      currentViewMode = "threads";
+      canvasWrapper.style.display = "none";
+      threadsContainer.style.display = "flex";
+      renderThreadsChapter(true);
     }
 
     if (paramBook) {

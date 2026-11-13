@@ -31,11 +31,19 @@ Inspired by Chris Harrison & Christoph Römhild's classic 2007 arc diagram and [
 
 ---
 
+### 4. Threads View (Chapter Reading & Living Scripture Threads)
+*Verse-by-verse chapter reading mode inspired by `trekhleb/bible-cross-references`, projecting living cubic Bézier threads from each verse in real-time to a unified canonical scripture spine.*
+
+![Threads Reading View](docs/screenshots/threads-view.png)
+
+---
+
 ## ✨ Key Features
 
 - **Multi-Mode Visualizations:**
   - **Bridge (Bible ↔ BOM):** Dual-rail architecture revealing the harmonizing threads between biblical texts (Isaiah, Matthew, Luke, John, Psalms, Revelation) and Book of Mormon revelations.
   - **Sacred Ring:** 360-degree radial mandala with curved chord beams and real-time scripture stats in the center orb.
+  - **Threads (Reading Mode):** Verse-by-verse chapter reader with smooth cubic Bézier threads connecting directly to a vertical Scripture Spine (Bible Old & New Testament + Book of Mormon), with real-time scrolling tracking and hover illumination.
 - **Deep Book Zoom Mode:**
   - Select any book (e.g. *2 Nephi*, *Alma*, *3 Nephi*) to zoom in with generous verse spacing.
   - Interactive chapter timeline showing proportional verse distribution.

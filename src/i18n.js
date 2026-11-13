@@ -43,6 +43,16 @@ export const translations = {
     viewModeLabel: "Diagram Style:",
     viewDual: "Bridge (Bible ↔ BOM)",
     viewRadial: "Sacred Ring",
+    viewThreads: "Threads",
+    threadsTitle: "Chapter Reading & Scripture Threads",
+    threadsPrevCh: "Previous Chapter",
+    threadsNextCh: "Next Chapter",
+    threadsSelectBook: "Select Book",
+    threadsSelectChapter: "Chapter {n}",
+    threadsReadingStats: "{book} {ch} • {verses} Verses • {links} Connections",
+    threadsSpineTitle: "Scripture Spine (Bible & Book of Mormon)",
+    threadsSpineTooltip: "{name}: {count} cross-references from this chapter",
+    threadsHoverHint: "Click a verse to inspect connections, or hover the scripture spine.",
     bibleTopTitle: "The Holy Bible (Old & New Testament)",
     bomBottomTitle: "The Book of Mormon (15 Books)",
     zoomReset: "Reset to All 15 Books",
@@ -93,6 +103,16 @@ export const translations = {
     viewModeLabel: "Estilo do Gráfico:",
     viewDual: "Ponte (Bíblia ↔ LM)",
     viewRadial: "Anel Sagrado",
+    viewThreads: "Threads (Fios)",
+    threadsTitle: "Leitura do Capítulo & Fios das Escrituras",
+    threadsPrevCh: "Capítulo Anterior",
+    threadsNextCh: "Próximo Capítulo",
+    threadsSelectBook: "Selecionar Livro",
+    threadsSelectChapter: "Capítulo {n}",
+    threadsReadingStats: "{book} {ch} • {verses} Versículos • {links} Conexões",
+    threadsSpineTitle: "Coluna Canônica (Bíblia & Livro de Mórmon)",
+    threadsSpineTooltip: "{name}: {count} referências cruzadas neste capítulo",
+    threadsHoverHint: "Clique em um versículo para inspecionar, ou passe o cursor pela coluna canônica.",
     bibleTopTitle: "A Bíblia Sagrada (Antigo & Novo Testamento)",
     bomBottomTitle: "O Livro de Mórmon (15 Livros)",
     zoomReset: "Ver Todo o Livro de Mórmon",
@@ -119,4 +139,29 @@ export function t(key, params = {}) {
     str = str.replace(`{${k}}`, v);
   }
   return str;
+}
+
+export const BOOK_NAMES_PT = {
+  "1 Nephi": "1 Néfi",
+  "2 Nephi": "2 Néfi",
+  "Jacob": "Jacó",
+  "Enos": "Enos",
+  "Jarom": "Jarom",
+  "Omni": "Ômni",
+  "Words of Mormon": "Palavras de Mórmon",
+  "Mosiah": "Mosias",
+  "Alma": "Alma",
+  "Helaman": "Helamã",
+  "3 Nephi": "3 Néfi",
+  "4 Nephi": "4 Néfi",
+  "Mormon": "Mórmon",
+  "Ether": "Éter",
+  "Moroni": "Morôni"
+};
+
+export function getBookDisplayName(bookName) {
+  if (currentLang === "pt" && BOOK_NAMES_PT[bookName]) {
+    return BOOK_NAMES_PT[bookName];
+  }
+  return bookName;
 }

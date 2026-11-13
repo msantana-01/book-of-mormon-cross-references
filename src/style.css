@@ -765,6 +765,219 @@ main {
   white-space: nowrap;
 }
 
+/* ============================================================
+   THREADS VIEW (Reading Mode & Living Scripture Threads)
+   Inspired by trekhleb/bible-cross-references
+   ============================================================ */
+.threads-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  backdrop-filter: blur(16px);
+  margin-bottom: 1.25rem;
+}
+
+.threads-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.threads-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.threads-select-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.threads-stage {
+  display: flex;
+  gap: 1.5rem;
+  height: 660px;
+  position: relative;
+}
+
+.threads-reading-pane {
+  flex: 1 1 56%;
+  overflow-y: auto;
+  padding-right: 1rem;
+  scroll-behavior: smooth;
+}
+
+.threads-reading-pane::-webkit-scrollbar {
+  width: 6px;
+}
+.threads-reading-pane::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+}
+.threads-reading-pane::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.4);
+}
+
+.threads-chapter-header {
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.75rem;
+}
+
+.threads-chapter-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: #f8fafc;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.threads-chapter-header p {
+  font-size: 0.825rem;
+  margin-top: 0.25rem;
+}
+
+.threads-verses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.threads-verse-item {
+  display: flex;
+  gap: 0.85rem;
+  align-items: baseline;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.threads-verse-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.threads-verse-item.active {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+}
+
+.threads-verse-item.has-connections {
+  border-left: 3px solid rgba(56, 189, 248, 0.5);
+}
+
+.threads-verse-item.active.has-connections {
+  border-left: 3px solid var(--gold);
+}
+
+.threads-verse-num {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: #fbbf24;
+  min-width: 22px;
+  text-align: right;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.threads-verse-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #e2e8f0;
+  flex: 1;
+}
+
+.threads-verse-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.threads-canvas-pane {
+  flex: 1 1 44%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 280px;
+}
+
+.threads-spine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.threads-hint {
+  font-size: 0.7rem;
+  color: var(--cyan);
+  text-transform: none;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.threads-canvas-box {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#threadsCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.threads-spine-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(15, 23, 42, 0.96);
+  border: 1px solid var(--border-hover);
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  color: #f8fafc;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  z-index: 50;
+  transform: translate(-50%, -120%);
+}
+
 /* Footer */
 footer {
   border-top: 1px solid var(--border-color);
@@ -826,5 +1039,16 @@ footer a:hover {
   .tour-controls {
     width: 100%;
     justify-content: space-between;
+  }
+  .threads-stage {
+    flex-direction: column;
+    height: auto;
+  }
+  .threads-reading-pane {
+    max-height: 460px;
+  }
+  .threads-canvas-pane {
+    height: 360px;
+    min-width: 100%;
   }
 }
