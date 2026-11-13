@@ -354,6 +354,62 @@ const structureOccurrencesHeaderTitle = document.getElementById("structureOccurr
 const structureOccurrencesHint = document.getElementById("structureOccurrencesHint");
 const structurePillsList = document.getElementById("structurePillsList");
 
+// How to Use Tutorial Modal Elements
+const howToUseBtn = document.getElementById("howToUseBtn");
+const howToUseText = document.getElementById("howToUseText");
+const tutorialModal = document.getElementById("tutorialModal");
+const tutorialCloseBtn = document.getElementById("tutorialCloseBtn");
+const tutorialDoneBtn = document.getElementById("tutorialDoneBtn");
+const tutorialTabs = document.querySelectorAll(".tutorial-tab");
+const tutorialPanes = document.querySelectorAll(".tutorial-pane");
+const tutorialPrevBtn = document.getElementById("tutorialPrevBtn");
+const tutorialNextBtn = document.getElementById("tutorialNextBtn");
+const tutorialStepIndicator = document.getElementById("tutorialStepIndicator");
+
+const TUTORIAL_TAB_IDS = ["diagrams", "navigation", "chiasmus", "cards"];
+let currentTutorialTabIndex = 0;
+
+function setTutorialTab(index) {
+  if (index < 0 || index >= TUTORIAL_TAB_IDS.length) return;
+  currentTutorialTabIndex = index;
+  const tabId = TUTORIAL_TAB_IDS[index];
+
+  tutorialTabs.forEach((tab, i) => {
+    tab.classList.toggle("active", i === index);
+  });
+
+  tutorialPanes.forEach(pane => {
+    pane.style.display = pane.id === `pane${tabId.charAt(0).toUpperCase() + tabId.slice(1)}` ? "block" : "none";
+  });
+
+  if (tutorialPrevBtn) tutorialPrevBtn.disabled = (index === 0);
+  if (tutorialNextBtn) {
+    if (index === TUTORIAL_TAB_IDS.length - 1) {
+      tutorialNextBtn.style.display = "none";
+    } else {
+      tutorialNextBtn.style.display = "inline-flex";
+    }
+  }
+  if (tutorialStepIndicator) {
+    tutorialStepIndicator.textContent = `${index + 1} / ${TUTORIAL_TAB_IDS.length}`;
+  }
+}
+
+function openTutorialModal() {
+  if (tutorialModal) {
+    tutorialModal.style.display = "flex";
+    setTutorialTab(0);
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeTutorialModal() {
+  if (tutorialModal) {
+    tutorialModal.style.display = "none";
+    document.body.style.overflow = "";
+  }
+}
+
 function scrollToStudyPanel() {
   if (studyPanel) {
     studyPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -2188,6 +2244,42 @@ zoomResetBtn.addEventListener("click", () => {
   resetZoom();
 });
 
+// How to Use Tutorial Modal Event Listeners
+if (howToUseBtn) {
+  howToUseBtn.addEventListener("click", openTutorialModal);
+}
+if (tutorialCloseBtn) {
+  tutorialCloseBtn.addEventListener("click", closeTutorialModal);
+}
+if (tutorialDoneBtn) {
+  tutorialDoneBtn.addEventListener("click", closeTutorialModal);
+}
+if (tutorialModal) {
+  tutorialModal.addEventListener("click", (e) => {
+    if (e.target === tutorialModal) closeTutorialModal();
+  });
+}
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && tutorialModal && tutorialModal.style.display !== "none") {
+    closeTutorialModal();
+  }
+});
+tutorialTabs.forEach((tab, idx) => {
+  tab.addEventListener("click", () => {
+    setTutorialTab(idx);
+  });
+});
+if (tutorialPrevBtn) {
+  tutorialPrevBtn.addEventListener("click", () => {
+    setTutorialTab(currentTutorialTabIndex - 1);
+  });
+}
+if (tutorialNextBtn) {
+  tutorialNextBtn.addEventListener("click", () => {
+    setTutorialTab(currentTutorialTabIndex + 1);
+  });
+}
+
 // Topic selector
 topicSelect.addEventListener("change", (e) => {
   activeTopicFilter = e.target.value;
@@ -2276,6 +2368,78 @@ function updateUILanguage() {
   randomConnBtn.querySelector("span").textContent = t("randomBtn");
   searchInput.placeholder = t("searchPlaceholder");
   langText.textContent = t("langToggle");
+
+  // Tutorial Modal translations
+  if (howToUseText) howToUseText.textContent = t("howToUseBtn");
+  if (howToUseBtn) howToUseBtn.title = t("howToUseTooltip");
+  const elTutorialModalTitle = document.getElementById("tutorialModalTitle");
+  if (elTutorialModalTitle) elTutorialModalTitle.textContent = t("tutorialTitle");
+  const elTutorialModalSubtitle = document.getElementById("tutorialModalSubtitle");
+  if (elTutorialModalSubtitle) elTutorialModalSubtitle.textContent = t("tutorialSubtitle");
+  const elTabDiagramsLabel = document.getElementById("tabDiagramsLabel");
+  if (elTabDiagramsLabel) elTabDiagramsLabel.textContent = t("tutorialTabDiagrams");
+  const elTabNavigationLabel = document.getElementById("tabNavigationLabel");
+  if (elTabNavigationLabel) elTabNavigationLabel.textContent = t("tutorialTabNav");
+  const elTabChiasmusLabel = document.getElementById("tabChiasmusLabel");
+  if (elTabChiasmusLabel) elTabChiasmusLabel.textContent = t("tutorialTabChiasmus");
+  const elTabCardsLabel = document.getElementById("tabCardsLabel");
+  if (elTabCardsLabel) elTabCardsLabel.textContent = t("tutorialTabCards");
+
+  const elCaptionBridge = document.getElementById("captionBridge");
+  if (elCaptionBridge) elCaptionBridge.textContent = t("captionBridge");
+  const elCaptionThreads = document.getElementById("captionThreads");
+  if (elCaptionThreads) elCaptionThreads.textContent = t("captionThreads");
+  const elCaptionChiasmus = document.getElementById("captionChiasmus");
+  if (elCaptionChiasmus) elCaptionChiasmus.textContent = t("captionChiasmus");
+  const elCaptionCard = document.getElementById("captionCard");
+  if (elCaptionCard) elCaptionCard.textContent = t("captionCard");
+
+  const elTutoDiagramsTitle = document.getElementById("tutoDiagramsTitle");
+  if (elTutoDiagramsTitle) elTutoDiagramsTitle.textContent = t("tutoDiagramsTitle");
+  const elTutoBridgeDesc = document.getElementById("tutoBridgeDesc");
+  if (elTutoBridgeDesc) elTutoBridgeDesc.textContent = t("tutoBridgeDesc");
+  const elTutoRadialDesc = document.getElementById("tutoRadialDesc");
+  if (elTutoRadialDesc) elTutoRadialDesc.textContent = t("tutoRadialDesc");
+  const elTutoThreadsDesc = document.getElementById("tutoThreadsDesc");
+  if (elTutoThreadsDesc) elTutoThreadsDesc.textContent = t("tutoThreadsDesc");
+
+  const elTutoNavTitle = document.getElementById("tutoNavTitle");
+  if (elTutoNavTitle) elTutoNavTitle.textContent = t("tutoNavTitle");
+  const elTutoSearchDesc = document.getElementById("tutoSearchDesc");
+  if (elTutoSearchDesc) elTutoSearchDesc.innerHTML = t("tutoSearchDesc");
+  const elTutoScopeDesc = document.getElementById("tutoScopeDesc");
+  if (elTutoScopeDesc) elTutoScopeDesc.innerHTML = t("tutoScopeDesc");
+  const elTutoZoomDesc = document.getElementById("tutoZoomDesc");
+  if (elTutoZoomDesc) elTutoZoomDesc.innerHTML = t("tutoZoomDesc");
+  const elTutoPillsDesc = document.getElementById("tutoPillsDesc");
+  if (elTutoPillsDesc) elTutoPillsDesc.innerHTML = t("tutoPillsDesc");
+
+  const elTutoChiasmusTitle = document.getElementById("tutoChiasmusTitle");
+  if (elTutoChiasmusTitle) elTutoChiasmusTitle.textContent = t("tutoChiasmusTitle");
+  const elTutoChiasmusDesc = document.getElementById("tutoChiasmusDesc");
+  if (elTutoChiasmusDesc) elTutoChiasmusDesc.textContent = t("tutoChiasmusDesc");
+  const elTutoTreeDesc = document.getElementById("tutoTreeDesc");
+  if (elTutoTreeDesc) elTutoTreeDesc.textContent = t("tutoTreeDesc");
+  const elTutoFormulasDesc = document.getElementById("tutoFormulasDesc");
+  if (elTutoFormulasDesc) elTutoFormulasDesc.textContent = t("tutoFormulasDesc");
+  const elTutoHebraismsDesc = document.getElementById("tutoHebraismsDesc");
+  if (elTutoHebraismsDesc) elTutoHebraismsDesc.textContent = t("tutoHebraismsDesc");
+
+  const elTutoCardsTitle = document.getElementById("tutoCardsTitle");
+  if (elTutoCardsTitle) elTutoCardsTitle.textContent = t("tutoCardsTitle");
+  const elTutoCardsDesc = document.getElementById("tutoCardsDesc");
+  if (elTutoCardsDesc) elTutoCardsDesc.textContent = t("tutoCardsDesc");
+  const elTutoChurchDesc = document.getElementById("tutoChurchDesc");
+  if (elTutoChurchDesc) elTutoChurchDesc.textContent = t("tutoChurchDesc");
+  const elTutoShareDesc = document.getElementById("tutoShareDesc");
+  if (elTutoShareDesc) elTutoShareDesc.innerHTML = t("tutoShareDesc");
+
+  const elTutorialPrevText = document.getElementById("tutorialPrevText");
+  if (elTutorialPrevText) elTutorialPrevText.textContent = t("tutorialPrev");
+  const elTutorialNextText = document.getElementById("tutorialNextText");
+  if (elTutorialNextText) elTutorialNextText.textContent = t("tutorialNext");
+  const elTutorialDoneText = document.getElementById("tutorialDoneText");
+  if (elTutorialDoneText) elTutorialDoneText.textContent = t("tutorialDone");
 
   renderAxis();
   renderFeaturedPills();

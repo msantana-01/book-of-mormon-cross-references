@@ -29,6 +29,10 @@
           <span class="badge" id="badgeChapters">239 Chapters</span>
           <span class="badge" id="badgeVerses">6,604 Verses</span>
         </div>
+        <button id="howToUseBtn" class="how-to-use-btn" title="How to Use & Explore" aria-haspopup="dialog">
+          <svg class="ui-icon ui-icon-gold" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span id="howToUseText">How to Use</span>
+        </button>
         <button id="langToggleBtn" class="lang-btn" aria-label="Toggle Interface Language">
           <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span id="langText">Português</span>
@@ -276,6 +280,185 @@
       </div>
     </section>
   </main>
+
+  <!-- How to Use Tutorial Modal -->
+  <div id="tutorialModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="tutorialModalTitle" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="tutorialModalTitle">🧭 How to Use & Explore</h2>
+          <p id="tutorialModalSubtitle">Master the cross-references, sacred diagrams, chiastic structures & card exports.</p>
+        </div>
+        <button id="tutorialCloseBtn" class="modal-close-btn" aria-label="Close tutorial">
+          <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Tutorial Navigation Tabs -->
+      <div class="tutorial-tabs" role="tablist">
+        <button class="tutorial-tab active" data-tab="diagrams" role="tab" id="tabDiagrams">
+          <span class="tab-icon">🌉</span>
+          <span class="tab-label" id="tabDiagramsLabel">Diagram Styles</span>
+        </button>
+        <button class="tutorial-tab" data-tab="navigation" role="tab" id="tabNavigation">
+          <span class="tab-icon">🔍</span>
+          <span class="tab-label" id="tabNavigationLabel">Search & Filters</span>
+        </button>
+        <button class="tutorial-tab" data-tab="chiasmus" role="tab" id="tabChiasmus">
+          <span class="tab-icon">📜</span>
+          <span class="tab-label" id="tabChiasmusLabel">Chiasmus & Hebrew</span>
+        </button>
+        <button class="tutorial-tab" data-tab="cards" role="tab" id="tabCards">
+          <span class="tab-icon">📸</span>
+          <span class="tab-label" id="tabCardsLabel">Study Cards & Church</span>
+        </button>
+      </div>
+
+      <!-- Tutorial Content Panes -->
+      <div class="tutorial-content-pane">
+        <!-- Pane 1: Diagrams -->
+        <div class="tutorial-pane active" id="paneDiagrams">
+          <div class="tutorial-grid">
+            <div class="tutorial-preview-col">
+              <div class="tutorial-img-frame">
+                <img src="/images/guide/bridge.png" alt="Bridge Diagram Style" class="tutorial-screenshot" id="tutorialImgBridge" />
+                <div class="tutorial-caption" id="captionBridge">Bridge Diagram: Holy Bible (top) to Book of Mormon (bottom)</div>
+              </div>
+            </div>
+            <div class="tutorial-info-col">
+              <h3 id="tutoDiagramsTitle">Three Living Perspectives</h3>
+              <ul class="tutorial-points">
+                <li>
+                  <strong>🌉 Bridge (Bible ↔ BOM):</strong>
+                  <span id="tutoBridgeDesc">Witness how ancient Old Testament prophecies (Isaiah, Genesis) and New Testament events (Matthew, Luke) beam directly into Book of Mormon fulfillment.</span>
+                </li>
+                <li>
+                  <strong>🔮 Sacred Ring:</strong>
+                  <span id="tutoRadialDesc">A circular harmonious chord graph displaying internal symmetry and prophetic threads interconnecting all 15 books.</span>
+                </li>
+                <li>
+                  <strong>🧵 Living Threads:</strong>
+                  <span id="tutoThreadsDesc">Chapter reading mode with an interactive canon spine on the right. Hover the spine or click any verse to follow cross-references live.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 2: Search & Filters -->
+        <div class="tutorial-pane" id="paneNavigation" style="display: none;">
+          <div class="tutorial-grid">
+            <div class="tutorial-preview-col">
+              <div class="tutorial-img-frame">
+                <img src="/images/guide/threads.png" alt="Search and Living Threads" class="tutorial-screenshot" id="tutorialImgThreads" />
+                <div class="tutorial-caption" id="captionThreads">Search any verse, filter internal or biblical arcs, and zoom into books</div>
+              </div>
+            </div>
+            <div class="tutorial-info-col">
+              <h3 id="tutoNavTitle">Instant Scripture Search & Filters</h3>
+              <ul class="tutorial-points">
+                <li>
+                  <strong>🔍 Search Input:</strong>
+                  <span id="tutoSearchDesc">Type any reference (e.g., <em>Alma 32:21</em>, <em>1 Nephi 3:7</em>) or thematic keyword to jump immediately.</span>
+                </li>
+                <li>
+                  <strong>⚡ Scope Filters:</strong>
+                  <span id="tutoScopeDesc">Switch between <em>All</em>, <em>Internal</em> (BOM only), and <em>Biblical</em> (OT/NT parallels) to isolate connections.</span>
+                </li>
+                <li>
+                  <strong>📖 Zoom into Specific Books:</strong>
+                  <span id="tutoZoomDesc">Select any of the 15 books in the dropdown to zoom into chapters and inspect localized cluster connections.</span>
+                </li>
+                <li>
+                  <strong>✨ Featured Pills:</strong>
+                  <span id="tutoPillsDesc">Click the golden pills at the top to tour iconic scriptural connections (Samuel's Sign, Abinadi & Isaiah 53, Alma on Faith).</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 3: Chiasmus & Ancient Structures -->
+        <div class="tutorial-pane" id="paneChiasmus" style="display: none;">
+          <div class="tutorial-grid">
+            <div class="tutorial-preview-col">
+              <div class="tutorial-img-frame">
+                <img src="/images/guide/chiasmus.png" alt="Ancient Hebrew Chiasmus Tree" class="tutorial-screenshot" id="tutorialImgChiasmus" />
+                <div class="tutorial-caption" id="captionChiasmus">Alma 36: Symmetrical inverted parallelism centered on Christ (v. 18)</div>
+              </div>
+            </div>
+            <div class="tutorial-info-col">
+              <h3 id="tutoChiasmusTitle">Ancient Semitic Craftsmanship</h3>
+              <ul class="tutorial-points">
+                <li>
+                  <strong>📜 Hebrew Chiasmus:</strong>
+                  <span id="tutoChiasmusDesc">Explore ancient inverted poetry. The entire 30 verses of Alma 36 revolve symmetrically around the divine apex in verse 18: crying unto Jesus Christ for mercy.</span>
+                </li>
+                <li>
+                  <strong>⭐ Interactive Apex & Levels:</strong>
+                  <span id="tutoTreeDesc">Click any level in the chiastic tree (A ↔ A', B ↔ B') to jump back and forth and compare paired parallel clauses.</span>
+                </li>
+                <li>
+                  <strong>✍️ Prophetic Formulas:</strong>
+                  <span id="tutoFormulasDesc">Discover Mormon's editorial signature ("And thus we see") and the Deuteronomy-rooted Covenant of the Promised Land ("Prosper in the land").</span>
+                </li>
+                <li>
+                  <strong>🏛️ Hebraisms:</strong>
+                  <span id="tutoHebraismsDesc">Analyze authentic Semitic grammar: noun construct states ("plates of brass", "rod of iron"), solemn oaths ("As the Lord liveth"), and autobiographical colophons.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 4: Study Cards & Church.org -->
+        <div class="tutorial-pane" id="paneCards" style="display: none;">
+          <div class="tutorial-grid">
+            <div class="tutorial-preview-col">
+              <div class="tutorial-img-frame">
+                <img src="/images/guide/study_card.png" alt="Export Scripture Card PNG" class="tutorial-screenshot" id="tutorialImgCard" />
+                <div class="tutorial-caption" id="captionCard">High-resolution study card ready to download and share</div>
+              </div>
+            </div>
+            <div class="tutorial-info-col">
+              <h3 id="tutoCardsTitle">Study Tools & Social Sharing</h3>
+              <ul class="tutorial-points">
+                <li>
+                  <strong>📸 1-Click PNG Card:</strong>
+                  <span id="tutoCardsDesc">Click "Save Card (PNG)" to instantly generate a high-definition, beautifully styled study card with verse text and parallels for Instagram, WhatsApp, or gospel presentations.</span>
+                </li>
+                <li>
+                  <strong>↗️ Official Church Integration:</strong>
+                  <span id="tutoChurchDesc">Click the link at the bottom of the study panel to read the full chapter on ChurchofJesusChrist.org in Portuguese or English.</span>
+                </li>
+                <li>
+                  <strong>🔗 Direct Deep Linking:</strong>
+                  <span id="tutoShareDesc">Share any verse directly using URL parameters (e.g. <code>/?v=3579</code> for Alma 36:18 or <code>/?view=threads</code>).</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="modal-footer-nav">
+          <button id="tutorialPrevBtn" class="modal-nav-btn" disabled>
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span id="tutorialPrevText">Previous</span>
+          </button>
+          <span class="tutorial-step-indicator" id="tutorialStepIndicator">1 / 4</span>
+          <button id="tutorialNextBtn" class="modal-nav-btn modal-nav-btn-primary">
+            <span id="tutorialNextText">Next</span>
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+        <button id="tutorialDoneBtn" class="modal-done-btn">
+          <span id="tutorialDoneText">Start Exploring</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>
