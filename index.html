@@ -84,6 +84,9 @@
           <option value="christ">Christ's Ministry & Visit</option>
           <option value="faith">Faith & Repentance</option>
           <option value="isaiah">Isaiah Quotations</option>
+          <option value="chiasmus">Chiasmus & Hebrew Poetry</option>
+          <option value="formulas">Prophetic Formulas ("And thus we see")</option>
+          <option value="hebraisms">Hebraisms & Semitic Idioms</option>
         </select>
 
         <select id="bookSelect" class="select-input" aria-label="Select Specific Book">
@@ -195,6 +198,36 @@
 
       <div class="verse-text-box" id="verseTextBox">
         Hover or click on any point along the scripture axis above to inspect verses and connected arcs.
+      </div>
+
+      <!-- Ancient Semitic Literary Structure Box (Chiasmus, Formulas, Hebraisms) -->
+      <div class="literary-structure-box" id="literaryStructureBox" style="display: none;">
+        <div class="structure-header">
+          <div class="structure-badge-row">
+            <span class="structure-type-badge" id="structureTypeBadge">📜 Quiasmo Hebraico</span>
+            <span class="structure-scope-badge" id="structureScopeBadge">Alma 36:1–30</span>
+          </div>
+          <h4 class="structure-title" id="structureTitle"></h4>
+          <p class="structure-desc" id="structureDesc"></p>
+        </div>
+
+        <!-- Chiastic Parallelism Tree view (when type is chiasmus) -->
+        <div class="chiastic-tree-container" id="chiasticTreeContainer" style="display: none;">
+          <div class="chiastic-tree-header">
+            <span id="chiasticTreeHeaderTitle">Estrutura Poética Invertida (Quiasmo)</span>
+            <span class="chiastic-tree-hint" id="chiasticTreeHint">Clique em qualquer par para navegar</span>
+          </div>
+          <div class="chiastic-tree-list" id="chiasticTreeList" role="list"></div>
+        </div>
+
+        <!-- Formula occurrences list / pills (when formula or hebraism) -->
+        <div class="structure-occurrences-container" id="structureOccurrencesContainer" style="display: none;">
+          <div class="structure-occurrences-header">
+            <span id="structureOccurrencesHeaderTitle">Ocorrências Desta Estrutura</span>
+            <span class="structure-occurrences-hint" id="structureOccurrencesHint">Versículos conectados</span>
+          </div>
+          <div class="structure-pills-list" id="structurePillsList" role="list"></div>
+        </div>
       </div>
 
       <div class="connections-section" id="connectionsSection">

@@ -202,5 +202,158 @@
     "type": "exhortation",
     "note": "Moroni's concluding farewell and final exhortation to remember God's mercy throughout all generations.",
     "category": "internal"
+  },
+  {
+    "source": 3562,
+    "target": 3591,
+    "sourceRef": "Alma 36:1",
+    "targetRef": "Alma 36:30",
+    "type": "chiasmus",
+    "note": "Quiasmo de Alma 36 (Nível A ↔ A'): Guardar mandamentos e prosperar na terra.",
+    "category": "internal"
+  },
+  {
+    "source": 3563,
+    "target": 3590,
+    "sourceRef": "Alma 36:2",
+    "targetRef": "Alma 36:29",
+    "type": "chiasmus",
+    "note": "Quiasmo de Alma 36 (Nível B ↔ B'): Lembrança do cativeiro e libertação divina.",
+    "category": "internal"
+  },
+  {
+    "source": 3564,
+    "target": 3588,
+    "sourceRef": "Alma 36:3",
+    "targetRef": "Alma 36:27",
+    "type": "chiasmus",
+    "note": "Quiasmo de Alma 36 (Nível C ↔ C'): Confiança em Deus nas tribulações e aflições.",
+    "category": "internal"
+  },
+  {
+    "source": 3573,
+    "target": 3581,
+    "sourceRef": "Alma 36:12",
+    "targetRef": "Alma 36:20",
+    "type": "chiasmus",
+    "note": "Quiasmo de Alma 36 (Nível D ↔ D'): Dores do inferno superadas pela luz e alegria indizível.",
+    "category": "internal"
+  },
+  {
+    "source": 3578,
+    "target": 3579,
+    "sourceRef": "Alma 36:17",
+    "targetRef": "Alma 36:18",
+    "type": "chiasmus",
+    "note": "Quiasmo de Alma 36 (Nível E ↔ ÁPICE): Lembrança de Cristo conduz ao clamor de salvação.",
+    "category": "internal"
+  },
+  {
+    "source": 3579,
+    "target": 3580,
+    "sourceRef": "Alma 36:18",
+    "targetRef": "Alma 36:19",
+    "type": "chiasmus",
+    "note": "Quiasmo de Alma 36 (ÁPICE ↔ E'): O clamor a Jesus Cristo dissipa instantaneamente a dor da culpa.",
+    "category": "internal"
+  },
+  {
+    "source": 1767,
+    "target": 1768,
+    "sourceRef": "Mosiah 3:18",
+    "targetRef": "Mosiah 3:19",
+    "type": "chiasmus",
+    "note": "Quiasmo do Homem Natural: O sangue expiatório de Cristo transforma a natureza caída.",
+    "category": "internal"
+  },
+  {
+    "source": 3711,
+    "target": 3713,
+    "sourceRef": "Alma 41:13",
+    "targetRef": "Alma 41:15",
+    "type": "chiasmus",
+    "note": "Quiasmo da Restauração: Simetria eterna entre bem restaurado ao bem e mal ao mal.",
+    "category": "internal"
+  },
+  {
+    "source": 4810,
+    "target": 3400,
+    "sourceRef": "Helaman 12:1",
+    "targetRef": "Alma 30:60",
+    "type": "prophetic-formula",
+    "note": "Fórmula Editorial de Mórmon ('E assim vemos'): Reflexão teológica sobre justiça e misericórdia.",
+    "category": "internal"
+  },
+  {
+    "source": 4810,
+    "target": 3214,
+    "sourceRef": "Helaman 12:1",
+    "targetRef": "Alma 24:19",
+    "type": "prophetic-formula",
+    "note": "Fórmula Editorial de Mórmon ('E assim vemos'): Firmeza dos convertidos até a morte.",
+    "category": "internal"
+  },
+  {
+    "source": 4810,
+    "target": 4525,
+    "sourceRef": "Helaman 12:1",
+    "targetRef": "Helaman 3:27",
+    "type": "prophetic-formula",
+    "note": "Fórmula Editorial de Mórmon ('E assim vemos'): O Senhor é misericordioso com todos os sinceros.",
+    "category": "internal"
+  },
+  {
+    "source": 4810,
+    "target": 5063,
+    "sourceRef": "Helaman 12:1",
+    "targetRef": "3 Nephi 5:8",
+    "type": "prophetic-formula",
+    "note": "Fórmula Editorial de Mórmon ('E assim vemos'): O Senhor livra Seu povo da aliança.",
+    "category": "internal"
+  },
+  {
+    "source": 40,
+    "target": 638,
+    "sourceRef": "1 Nephi 2:20",
+    "targetRef": "2 Nephi 1:20",
+    "type": "covenant-formula",
+    "note": "Fórmula da Aliança Semítica: 'Se guardardes os meus mandamentos, prosperareis na terra'.",
+    "category": "internal"
+  },
+  {
+    "source": 40,
+    "target": 3562,
+    "sourceRef": "1 Nephi 2:20",
+    "targetRef": "Alma 36:1",
+    "type": "covenant-formula",
+    "note": "Fórmula da Aliança Semítica: Transmissão patriarcal da promessa da terra.",
+    "category": "internal"
+  },
+  {
+    "source": 40,
+    "target": 4518,
+    "sourceRef": "1 Nephi 2:20",
+    "targetRef": "Helaman 3:20",
+    "type": "covenant-formula",
+    "note": "Fórmula da Aliança Semítica: Prosperidade e paz contínuas sob a lei de Deus.",
+    "category": "internal"
+  },
+  {
+    "source": 1,
+    "target": 59,
+    "sourceRef": "1 Nephi 1:1",
+    "targetRef": "1 Nephi 3:15",
+    "type": "hebraism",
+    "note": "Hebraísmos Semíticos: Colofão autobiográfico e juramento bíblico 'Vive o Senhor'.",
+    "category": "internal"
+  },
+  {
+    "source": 47,
+    "target": 182,
+    "sourceRef": "1 Nephi 3:3",
+    "targetRef": "1 Nephi 8:19",
+    "type": "hebraism",
+    "note": "Estado Construto Hebraico: Cadeias nominais semíticas ('placas de latão' e 'barra de ferro').",
+    "category": "internal"
   }
 ]

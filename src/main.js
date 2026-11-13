@@ -10,6 +10,8 @@ let externalLinks = [];
 let currentTourIndex = 0;
 let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] }
 let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
+let literaryStructures = [];
+let verseStructuresMap = new Map(); // verseId -> array of structure objects
 
 let currentViewMode = "dual"; // "dual" | "radial" | "threads"
 let selectedVerseId = 4876; // Default to Helaman 14:2 (Samuel the Lamanite's Sign)
@@ -337,6 +339,21 @@ const shareCardText = document.getElementById("shareCardText");
 const backToDiagramBtn = document.getElementById("backToDiagramBtn");
 const backToDiagramText = document.getElementById("backToDiagramText");
 
+// Ancient Semitic Literary Structures DOM Elements
+const literaryStructureBox = document.getElementById("literaryStructureBox");
+const structureTypeBadge = document.getElementById("structureTypeBadge");
+const structureScopeBadge = document.getElementById("structureScopeBadge");
+const structureTitle = document.getElementById("structureTitle");
+const structureDesc = document.getElementById("structureDesc");
+const chiasticTreeContainer = document.getElementById("chiasticTreeContainer");
+const chiasticTreeHeaderTitle = document.getElementById("chiasticTreeHeaderTitle");
+const chiasticTreeHint = document.getElementById("chiasticTreeHint");
+const chiasticTreeList = document.getElementById("chiasticTreeList");
+const structureOccurrencesContainer = document.getElementById("structureOccurrencesContainer");
+const structureOccurrencesHeaderTitle = document.getElementById("structureOccurrencesHeaderTitle");
+const structureOccurrencesHint = document.getElementById("structureOccurrencesHint");
+const structurePillsList = document.getElementById("structurePillsList");
+
 function scrollToStudyPanel() {
   if (studyPanel) {
     studyPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -598,6 +615,9 @@ function drawDualView() {
       if (activeBook && (link.source < activeBook.startVerseId || link.source > activeBook.endVerseId)) {
         return;
       }
+      if (activeTopicFilter !== "all" && !isLinkMatchingTopic(link, activeTopicFilter)) {
+        return;
+      }
 
       const isConnectedToActive = (link.source === activeVerse);
       const xBom = verseToX(link.source);
@@ -644,6 +664,9 @@ function drawDualView() {
       if (activeBook && !sourceInBook && !targetInBook) {
         return;
       }
+      if (activeTopicFilter !== "all" && !isLinkMatchingTopic(link, activeTopicFilter)) {
+        return;
+      }
 
       const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
 
@@ -677,6 +700,27 @@ function drawDualView() {
         ctx.lineWidth = 2.8;
         ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
         ctx.shadowBlur = 12;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      } else if (activeTopicFilter === "chiasmus") {
+        ctx.strokeStyle = "#c084fc";
+        ctx.lineWidth = 2.4;
+        ctx.shadowColor = "rgba(192, 132, 252, 0.7)";
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      } else if (activeTopicFilter === "formulas") {
+        ctx.strokeStyle = "#34d399";
+        ctx.lineWidth = 2.4;
+        ctx.shadowColor = "rgba(52, 211, 153, 0.7)";
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      } else if (activeTopicFilter === "hebraisms") {
+        ctx.strokeStyle = "#38bdf8";
+        ctx.lineWidth = 2.4;
+        ctx.shadowColor = "rgba(56, 189, 248, 0.7)";
+        ctx.shadowBlur = 10;
         ctx.stroke();
         ctx.shadowBlur = 0;
       } else if (activeVerse) {
@@ -833,6 +877,9 @@ function drawRadialView() {
     if (activeBook && !sourceInBook && !targetInBook) {
       return;
     }
+    if (activeTopicFilter !== "all" && !isLinkMatchingTopic(link, activeTopicFilter)) {
+      return;
+    }
 
     const isConnectedToActive = (link.source === activeVerse || link.target === activeVerse);
     const a1 = verseAngle(link.source);
@@ -855,6 +902,27 @@ function drawRadialView() {
       ctx.lineWidth = 2.8;
       ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
       ctx.shadowBlur = 14;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    } else if (activeTopicFilter === "chiasmus") {
+      ctx.strokeStyle = "#c084fc";
+      ctx.lineWidth = 2.4;
+      ctx.shadowColor = "rgba(192, 132, 252, 0.7)";
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    } else if (activeTopicFilter === "formulas") {
+      ctx.strokeStyle = "#34d399";
+      ctx.lineWidth = 2.4;
+      ctx.shadowColor = "rgba(52, 211, 153, 0.7)";
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    } else if (activeTopicFilter === "hebraisms") {
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2.4;
+      ctx.shadowColor = "rgba(56, 189, 248, 0.7)";
+      ctx.shadowBlur = 10;
       ctx.stroke();
       ctx.shadowBlur = 0;
     } else if (activeVerse) {
@@ -1493,6 +1561,129 @@ function renderFeaturedPills() {
   });
 }
 
+// Check if a link matches the selected doctrinal or literary topic
+function isLinkMatchingTopic(link, topic) {
+  if (!topic || topic === "all") return true;
+  const lType = (link.type || "").toLowerCase();
+  const note = (link.note || "").toLowerCase();
+  const extRef = (link.externalRef || "").toLowerCase();
+
+  if (topic === "chiasmus") {
+    return lType === "chiasmus" || note.includes("chiasm") || note.includes("quiasm");
+  }
+  if (topic === "formulas") {
+    return lType === "prophetic-formula" || lType === "covenant-formula" || note.includes("thus we see") || note.includes("assim vemos") || note.includes("prosper");
+  }
+  if (topic === "hebraisms") {
+    return lType === "hebraism" || note.includes("construct") || note.includes("hebraism") || note.includes("oath") || note.includes("colophon");
+  }
+  if (topic === "prophecy") {
+    return lType.includes("prophecy") || lType.includes("fulfillment") || note.includes("prophe");
+  }
+  if (topic === "christ") {
+    return note.includes("christ") || note.includes("jesus") || note.includes("messiah") || note.includes("lord") || note.includes("cristo") || note.includes("salvador");
+  }
+  if (topic === "faith") {
+    return note.includes("faith") || note.includes("repent") || note.includes("fé") || note.includes("arrependimento");
+  }
+  if (topic === "isaiah") {
+    return extRef.startsWith("isaiah") || note.includes("isaiah") || note.includes("isaías");
+  }
+  return true;
+}
+
+// Render Ancient Semitic Literary Structures (Chiasmus, Formulas, Hebraisms) in the Study Panel
+function renderLiteraryStructure(verseId) {
+  if (!literaryStructureBox) return;
+
+  const structures = verseStructuresMap.get(verseId);
+  if (!structures || structures.length === 0) {
+    literaryStructureBox.style.display = "none";
+    return;
+  }
+
+  const struct = structures[0];
+  literaryStructureBox.style.display = "block";
+
+  // Badges and title
+  if (struct.type === "chiasmus") {
+    structureTypeBadge.textContent = t("structureChiasmusTag");
+  } else if (struct.type === "prophetic-formula") {
+    structureTypeBadge.textContent = t("structureFormulaTag");
+  } else if (struct.type === "hebraism") {
+    structureTypeBadge.textContent = t("structureHebraismTag");
+  } else {
+    structureTypeBadge.textContent = struct.type;
+  }
+
+  structureScopeBadge.textContent = struct.passage;
+  structureTitle.textContent = getLang() === "pt" ? struct.titlePt : struct.titleEn;
+  structureDesc.textContent = getLang() === "pt" ? struct.descriptionPt : struct.descriptionEn;
+
+  // Render Chiastic tree
+  if (struct.type === "chiasmus" && struct.chiasticTree && struct.chiasticTree.length > 0) {
+    chiasticTreeContainer.style.display = "block";
+    structureOccurrencesContainer.style.display = "none";
+
+    chiasticTreeHeaderTitle.textContent = t("structureTreeHeader");
+    chiasticTreeHint.textContent = t("structureTreeHint");
+    chiasticTreeList.innerHTML = "";
+
+    struct.chiasticTree.forEach(item => {
+      const row = document.createElement("div");
+      const isApex = !!item.isCenter;
+      const isActive = (item.verseId === verseId);
+      row.className = `chiastic-tree-item ${isApex ? "is-apex" : ""} ${isActive ? "active" : ""}`;
+
+      const cleanLevel = item.level.replace("'", "").trim();
+      let depth = 0;
+      if (cleanLevel === "B") depth = 1;
+      else if (cleanLevel === "C") depth = 2;
+      else if (cleanLevel === "D") depth = 3;
+      else if (cleanLevel === "E") depth = 4;
+      else if (item.isCenter) depth = 5;
+
+      row.style.paddingLeft = `${0.65 + depth * 0.85}rem`;
+
+      const textSnippet = getLang() === "pt" ? item.textPt : item.textEn;
+      row.innerHTML = `
+        <span class="chiastic-level">${item.level}</span>
+        <span class="chiastic-ref">${item.ref}</span>
+        <span class="chiastic-text" title="${textSnippet}">"${textSnippet}"</span>
+      `;
+      row.addEventListener("click", () => {
+        selectVerse(item.verseId, false);
+      });
+      chiasticTreeList.appendChild(row);
+    });
+  } else if (struct.examples && struct.examples.length > 0) {
+    chiasticTreeContainer.style.display = "none";
+    structureOccurrencesContainer.style.display = "block";
+
+    structureOccurrencesHeaderTitle.textContent = t("structureOccurrencesHeader");
+    structureOccurrencesHint.textContent = t("structureOccurrencesHint");
+    structurePillsList.innerHTML = "";
+
+    struct.examples.forEach(item => {
+      const pill = document.createElement("button");
+      const isActive = (item.verseId === verseId);
+      pill.className = `structure-pill ${isActive ? "active" : ""}`;
+      const tagText = getLang() === "pt" ? item.tagPt : item.tagEn;
+      pill.innerHTML = `
+        <strong>${item.ref}</strong>
+        <span class="structure-pill-tag">${tagText}</span>
+      `;
+      pill.addEventListener("click", () => {
+        selectVerse(item.verseId, false);
+      });
+      structurePillsList.appendChild(pill);
+    });
+  } else {
+    chiasticTreeContainer.style.display = "none";
+    structureOccurrencesContainer.style.display = "none";
+  }
+}
+
 // Select a verse and update the Study Panel
 function selectVerse(verseId, shouldScroll = false) {
   if (!verseId || verseId < 1 || verseId > 6604) return;
@@ -1573,6 +1764,22 @@ function selectVerse(verseId, shouldScroll = false) {
       const targetId = isSource ? link.target : link.source;
       const targetRefStr = isSource ? link.targetRef : link.sourceRef;
 
+      let typeTag = link.type || "Parallel";
+      let tagClass = "tag-internal";
+      if (link.type === "chiasmus") {
+        typeTag = getLang() === "pt" ? "Quiasmo" : "Chiasmus";
+        tagClass = "tag-chiasmus";
+      } else if (link.type === "prophetic-formula") {
+        typeTag = getLang() === "pt" ? "Fórmula Profética" : "Prophetic Formula";
+        tagClass = "tag-formula";
+      } else if (link.type === "covenant-formula") {
+        typeTag = getLang() === "pt" ? "Aliança da Terra" : "Covenant Formula";
+        tagClass = "tag-formula";
+      } else if (link.type === "hebraism") {
+        typeTag = getLang() === "pt" ? "Hebraísmo" : "Hebraism";
+        tagClass = "tag-hebraism";
+      }
+
       const card = document.createElement("div");
       card.className = "connection-card";
       card.setAttribute("role", "button");
@@ -1583,7 +1790,7 @@ function selectVerse(verseId, shouldScroll = false) {
           <div class="connection-title">${icons.link} ${targetRefStr}</div>
           ${link.note ? `<div class="connection-note">${link.note}</div>` : ""}
         </div>
-        <span class="tag tag-internal">${link.type || "Parallel"}</span>
+        <span class="tag ${tagClass}">${typeTag}</span>
       `;
       card.addEventListener("click", () => {
         selectVerse(targetId);
@@ -1637,6 +1844,9 @@ function selectVerse(verseId, shouldScroll = false) {
       connectionsList.appendChild(card);
     });
   }
+
+  // Render Ancient Semitic Literary Structures (Chiasmus, Formulas, Hebraisms)
+  renderLiteraryStructure(verseId);
 
   // Update pills highlight if matching
   document.querySelectorAll(".featured-pill").forEach((pill, idx) => {
@@ -1973,7 +2183,15 @@ zoomResetBtn.addEventListener("click", () => {
 // Topic selector
 topicSelect.addEventListener("change", (e) => {
   activeTopicFilter = e.target.value;
-  draw();
+  if (activeTopicFilter === "chiasmus") {
+    selectVerse(3579, true); // Alma 36:18 (Center on Christ)
+  } else if (activeTopicFilter === "formulas") {
+    selectVerse(4810, true); // Helaman 12:1 ("And thus we see")
+  } else if (activeTopicFilter === "hebraisms") {
+    selectVerse(1, true); // 1 Nephi 1:1 (Ancient colophon)
+  } else {
+    draw();
+  }
 });
 
 // Language toggle button
@@ -2014,7 +2232,10 @@ function updateUILanguage() {
       "prophecy": "topicProphecy",
       "christ": "topicChrist",
       "faith": "topicFaith",
-      "isaiah": "topicIsaiah"
+      "isaiah": "topicIsaiah",
+      "chiasmus": "topicChiasmus",
+      "formulas": "topicFormulas",
+      "hebraisms": "topicHebraisms"
     };
     Array.from(topicSelect.options).forEach(opt => {
       const k = topicKeys[opt.value];
@@ -2070,17 +2291,29 @@ window.addEventListener("resize", () => {
 // Initial Data Load
 async function init() {
   try {
-    const [booksRes, internalRes, externalRes, versesRes] = await Promise.all([
+    const [booksRes, internalRes, externalRes, versesRes, structuresRes] = await Promise.all([
       fetch("/data/books.json"),
       fetch("/data/cross_references.json"),
       fetch("/data/external_references.json"),
-      fetch("/data/verses_en.json")
+      fetch("/data/verses_en.json"),
+      fetch("/data/literary_structures.json")
     ]);
 
     books = await booksRes.json();
     internalLinks = await internalRes.json();
     externalLinks = await externalRes.json();
     verses = await versesRes.json();
+    literaryStructures = await structuresRes.json();
+
+    // Populate verseStructuresMap
+    literaryStructures.forEach(struct => {
+      (struct.verseIds || []).forEach(vid => {
+        if (!verseStructuresMap.has(vid)) {
+          verseStructuresMap.set(vid, []);
+        }
+        verseStructuresMap.get(vid).push(struct);
+      });
+    });
 
     // Dynamically resolve verseId & targetId for all featured connections!
     FEATURED_CONNECTIONS.forEach(item => {

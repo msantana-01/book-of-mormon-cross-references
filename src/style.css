@@ -707,6 +707,24 @@ main {
   color: #c7d2fe;
 }
 
+.tag-chiasmus {
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  color: #e9d5ff;
+}
+
+.tag-formula {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #a7f3d0;
+}
+
+.tag-hebraism {
+  background: rgba(56, 189, 248, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #bae6fd;
+}
+
 .tag-external {
   background: rgba(16, 185, 129, 0.16);
   border: 1px solid rgba(16, 185, 129, 0.3);
@@ -1083,6 +1101,222 @@ footer a {
 footer a:hover {
   color: var(--gold);
   text-decoration: underline;
+}
+
+/* ========================================================
+   Ancient Semitic Literary Structures (Chiasmus, Formulas, Hebraisms)
+   ======================================================== */
+.literary-structure-box {
+  margin: 1.25rem 0;
+  padding: 1.15rem 1.25rem;
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.16) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(168, 85, 247, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.structure-header {
+  margin-bottom: 0.75rem;
+}
+
+.structure-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.structure-type-badge {
+  background: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.structure-scope-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.structure-title {
+  font-family: var(--font-display, serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 0.35rem 0;
+  line-height: 1.35;
+}
+
+.structure-desc {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Chiastic Parallelism Tree */
+.chiastic-tree-container {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.chiastic-tree-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 0.65rem;
+}
+
+.chiastic-tree-hint {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.chiastic-tree-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.chiastic-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.chiastic-tree-item:hover {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.chiastic-tree-item.active {
+  background: rgba(168, 85, 247, 0.22);
+  border-color: #a855f7;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+}
+
+.chiastic-tree-item.is-apex {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.18), rgba(168, 85, 247, 0.18));
+  border-color: rgba(245, 158, 11, 0.5);
+  font-weight: 600;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.2);
+}
+
+.chiastic-level {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.8rem;
+  min-width: 24px;
+  color: #c084fc;
+  flex-shrink: 0;
+}
+
+.chiastic-tree-item.is-apex .chiastic-level {
+  color: #fbbf24;
+  font-size: 0.85rem;
+}
+
+.chiastic-ref {
+  font-weight: 600;
+  color: #e2e8f0;
+  min-width: 85px;
+  flex-shrink: 0;
+}
+
+.chiastic-text {
+  color: #94a3b8;
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Structure Occurrences Pills */
+.structure-occurrences-container {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.structure-occurrences-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 0.65rem;
+}
+
+.structure-occurrences-hint {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.structure-pills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.structure-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  font-size: 0.825rem;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.structure-pill:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: #f8fafc;
+}
+
+.structure-pill.active {
+  background: rgba(168, 85, 247, 0.25);
+  border-color: #a855f7;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+  color: #fff;
+}
+
+.structure-pill-tag {
+  font-size: 0.725rem;
+  color: #94a3b8;
+  padding-left: 0.25rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* Accessibility: Reduced Motion */
