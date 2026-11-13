@@ -587,6 +587,7 @@ function drawDualView() {
   ctx.stroke();
 
   // Draw Bible book nodes on top rail
+  const isMobileCanvas = usableWidth < 550;
   BIBLE_BOOKS.forEach(b => {
     const bx = PADDING_X + b.pos * usableWidth;
     ctx.fillStyle = b.color;
@@ -594,10 +595,18 @@ function drawDualView() {
     ctx.arc(bx, topY, b.weight ? 3.5 : 2.5, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = b.color;
-    ctx.font = b.weight ? "bold 10px Inter, sans-serif" : "9px Inter, sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText(b.short, bx, topY - 12);
+    const isMilestone = b.weight || ["Gen", "Ps", "John", "Rev"].includes(b.short);
+    if (!isMobileCanvas || isMilestone) {
+      let label = b.short;
+      if (isMobileCanvas) {
+        if (label.startsWith("Isa")) label = "Isa";
+        if (label.startsWith("Matt")) label = "Matt";
+      }
+      ctx.fillStyle = b.color;
+      ctx.font = b.weight ? "bold 10px Inter, sans-serif" : "9px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(label, bx, topY - 12);
+    }
   });
 
   // B. Bottom Rail (Book of Mormon)
@@ -1699,7 +1708,7 @@ function renderLiteraryStructure(verseId) {
       else if (cleanLevel === "E") depth = 4;
       else if (item.isCenter) depth = 5;
 
-      row.style.paddingLeft = `${0.65 + depth * 0.85}rem`;
+      row.style.setProperty("--chiasmus-depth", depth);
 
       const textSnippet = getLang() === "pt" ? item.textPt : item.textEn;
       row.innerHTML = `
@@ -1948,29 +1957,34 @@ function selectVerse(verseId, shouldScroll = false) {
   }
 }
 
-// Mouse events on canvas with mode-aware coordinates
-canvas.addEventListener("mousemove", (e) => {
+// Mode-aware verse detection helper for mouse and touch interactions
+function getVerseAtCanvasPoint(mouseX, mouseY, radiusTolerance = 20) {
   const rect = canvas.getBoundingClientRect();
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-
-  let vId = null;
-
   if (currentViewMode === "radial") {
     const cx = rect.width / 2;
     const cy = rect.height / 2;
     const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2);
     const outerR = Math.min(rect.width, rect.height) * 0.42;
 
-    if (dist >= outerR * 0.25 && dist <= outerR * 1.25) {
+    if (dist >= outerR * 0.25 && dist <= outerR * 1.3) {
       const angle = Math.atan2(mouseY - cy, mouseX - cx);
-      vId = radialToVerse(angle);
+      return radialToVerse(angle);
     }
   } else {
-    if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
-      vId = findNearestConnectedVerse(mouseX, 18);
+    if (mouseX >= PADDING_X - 10 && mouseX <= PADDING_X + usableWidth + 10) {
+      return findNearestConnectedVerse(mouseX, radiusTolerance);
     }
   }
+  return null;
+}
+
+// Mouse events on canvas with mode-aware coordinates
+canvas.addEventListener("mousemove", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  const vId = getVerseAtCanvasPoint(mouseX, mouseY, 18);
 
   if (vId) {
     hoveredVerseId = vId;
@@ -2000,24 +2014,99 @@ canvas.addEventListener("click", (e) => {
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
 
-  if (currentViewMode === "radial") {
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2);
-    const outerR = Math.min(rect.width, rect.height) * 0.42;
-
-    if (dist >= outerR * 0.25 && dist <= outerR * 1.25) {
-      const angle = Math.atan2(mouseY - cy, mouseX - cx);
-      const vId = radialToVerse(angle);
-      selectVerse(vId, true);
-    }
-  } else {
-    if (mouseX >= PADDING_X && mouseX <= PADDING_X + usableWidth) {
-      const vId = findNearestConnectedVerse(mouseX, 20);
-      selectVerse(vId, true);
-    }
+  const vId = getVerseAtCanvasPoint(mouseX, mouseY, 20);
+  if (vId) {
+    selectVerse(vId, true);
   }
 });
+
+// Touch events on canvas for smooth mobile scrubbing & tap selection
+let isCanvasTouching = false;
+let canvasTouchStartPos = { x: 0, y: 0 };
+
+canvas.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = touch.clientX - rect.left;
+    const mouseY = touch.clientY - rect.top;
+    canvasTouchStartPos = { x: touch.clientX, y: touch.clientY };
+
+    const vId = getVerseAtCanvasPoint(mouseX, mouseY, 28);
+    if (vId) {
+      isCanvasTouching = true;
+      hoveredVerseId = vId;
+      const vObj = verses[vId - 1];
+      const conns = verseConnectionsMap.get(vId) || { internal: [], external: [] };
+      const total = conns.internal.length + conns.external.length;
+
+      tooltip.style.display = "block";
+      tooltip.style.left = `${touch.clientX}px`;
+      tooltip.style.top = `${touch.clientY - 42}px`;
+      tooltip.innerHTML = `<strong>${vObj ? vObj.ref : `Verse #${vId}`}</strong> &bull; ${total} connection${total === 1 ? '' : 's'}`;
+      draw();
+    }
+  }
+}, { passive: true });
+
+canvas.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 1 && isCanvasTouching) {
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = touch.clientX - rect.left;
+    const mouseY = touch.clientY - rect.top;
+
+    const vId = getVerseAtCanvasPoint(mouseX, mouseY, 28);
+    if (vId) {
+      hoveredVerseId = vId;
+      const vObj = verses[vId - 1];
+      const conns = verseConnectionsMap.get(vId) || { internal: [], external: [] };
+      const total = conns.internal.length + conns.external.length;
+
+      tooltip.style.display = "block";
+      tooltip.style.left = `${touch.clientX}px`;
+      tooltip.style.top = `${touch.clientY - 42}px`;
+      tooltip.innerHTML = `<strong>${vObj ? vObj.ref : `Verse #${vId}`}</strong> &bull; ${total} connection${total === 1 ? '' : 's'}`;
+      draw();
+
+      // If scrubbing along the horizontal timeline, prevent window scrolling
+      if (Math.abs(touch.clientX - canvasTouchStartPos.x) > Math.abs(touch.clientY - canvasTouchStartPos.y)) {
+        if (e.cancelable) e.preventDefault();
+      }
+    }
+  }
+}, { passive: false });
+
+canvas.addEventListener("touchend", () => {
+  if (isCanvasTouching) {
+    isCanvasTouching = false;
+    tooltip.style.display = "none";
+    if (hoveredVerseId) {
+      const selectedId = hoveredVerseId;
+      hoveredVerseId = null;
+      selectVerse(selectedId, true);
+    }
+    draw();
+  }
+});
+
+canvas.addEventListener("touchcancel", () => {
+  isCanvasTouching = false;
+  hoveredVerseId = null;
+  tooltip.style.display = "none";
+  draw();
+});
+
+// Touch tap on axis bar segments
+axisBar.addEventListener("touchstart", (e) => {
+  if (e.touches.length === 1) {
+    const touch = e.touches[0];
+    const el = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (el && (el.classList.contains("book-segment") || el.classList.contains("chapter-segment"))) {
+      el.click();
+    }
+  }
+}, { passive: true });
 
 // View mode switcher buttons
 viewBtns.forEach(btn => {
@@ -2120,6 +2209,40 @@ threadsCanvas.addEventListener("mousemove", (e) => {
 });
 
 threadsCanvas.addEventListener("mouseleave", () => {
+  if (threadsHoveredSpineBook !== null) {
+    threadsHoveredSpineBook = null;
+    threadsSpineTooltip.style.display = "none";
+    drawThreadsCanvas();
+  }
+});
+
+// Touch interactions for Threads Canvas Spine
+threadsCanvas.addEventListener("touchstart", (e) => {
+  if (currentViewMode !== "threads" || e.touches.length !== 1) return;
+  const touch = e.touches[0];
+  const rect = threadsCanvas.getBoundingClientRect();
+  const mouseX = touch.clientX - rect.left;
+  const mouseY = touch.clientY - rect.top;
+
+  const spineBarWidth = rect.width < 340 ? 8 : 10;
+  const labelSpace = rect.width < 340 ? 60 : 75;
+  const spineBarLeft = Math.max(90, rect.width - labelSpace - spineBarWidth);
+
+  if (mouseX >= spineBarLeft - 25 && mouseX <= rect.width) {
+    const seg = threadsSpineSegments.find(s => mouseY >= s.top && mouseY <= s.bottom);
+    if (seg) {
+      threadsHoveredSpineBook = seg.name;
+      const count = countConnectionsToBookInCurrentChapter(seg.name);
+      threadsSpineTooltip.style.display = "block";
+      threadsSpineTooltip.style.left = `${mouseX}px`;
+      threadsSpineTooltip.style.top = `${mouseY - 32}px`;
+      threadsSpineTooltip.textContent = t("threadsSpineTooltip", { name: seg.displayName, count });
+      drawThreadsCanvas();
+    }
+  }
+}, { passive: true });
+
+threadsCanvas.addEventListener("touchend", () => {
   if (threadsHoveredSpineBook !== null) {
     threadsHoveredSpineBook = null;
     threadsSpineTooltip.style.display = "none";

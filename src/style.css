@@ -1224,6 +1224,7 @@ footer a:hover {
   align-items: center;
   gap: 0.75rem;
   padding: 0.45rem 0.75rem;
+  padding-left: calc(0.65rem + var(--chiasmus-depth, 0) * 0.85rem);
   border-radius: 8px;
   font-size: 0.85rem;
   cursor: pointer;
@@ -1660,40 +1661,193 @@ footer a:hover {
 }
 
 @media (max-width: 768px) {
-  .header-container, .controls-bar {
-    flex-direction: column;
-    align-items: flex-start;
+  header {
+    position: relative;
   }
-  .controls-row-actions {
+  .header-container {
     flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
   }
+  .brand {
+    text-align: center;
+  }
+  .brand h1 {
+    font-size: 1.2rem;
+  }
+  .brand p {
+    font-size: 0.75rem;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .badges {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+  .how-to-use-btn, .lang-btn {
+    min-height: 42px;
+    padding: 0.4rem 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.65rem 0.75rem;
+  }
+  .controls-row-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
   .view-mode-container {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+  }
+  .view-mode-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+  }
+  .view-mode-container .btn-group {
+    width: 100%;
+    display: flex;
+  }
+  .view-mode-container .view-btn {
+    flex: 1 1 0;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.76rem;
+    min-height: 44px;
+    white-space: normal;
+    line-height: 1.2;
+    gap: 0.35rem;
   }
   .filter-group {
     width: 100%;
     margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .filter-group .btn-group {
+    width: 100%;
+    display: flex;
+  }
+  .filter-group .filter-btn {
+    flex: 1 1 0;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.78rem;
+    min-height: 44px;
+  }
+  .filter-group .select-input {
+    width: 100%;
+    max-width: none;
+    min-height: 44px;
+    font-size: 0.825rem;
   }
   .search-box {
     width: 100%;
     max-width: none;
   }
+  .search-box input {
+    min-height: 44px;
+    font-size: 0.85rem;
+  }
+
   #arcCanvas {
-    height: 340px;
+    height: 330px;
+    touch-action: pan-y;
   }
   .canvas-wrapper {
-    min-height: 380px;
-    padding: 0.65rem;
+    min-height: 360px;
+    padding: 0.6rem 0.5rem;
   }
+  .axis-bar {
+    height: 22px;
+  }
+  .book-labels-row {
+    padding: 0.4rem 0;
+    gap: 0.35rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .book-label-pill, .chapter-label-pill {
+    padding: 0.3rem 0.6rem;
+    min-height: 34px;
+  }
+
   .featured-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.65rem;
   }
   .tour-controls {
     width: 100%;
     justify-content: space-between;
+  }
+  .tour-btn {
+    min-height: 42px;
+    padding: 0.45rem 0.7rem;
+  }
+
+  /* Verse Study Panel Mobile Ergonomics */
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+  .panel-header-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .share-card-btn, .back-to-diagram-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+    min-height: 42px;
+    font-size: 0.78rem;
+  }
+  .verse-text-box {
+    padding: 1.05rem 1.15rem;
+    font-size: 1.15rem;
+    line-height: 1.7;
+  }
+
+  /* Threads Mode Mobile */
+  .threads-controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+  .threads-nav-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .threads-select-group {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+  .threads-select-group .select-input {
+    width: 100%;
+    max-width: none;
+    min-height: 42px;
   }
   .threads-stage {
     flex-direction: column;
@@ -1705,5 +1859,88 @@ footer a:hover {
   .threads-canvas-pane {
     height: 360px;
     min-width: 100%;
+  }
+
+  /* Tutorial Modal Mobile */
+  .tutorial-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .modal-card {
+    max-height: 94vh;
+    border-radius: 12px;
+    margin: 0.5rem;
+  }
+  .modal-header {
+    padding: 1rem 1.15rem;
+  }
+  .modal-close-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .tutorial-tabs {
+    padding: 0.5rem 0.85rem;
+    gap: 0.35rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tutorial-tab {
+    padding: 0.5rem 0.75rem;
+    min-height: 44px;
+    font-size: 0.78rem;
+  }
+  .modal-body {
+    padding: 1rem 1.15rem;
+  }
+  .modal-footer {
+    padding: 0.75rem 1.15rem;
+  }
+  .modal-nav-btn, .modal-done-btn {
+    min-height: 44px;
+  }
+}
+
+/* Small Smart Phone Screens (iPhone SE, narrow Androids <= 480px) */
+@media (max-width: 480px) {
+  .view-btn {
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.45rem 0.2rem;
+    font-size: 0.7rem;
+    min-height: 48px;
+    text-align: center;
+  }
+  .view-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  .filter-btn {
+    font-size: 0.74rem;
+    padding: 0.5rem 0.2rem;
+  }
+  .badges {
+    display: none; /* Hide 3 count pills on very narrow screens to prevent header clutter */
+  }
+  .header-actions {
+    justify-content: flex-end;
+  }
+
+  /* Chiasmus Tree Compact Indentation */
+  .chiastic-tree-item {
+    padding-left: calc(0.35rem + var(--chiasmus-depth, 0) * 0.28rem) !important;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+  .chiastic-level {
+    font-size: 0.7rem;
+    min-width: 1.4rem;
+  }
+  .chiastic-ref {
+    font-size: 0.7rem;
+  }
+  .chiastic-text {
+    font-size: 0.78rem;
+    line-height: 1.35;
   }
 }
