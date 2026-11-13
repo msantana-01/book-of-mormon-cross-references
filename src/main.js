@@ -14,7 +14,7 @@ let literaryStructures = [];
 let verseStructuresMap = new Map(); // verseId -> array of structure objects
 
 let currentViewMode = "dual"; // "dual" | "radial" | "threads"
-let selectedVerseId = 4876; // Default to Helaman 14:2 (Samuel the Lamanite's Sign)
+let selectedVerseId = 1; // Default to 1 Nephi 1:1 (First verse of the Book of Mormon)
 let hoveredVerseId = null;
 let hoveredBookId = null;
 let currentFilter = "all"; // "all" | "internal" | "external"
@@ -2386,11 +2386,19 @@ async function init() {
       renderThreadsChapter(true);
     }
 
-    if (paramBook) {
+    const paramVerse = urlParams.get("v") || urlParams.get("verse");
+    if (paramVerse) {
+      const vNum = parseInt(paramVerse, 10);
+      if (vNum && vNum >= 1 && vNum <= 6604) {
+        selectVerse(vNum);
+      } else {
+        selectVerse(1);
+      }
+    } else if (paramBook) {
       zoomToBook(paramBook);
     } else {
-      // Select the first featured connection (Helaman 14:2)
-      selectVerse(FEATURED_CONNECTIONS[0].verseId || 4876);
+      // Default to 1 Nephi 1:1 (Opening verse of the Book of Mormon)
+      selectVerse(1);
     }
 
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
