@@ -157,6 +157,81 @@ const CHURCH_BOOK_SLUGS = {
   "Moroni": "moro"
 };
 
+// Canonical Church Bible & other scripture slugs
+const BIBLE_CHURCH_SLUGS = {
+  // Old Testament
+  "Genesis": { testament: "ot", slug: "gen" },
+  "Exodus": { testament: "ot", slug: "ex" },
+  "Numbers": { testament: "ot", slug: "num" },
+  "Deuteronomy": { testament: "ot", slug: "deut" },
+  "Joshua": { testament: "ot", slug: "josh" },
+  "1 Samuel": { testament: "ot", slug: "1-sam" },
+  "2 Samuel": { testament: "ot", slug: "2-sam" },
+  "1 Chronicles": { testament: "ot", slug: "1-chron" },
+  "2 Chronicles": { testament: "ot", slug: "2-chron" },
+  "Esther": { testament: "ot", slug: "esth" },
+  "Job": { testament: "ot", slug: "job" },
+  "Psalm": { testament: "ot", slug: "ps" },
+  "Psalms": { testament: "ot", slug: "ps" },
+  "Proverbs": { testament: "ot", slug: "prov" },
+  "Ecclesiastes": { testament: "ot", slug: "eccl" },
+  "Isaiah": { testament: "ot", slug: "isa" },
+  "Jeremiah": { testament: "ot", slug: "jer" },
+  "Lamentations": { testament: "ot", slug: "lam" },
+  "Ezekiel": { testament: "ot", slug: "ezek" },
+  "Daniel": { testament: "ot", slug: "dan" },
+  "Amos": { testament: "ot", slug: "amos" },
+  "Micah": { testament: "ot", slug: "micah" },
+  "Nahum": { testament: "ot", slug: "nahum" },
+  "Zechariah": { testament: "ot", slug: "zech" },
+  "Malachi": { testament: "ot", slug: "mal" },
+
+  // New Testament
+  "Matthew": { testament: "nt", slug: "matt" },
+  "Mark": { testament: "nt", slug: "mark" },
+  "Luke": { testament: "nt", slug: "luke" },
+  "John": { testament: "nt", slug: "john" },
+  "Acts": { testament: "nt", slug: "acts" },
+  "Romans": { testament: "nt", slug: "rom" },
+  "1 Corinthians": { testament: "nt", slug: "1-cor" },
+  "2 Corinthians": { testament: "nt", slug: "2-cor" },
+  "Galatians": { testament: "nt", slug: "gal" },
+  "Ephesians": { testament: "nt", slug: "eph" },
+  "Philippians": { testament: "nt", slug: "phil" },
+  "Colossians": { testament: "nt", slug: "col" },
+  "1 Timothy": { testament: "nt", slug: "1-tim" },
+  "2 Timothy": { testament: "nt", slug: "2-tim" },
+  "Titus": { testament: "nt", slug: "titus" },
+  "Hebrews": { testament: "nt", slug: "heb" },
+  "James": { testament: "nt", slug: "james" },
+  "1 John": { testament: "nt", slug: "1-jn" },
+  "Jude": { testament: "nt", slug: "jude" },
+  "Revelation": { testament: "nt", slug: "rev" },
+
+  // Pearl of Great Price & D&C
+  "Moses": { testament: "pgp", slug: "moses" },
+  "Abraham": { testament: "pgp", slug: "abr" },
+  "Joseph Smith--History": { testament: "pgp", slug: "js-h" },
+  "Doctrine and Covenants": { testament: "dc-testament", slug: "dc" }
+};
+
+function getBibleStudyUrl(externalRefStr) {
+  if (!externalRefStr) return null;
+  const m = externalRefStr.trim().match(/^([1-3]?\s?[A-Za-z\s\-]+?)\s+(\d+)(?::(\d+)(?:-\d+)?)?$/);
+  if (!m) return null;
+  const bookName = m[1].trim();
+  const ch = m[2];
+  const v = m[3];
+  const info = BIBLE_CHURCH_SLUGS[bookName];
+  if (!info) return null;
+  const langParam = getLang() === "pt" ? "por" : "eng";
+  let url = `https://www.churchofjesuschrist.org/study/scriptures/${info.testament}/${info.slug}/${ch}?lang=${langParam}`;
+  if (v) {
+    url += `#${v}`;
+  }
+  return url;
+}
+
 // DOM Elements
 const canvas = document.getElementById("arcCanvas");
 const ctx = canvas.getContext("2d");
@@ -991,6 +1066,9 @@ function selectVerse(verseId) {
 
       const card = document.createElement("div");
       card.className = "connection-card";
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("aria-label", `${t("jumpTo")} ${targetRefStr}`);
       card.innerHTML = `
         <div class="connection-left">
           <div class="connection-title">${icons.link} ${targetRefStr}</div>
@@ -1001,17 +1079,48 @@ function selectVerse(verseId) {
       card.addEventListener("click", () => {
         selectVerse(targetId);
       });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          selectVerse(targetId);
+        }
+      });
       connectionsList.appendChild(card);
     });
 
-    // External links (Bible)
+    // External links (Bible, PGP, D&C)
     filteredExternal.forEach(link => {
       const card = document.createElement("div");
-      card.className = "connection-card";
-      card.style.cursor = "default";
+      const studyUrl = getBibleStudyUrl(link.externalRef);
+      card.className = `connection-card ${studyUrl ? "connection-card-external" : ""}`;
+
+      if (studyUrl) {
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        const tooltipText = getLang() === "pt"
+          ? `Abrir ${link.externalRef} em ChurchofJesusChrist.org ↗`
+          : `Open ${link.externalRef} on ChurchofJesusChrist.org ↗`;
+        card.setAttribute("title", tooltipText);
+        card.setAttribute("aria-label", tooltipText);
+        card.addEventListener("click", () => {
+          window.open(studyUrl, "_blank", "noopener,noreferrer");
+        });
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            window.open(studyUrl, "_blank", "noopener,noreferrer");
+          }
+        });
+      } else {
+        card.style.cursor = "default";
+      }
+
       card.innerHTML = `
         <div class="connection-left">
-          <div class="connection-title">${icons.bookOpen} ${link.externalRef} (${link.externalWork || "Bible"})</div>
+          <div class="connection-title">
+            ${icons.bookOpen} ${link.externalRef} (${link.externalWork || "Bible"})
+            ${studyUrl ? `<span class="external-link-hint" aria-hidden="true">${icons.externalLink}</span>` : ""}
+          </div>
           ${link.note ? `<div class="connection-note">${link.note}</div>` : ""}
         </div>
         <span class="tag tag-external">${link.type || "Biblical Reference"}</span>
