@@ -39,50 +39,57 @@
 
   <!-- Controls Bar -->
   <section class="controls-bar" aria-label="Filter Controls">
-    <div class="search-box">
-      <span class="search-icon">
-        <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      </span>
-      <input type="text" id="searchInput" class="search-input" placeholder="Search verse (e.g. Alma 32:21, 1 Ne 3:7) or keyword..." aria-label="Search Scripture Verse" />
-    </div>
-
-    <!-- View Mode Selector (Dual Bridge / Radial Ring) -->
-    <div class="view-mode-container" role="region" aria-label="View Mode Switcher">
-      <span class="view-mode-label" id="viewModeLabel">Diagram Style:</span>
-      <div class="btn-group" role="group" aria-label="Choose Diagram Visualization Style">
-        <button class="view-btn active" data-view="dual" id="btnViewDual" title="Bible on top, Book of Mormon on bottom with connecting beams">
-          <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5"></path><path d="M20 19V5"></path><path d="M4 10h16"></path><path d="M4 19c4-6 12-6 16 0"></path></svg>
-          <span id="labelViewDual">Bridge (Bible ↔ BOM)</span>
-        </button>
-        <button class="view-btn" data-view="radial" id="btnViewRadial" title="Circular mandala ring with chords">
-          <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m12 3 3 9-6-3 9 3-6-9"></path></svg>
-          <span id="labelViewRadial">Sacred Ring</span>
-        </button>
-        <button class="view-btn" data-view="threads" id="btnViewThreads" title="Verse-by-verse chapter reading with connecting threads to scriptures">
-          <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h6a4 4 0 0 1 4 4v10"></path><path d="M21 19h-6a4 4 0 0 1-4-4V5"></path><circle cx="3" cy="5" r="1.5"></circle><circle cx="21" cy="19" r="1.5"></circle></svg>
-          <span id="labelViewThreads">Threads</span>
-        </button>
+    <!-- Top Row: Expanded Search Bar -->
+    <div class="controls-row controls-row-search">
+      <div class="search-box">
+        <span class="search-icon">
+          <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search verse (e.g. Alma 32:21, 1 Ne 3:7) or keyword..." aria-label="Search Scripture Verse" />
       </div>
     </div>
 
-    <div class="filter-group">
-      <div class="btn-group" role="group" aria-label="Connection Type Filter">
-        <button class="filter-btn active" data-filter="all" id="btnFilterAll">All</button>
-        <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal</button>
-        <button class="filter-btn" data-filter="external" id="btnFilterExternal">Biblical</button>
+    <!-- Bottom Row: Diagram Style on Left, Filter & Book Selection on Right -->
+    <div class="controls-row controls-row-actions">
+      <!-- View Mode Selector (Dual Bridge / Radial Ring / Threads) on Left -->
+      <div class="view-mode-container" role="region" aria-label="View Mode Switcher">
+        <span class="view-mode-label" id="viewModeLabel">Diagram Style:</span>
+        <div class="btn-group" role="group" aria-label="Choose Diagram Visualization Style">
+          <button class="view-btn active" data-view="dual" id="btnViewDual" title="Bible on top, Book of Mormon on bottom with connecting beams">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5"></path><path d="M20 19V5"></path><path d="M4 10h16"></path><path d="M4 19c4-6 12-6 16 0"></path></svg>
+            <span id="labelViewDual">Bridge (Bible ↔ BOM)</span>
+          </button>
+          <button class="view-btn" data-view="radial" id="btnViewRadial" title="Circular mandala ring with chords">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m12 3 3 9-6-3 9 3-6-9"></path></svg>
+            <span id="labelViewRadial">Sacred Ring</span>
+          </button>
+          <button class="view-btn" data-view="threads" id="btnViewThreads" title="Verse-by-verse chapter reading with connecting threads to scriptures">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h6a4 4 0 0 1 4 4v10"></path><path d="M21 19h-6a4 4 0 0 1-4-4V5"></path><circle cx="3" cy="5" r="1.5"></circle><circle cx="21" cy="19" r="1.5"></circle></svg>
+            <span id="labelViewThreads">Threads</span>
+          </button>
+        </div>
       </div>
-      
-      <select id="topicSelect" class="select-input" aria-label="Filter by Doctrinal Theme">
-        <option value="all">All Doctrinal Themes</option>
-        <option value="prophecy">Prophecies & Fulfillments</option>
-        <option value="christ">Christ's Ministry & Visit</option>
-        <option value="faith">Faith & Repentance</option>
-        <option value="isaiah">Isaiah Quotations</option>
-      </select>
 
-      <select id="bookSelect" class="select-input" aria-label="Select Specific Book">
-        <option value="all">Whole Book of Mormon</option>
-      </select>
+      <!-- Filters & Selects Aligned to Right -->
+      <div class="filter-group">
+        <div class="btn-group" role="group" aria-label="Connection Type Filter">
+          <button class="filter-btn active" data-filter="all" id="btnFilterAll">All</button>
+          <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal</button>
+          <button class="filter-btn" data-filter="external" id="btnFilterExternal">Biblical</button>
+        </div>
+        
+        <select id="topicSelect" class="select-input" aria-label="Filter by Doctrinal Theme">
+          <option value="all">All Doctrinal Themes</option>
+          <option value="prophecy">Prophecies & Fulfillments</option>
+          <option value="christ">Christ's Ministry & Visit</option>
+          <option value="faith">Faith & Repentance</option>
+          <option value="isaiah">Isaiah Quotations</option>
+        </select>
+
+        <select id="bookSelect" class="select-input" aria-label="Select Specific Book">
+          <option value="all">Whole Book of Mormon</option>
+        </select>
+      </div>
     </div>
   </section>
 
