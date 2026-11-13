@@ -1,5 +1,6 @@
 import { t, getLang, setLang, getBookDisplayName } from "./i18n.js";
 import { icons } from "./icons.js";
+import { generateVerseCard } from "./shareCard.js";
 
 // State
 let books = [];
@@ -331,6 +332,8 @@ const connectionsList = document.getElementById("connectionsList");
 const officialLinkContainer = document.getElementById("officialLinkContainer");
 const officialLink = document.getElementById("officialLink");
 const studyPanel = document.getElementById("studyPanel");
+const shareCardBtn = document.getElementById("shareCardBtn");
+const shareCardText = document.getElementById("shareCardText");
 const backToDiagramBtn = document.getElementById("backToDiagramBtn");
 const backToDiagramText = document.getElementById("backToDiagramText");
 
@@ -1839,6 +1842,42 @@ threadsCanvas.addEventListener("mouseleave", () => {
   }
 });
 
+// Share Card Generator button
+if (shareCardBtn) {
+  shareCardBtn.addEventListener("click", async () => {
+    const verseObj = verses[selectedVerseId - 1];
+    if (!verseObj) return;
+    const bookObj = getBookForVerse(selectedVerseId);
+    const connections = verseConnectionsMap.get(selectedVerseId) || { internal: [], external: [] };
+
+    try {
+      shareCardBtn.disabled = true;
+      if (shareCardText) shareCardText.textContent = t("shareCardGenerating");
+
+      await generateVerseCard({
+        verseObj,
+        connections,
+        bookObj,
+        currentFilter
+      });
+
+      if (shareCardText) {
+        shareCardText.textContent = t("shareCardSuccess");
+        setTimeout(() => {
+          if (shareCardText) shareCardText.textContent = t("shareCard");
+          shareCardBtn.disabled = false;
+        }, 2200);
+      }
+    } catch (err) {
+      console.error("Card generation failed:", err);
+      if (shareCardText) {
+        shareCardText.textContent = t("shareCard");
+        shareCardBtn.disabled = false;
+      }
+    }
+  });
+}
+
 // Back to Diagram / Reading button
 if (backToDiagramBtn) {
   backToDiagramBtn.addEventListener("click", () => {
@@ -1953,6 +1992,12 @@ function updateUILanguage() {
   if (threadsSpineHeaderTitle) threadsSpineHeaderTitle.textContent = t("threadsSpineTitle");
   if (threadsHoverHintText) threadsHoverHintText.textContent = t("threadsHoverHint");
   if (backToDiagramText) backToDiagramText.textContent = t("backToDiagram");
+  if (shareCardText && (!shareCardBtn || !shareCardBtn.disabled)) {
+    shareCardText.textContent = t("shareCard");
+  }
+  if (shareCardBtn) {
+    shareCardBtn.title = t("shareCardTooltip");
+  }
   document.getElementById("bibleTopTitle").textContent = `📖 ${t("bibleTopTitle")}`;
   zoomResetText.textContent = t("zoomReset");
   prevConnBtn.querySelector(".tour-btn-text").textContent = t("prevBtn");

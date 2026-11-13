@@ -501,6 +501,38 @@ main {
   flex-wrap: wrap;
 }
 
+.share-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--gold);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  border-radius: 6px;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+}
+
+.share-card-btn:hover {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: var(--gold);
+  color: #fef08a;
+  transform: translateY(-1px);
+}
+
+.share-card-btn:active {
+  transform: translateY(0);
+}
+
+.share-card-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+}
+
 .back-to-diagram-btn {
   display: inline-flex;
   align-items: center;

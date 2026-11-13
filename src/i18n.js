@@ -59,7 +59,11 @@ export const translations = {
     bomBottomTitle: "The Book of Mormon (15 Books)",
     zoomReset: "Reset to All 15 Books",
     zoomedTitle: "{book} ({ch} Chapters, {v} Verses)",
-    chapterLabel: "Ch {n}"
+    chapterLabel: "Ch {n}",
+    shareCard: "Save Card (PNG)",
+    shareCardGenerating: "Generating...",
+    shareCardSuccess: "Card saved!",
+    shareCardTooltip: "Export scripture & parallels study card as high-res PNG"
   },
   pt: {
     title: "Referências Cruzadas do Livro de Mórmon",
@@ -121,7 +125,11 @@ export const translations = {
     bomBottomTitle: "O Livro de Mórmon (15 Livros)",
     zoomReset: "Ver Todo o Livro de Mórmon",
     zoomedTitle: "{book} ({ch} Capítulos, {v} Versículos)",
-    chapterLabel: "Cap {n}"
+    chapterLabel: "Cap {n}",
+    shareCard: "Salvar Card (PNG)",
+    shareCardGenerating: "Gerando...",
+    shareCardSuccess: "Card salvo!",
+    shareCardTooltip: "Exportar card de estudo do versículo e referências em alta resolução (PNG)"
   }
 };
 
