@@ -1780,6 +1780,10 @@ function selectVerse(verseId, shouldScroll = false) {
         tagClass = "tag-hebraism";
       }
 
+      const noteText = getLang() === "pt"
+        ? (link.notePt || link.note)
+        : (link.noteEn || link.note);
+
       const card = document.createElement("div");
       card.className = "connection-card";
       card.setAttribute("role", "button");
@@ -1788,7 +1792,7 @@ function selectVerse(verseId, shouldScroll = false) {
       card.innerHTML = `
         <div class="connection-left">
           <div class="connection-title">${icons.link} ${targetRefStr}</div>
-          ${link.note ? `<div class="connection-note">${link.note}</div>` : ""}
+          ${noteText ? `<div class="connection-note">${noteText}</div>` : ""}
         </div>
         <span class="tag ${tagClass}">${typeTag}</span>
       `;
@@ -1831,13 +1835,17 @@ function selectVerse(verseId, shouldScroll = false) {
         card.style.cursor = "default";
       }
 
+      const extNoteText = getLang() === "pt"
+        ? (link.notePt || link.note)
+        : (link.noteEn || link.note);
+
       card.innerHTML = `
         <div class="connection-left">
           <div class="connection-title">
             ${icons.bookOpen} ${link.externalRef} (${link.externalWork || "Bible"})
             ${studyUrl ? `<span class="external-link-hint" aria-hidden="true">${icons.externalLink}</span>` : ""}
           </div>
-          ${link.note ? `<div class="connection-note">${link.note}</div>` : ""}
+          ${extNoteText ? `<div class="connection-note">${extNoteText}</div>` : ""}
         </div>
         <span class="tag tag-external">${link.type || "Biblical Reference"}</span>
       `;

@@ -209,8 +209,10 @@
     "sourceRef": "Alma 36:1",
     "targetRef": "Alma 36:30",
     "type": "chiasmus",
-    "note": "Quiasmo de Alma 36 (Nível A ↔ A'): Guardar mandamentos e prosperar na terra.",
-    "category": "internal"
+    "note": "Alma 36 Chiasmus (Level A ↔ A'): Keep commandments and prosper in the land.",
+    "category": "internal",
+    "notePt": "Quiasmo de Alma 36 (Nível A ↔ A'): Guardar mandamentos e prosperar na terra.",
+    "noteEn": "Alma 36 Chiasmus (Level A ↔ A'): Keep commandments and prosper in the land."
   },
   {
     "source": 3563,
@@ -218,8 +220,10 @@
     "sourceRef": "Alma 36:2",
     "targetRef": "Alma 36:29",
     "type": "chiasmus",
-    "note": "Quiasmo de Alma 36 (Nível B ↔ B'): Lembrança do cativeiro e libertação divina.",
-    "category": "internal"
+    "note": "Alma 36 Chiasmus (Level B ↔ B'): Remember captivity and divine deliverance.",
+    "category": "internal",
+    "notePt": "Quiasmo de Alma 36 (Nível B ↔ B'): Lembrança do cativeiro e libertação divina.",
+    "noteEn": "Alma 36 Chiasmus (Level B ↔ B'): Remember captivity and divine deliverance."
   },
   {
     "source": 3564,
@@ -227,8 +231,10 @@
     "sourceRef": "Alma 36:3",
     "targetRef": "Alma 36:27",
     "type": "chiasmus",
-    "note": "Quiasmo de Alma 36 (Nível C ↔ C'): Confiança em Deus nas tribulações e aflições.",
-    "category": "internal"
+    "note": "Alma 36 Chiasmus (Level C ↔ C'): Trust in God through trials and afflictions.",
+    "category": "internal",
+    "notePt": "Quiasmo de Alma 36 (Nível C ↔ C'): Confiança em Deus nas tribulações e aflições.",
+    "noteEn": "Alma 36 Chiasmus (Level C ↔ C'): Trust in God through trials and afflictions."
   },
   {
     "source": 3573,
@@ -236,8 +242,10 @@
     "sourceRef": "Alma 36:12",
     "targetRef": "Alma 36:20",
     "type": "chiasmus",
-    "note": "Quiasmo de Alma 36 (Nível D ↔ D'): Dores do inferno superadas pela luz e alegria indizível.",
-    "category": "internal"
+    "note": "Alma 36 Chiasmus (Level D ↔ D'): Pains of hell transformed into marvelous light and joy.",
+    "category": "internal",
+    "notePt": "Quiasmo de Alma 36 (Nível D ↔ D'): Dores do inferno superadas pela luz e alegria indizível.",
+    "noteEn": "Alma 36 Chiasmus (Level D ↔ D'): Pains of hell transformed into marvelous light and joy."
   },
   {
     "source": 3578,
@@ -245,8 +253,10 @@
     "sourceRef": "Alma 36:17",
     "targetRef": "Alma 36:18",
     "type": "chiasmus",
-    "note": "Quiasmo de Alma 36 (Nível E ↔ ÁPICE): Lembrança de Cristo conduz ao clamor de salvação.",
-    "category": "internal"
+    "note": "Alma 36 Chiasmus (Level E ↔ APEX): Memory of Jesus Christ leads to cry for mercy.",
+    "category": "internal",
+    "notePt": "Quiasmo de Alma 36 (Nível E ↔ ÁPICE): Lembrança de Cristo conduz ao clamor de salvação.",
+    "noteEn": "Alma 36 Chiasmus (Level E ↔ APEX): Memory of Jesus Christ leads to cry for mercy."
   },
   {
     "source": 3579,
@@ -254,8 +264,10 @@
     "sourceRef": "Alma 36:18",
     "targetRef": "Alma 36:19",
     "type": "chiasmus",
-    "note": "Quiasmo de Alma 36 (ÁPICE ↔ E'): O clamor a Jesus Cristo dissipa instantaneamente a dor da culpa.",
-    "category": "internal"
+    "note": "Alma 36 Chiasmus (APEX ↔ E'): Calling upon Christ immediately removes the bitter pain of guilt.",
+    "category": "internal",
+    "notePt": "Quiasmo de Alma 36 (ÁPICE ↔ E'): O clamor a Jesus Cristo dissipa instantaneamente a dor da culpa.",
+    "noteEn": "Alma 36 Chiasmus (APEX ↔ E'): Calling upon Christ immediately removes the bitter pain of guilt."
   },
   {
     "source": 1767,
@@ -263,8 +275,10 @@
     "sourceRef": "Mosiah 3:18",
     "targetRef": "Mosiah 3:19",
     "type": "chiasmus",
-    "note": "Quiasmo do Homem Natural: O sangue expiatório de Cristo transforma a natureza caída.",
-    "category": "internal"
+    "note": "Chiasmus of the Natural Man: The atoning blood of Christ transforms fallen mortal nature.",
+    "category": "internal",
+    "notePt": "Quiasmo do Homem Natural: O sangue expiatório de Cristo transforma a natureza caída.",
+    "noteEn": "Chiasmus of the Natural Man: The atoning blood of Christ transforms fallen mortal nature."
   },
   {
     "source": 3711,
@@ -272,8 +286,10 @@
     "sourceRef": "Alma 41:13",
     "targetRef": "Alma 41:15",
     "type": "chiasmus",
-    "note": "Quiasmo da Restauração: Simetria eterna entre bem restaurado ao bem e mal ao mal.",
-    "category": "internal"
+    "note": "Chiasmus of Restoration: Eternal symmetry where good is restored to good and evil to evil.",
+    "category": "internal",
+    "notePt": "Quiasmo da Restauração: Simetria eterna entre bem restaurado ao bem e mal ao mal.",
+    "noteEn": "Chiasmus of Restoration: Eternal symmetry where good is restored to good and evil to evil."
   },
   {
     "source": 4810,
@@ -281,8 +297,10 @@
     "sourceRef": "Helaman 12:1",
     "targetRef": "Alma 30:60",
     "type": "prophetic-formula",
-    "note": "Fórmula Editorial de Mórmon ('E assim vemos'): Reflexão teológica sobre justiça e misericórdia.",
-    "category": "internal"
+    "note": "Mormon's Prophetic Editorial Formula ('And thus we see'): The adversary does not support his followers.",
+    "category": "internal",
+    "notePt": "Fórmula Editorial de Mórmon ('E assim vemos'): Reflexão teológica sobre justiça e misericórdia.",
+    "noteEn": "Mormon's Prophetic Editorial Formula ('And thus we see'): The adversary does not support his followers."
   },
   {
     "source": 4810,
@@ -290,8 +308,10 @@
     "sourceRef": "Helaman 12:1",
     "targetRef": "Alma 24:19",
     "type": "prophetic-formula",
-    "note": "Fórmula Editorial de Mórmon ('E assim vemos'): Firmeza dos convertidos até a morte.",
-    "category": "internal"
+    "note": "Mormon's Prophetic Editorial Formula ('And thus we see'): Steadfast faith and love of converts.",
+    "category": "internal",
+    "notePt": "Fórmula Editorial de Mórmon ('E assim vemos'): Firmeza dos convertidos até a morte.",
+    "noteEn": "Mormon's Prophetic Editorial Formula ('And thus we see'): Steadfast faith and love of converts."
   },
   {
     "source": 4810,
@@ -299,8 +319,10 @@
     "sourceRef": "Helaman 12:1",
     "targetRef": "Helaman 3:27",
     "type": "prophetic-formula",
-    "note": "Fórmula Editorial de Mórmon ('E assim vemos'): O Senhor é misericordioso com todos os sinceros.",
-    "category": "internal"
+    "note": "Mormon's Prophetic Editorial Formula ('And thus we see'): The Lord is merciful unto all sincere hearts.",
+    "category": "internal",
+    "notePt": "Fórmula Editorial de Mórmon ('E assim vemos'): O Senhor é misericordioso com todos os sinceros.",
+    "noteEn": "Mormon's Prophetic Editorial Formula ('And thus we see'): The Lord is merciful unto all sincere hearts."
   },
   {
     "source": 4810,
@@ -308,8 +330,10 @@
     "sourceRef": "Helaman 12:1",
     "targetRef": "3 Nephi 5:8",
     "type": "prophetic-formula",
-    "note": "Fórmula Editorial de Mórmon ('E assim vemos'): O Senhor livra Seu povo da aliança.",
-    "category": "internal"
+    "note": "Mormon's Prophetic Editorial Formula ('And thus we see'): The Lord delivers His covenant people.",
+    "category": "internal",
+    "notePt": "Fórmula Editorial de Mórmon ('E assim vemos'): O Senhor livra Seu povo da aliança.",
+    "noteEn": "Mormon's Prophetic Editorial Formula ('And thus we see'): The Lord delivers His covenant people."
   },
   {
     "source": 40,
@@ -317,8 +341,10 @@
     "sourceRef": "1 Nephi 2:20",
     "targetRef": "2 Nephi 1:20",
     "type": "covenant-formula",
-    "note": "Fórmula da Aliança Semítica: 'Se guardardes os meus mandamentos, prosperareis na terra'.",
-    "category": "internal"
+    "note": "Semitic Covenant Formula: 'Inasmuch as ye shall keep my commandments, ye shall prosper in the land'.",
+    "category": "internal",
+    "notePt": "Fórmula da Aliança Semítica: 'Se guardardes os meus mandamentos, prosperareis na terra'.",
+    "noteEn": "Semitic Covenant Formula: 'Inasmuch as ye shall keep my commandments, ye shall prosper in the land'."
   },
   {
     "source": 40,
@@ -326,8 +352,10 @@
     "sourceRef": "1 Nephi 2:20",
     "targetRef": "Alma 36:1",
     "type": "covenant-formula",
-    "note": "Fórmula da Aliança Semítica: Transmissão patriarcal da promessa da terra.",
-    "category": "internal"
+    "note": "Semitic Covenant Formula: Patriarchal transmission of the covenant of the land.",
+    "category": "internal",
+    "notePt": "Fórmula da Aliança Semítica: Transmissão patriarcal da promessa da terra.",
+    "noteEn": "Semitic Covenant Formula: Patriarchal transmission of the covenant of the land."
   },
   {
     "source": 40,
@@ -335,8 +363,10 @@
     "sourceRef": "1 Nephi 2:20",
     "targetRef": "Helaman 3:20",
     "type": "covenant-formula",
-    "note": "Fórmula da Aliança Semítica: Prosperidade e paz contínuas sob a lei de Deus.",
-    "category": "internal"
+    "note": "Semitic Covenant Formula: Continual prosperity and peace under the law of God.",
+    "category": "internal",
+    "notePt": "Fórmula da Aliança Semítica: Prosperidade e paz contínuas sob a lei de Deus.",
+    "noteEn": "Semitic Covenant Formula: Continual prosperity and peace under the law of God."
   },
   {
     "source": 1,
@@ -344,8 +374,10 @@
     "sourceRef": "1 Nephi 1:1",
     "targetRef": "1 Nephi 3:15",
     "type": "hebraism",
-    "note": "Hebraísmos Semíticos: Colofão autobiográfico e juramento bíblico 'Vive o Senhor'.",
-    "category": "internal"
+    "note": "Semitic Hebraisms: Autobiographical colophon and ancient biblical life-oath 'As the Lord liveth'.",
+    "category": "internal",
+    "notePt": "Hebraísmos Semíticos: Colofão autobiográfico e juramento bíblico 'Vive o Senhor'.",
+    "noteEn": "Semitic Hebraisms: Autobiographical colophon and ancient biblical life-oath 'As the Lord liveth'."
   },
   {
     "source": 47,
@@ -353,7 +385,9 @@
     "sourceRef": "1 Nephi 3:3",
     "targetRef": "1 Nephi 8:19",
     "type": "hebraism",
-    "note": "Estado Construto Hebraico: Cadeias nominais semíticas ('placas de latão' e 'barra de ferro').",
-    "category": "internal"
+    "note": "Hebrew Construct State: Semitic noun-phrase construct chains ('plates of brass' and 'rod of iron').",
+    "category": "internal",
+    "notePt": "Estado Construto Hebraico: Cadeias nominais semíticas ('placas de latão' e 'barra de ferro').",
+    "noteEn": "Hebrew Construct State: Semitic noun-phrase construct chains ('plates of brass' and 'rod of iron')."
   }
 ]
