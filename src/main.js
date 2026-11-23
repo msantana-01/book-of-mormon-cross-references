@@ -2862,6 +2862,59 @@ randomConnBtn.addEventListener("click", () => {
   selectVerse(list[currentTourIndex]);
 });
 
+// Native Touch Swipe Gestures for Mobile Exploration
+function setupTouchSwipeNavigation() {
+  function attachSwipe(el, onLeft, onRight) {
+    if (!el) return;
+    let startX = 0;
+    let startY = 0;
+    let startTime = 0;
+
+    el.addEventListener("touchstart", (e) => {
+      if (e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      startTime = Date.now();
+    }, { passive: true });
+
+    el.addEventListener("touchend", (e) => {
+      if (e.changedTouches.length !== 1) return;
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = endX - startX;
+      const diffY = endY - startY;
+      const elapsed = Date.now() - startTime;
+
+      // Threshold: horizontal swipe at least 45px, more horizontal than vertical, under 600ms
+      if (elapsed < 600 && Math.abs(diffX) >= 45 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+        if (diffX < 0) {
+          if (typeof onLeft === "function") onLeft();
+        } else {
+          if (typeof onRight === "function") onRight();
+        }
+      }
+    }, { passive: true });
+  }
+
+  // 1. Swipe left/right on Study Panel / Verse Inspector to navigate connections
+  if (studyPanel) {
+    attachSwipe(
+      studyPanel,
+      () => nextConnBtn && nextConnBtn.click(),
+      () => prevConnBtn && prevConnBtn.click()
+    );
+  }
+
+  // 2. Swipe left/right on Threads Reading Pane to navigate chapters
+  if (threadsReadingPane) {
+    attachSwipe(
+      threadsReadingPane,
+      () => threadsNextChBtn && threadsNextChBtn.click(),
+      () => threadsPrevChBtn && threadsPrevChBtn.click()
+    );
+  }
+}
+
 // URL state synchronization helper (keeps ?v= & ?lang= & ?view= in sync)
 function syncURLParams() {
   if (typeof window === "undefined" || !window.history || !window.location) return;
@@ -3554,14 +3607,16 @@ function showDataLoadError(err) {
 // Initial Data Load
 async function init() {
   try {
+    const dataBase = (import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : "./";
+    const dataPrefix = dataBase.endsWith("/") ? dataBase : (dataBase + "/");
     const responses = await Promise.all([
-      fetch("/data/books.json"),
-      fetch("/data/cross_references.json"),
-      fetch("/data/external_references.json"),
-      fetch("/data/verses_en.json"),
-      fetch("/data/verses_pt.json"),
-      fetch("/data/literary_structures.json"),
-      fetch("/data/external_verses.json")
+      fetch(`${dataPrefix}data/books.json`),
+      fetch(`${dataPrefix}data/cross_references.json`),
+      fetch(`${dataPrefix}data/external_references.json`),
+      fetch(`${dataPrefix}data/verses_en.json`),
+      fetch(`${dataPrefix}data/verses_pt.json`),
+      fetch(`${dataPrefix}data/literary_structures.json`),
+      fetch(`${dataPrefix}data/external_verses.json`)
     ]);
 
     for (const res of responses) {
@@ -3696,6 +3751,7 @@ async function init() {
     }
 
     updateBookmarksUI();
+    setupTouchSwipeNavigation();
 
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
   } catch (err) {
