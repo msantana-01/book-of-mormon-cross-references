@@ -4,6 +4,8 @@ import { generateVerseCard } from "./shareCard.js";
 
 // State
 let books = [];
+let versesEn = [];
+let versesPt = [];
 let verses = [];
 let internalLinks = [];
 let externalLinks = [];
@@ -185,23 +187,61 @@ function parseBibleBookName(refStr) {
 }
 
 // Canonical Church URL slugs
+const CHURCH_BOOK_SLUGS_BY_ID = {
+  1: "1-ne",
+  2: "2-ne",
+  3: "jacob",
+  4: "enos",
+  5: "jarom",
+  6: "omni",
+  7: "w-of-m",
+  8: "mosiah",
+  9: "alma",
+  10: "hel",
+  11: "3-ne",
+  12: "4-ne",
+  13: "morm",
+  14: "ether",
+  15: "moro"
+};
+
 const CHURCH_BOOK_SLUGS = {
   "1 Nephi": "1-ne",
+  "1 Néfi": "1-ne",
   "2 Nephi": "2-ne",
+  "2 Néfi": "2-ne",
   "Jacob": "jacob",
+  "Jacó": "jacob",
   "Enos": "enos",
   "Jarom": "jarom",
   "Omni": "omni",
+  "Ômni": "omni",
   "Words of Mormon": "w-of-m",
+  "Palavras de Mórmon": "w-of-m",
   "Mosiah": "mosiah",
+  "Mosias": "mosiah",
   "Alma": "alma",
   "Helaman": "hel",
+  "Helamã": "hel",
   "3 Nephi": "3-ne",
+  "3 Néfi": "3-ne",
   "4 Nephi": "4-ne",
+  "4 Néfi": "4-ne",
   "Mormon": "morm",
+  "Mórmon": "morm",
   "Ether": "ether",
-  "Moroni": "moro"
+  "Éter": "ether",
+  "Moroni": "moro",
+  "Morôni": "moro"
 };
+
+function getChurchStudyUrl(verseObj) {
+  if (!verseObj) return null;
+  const slug = (verseObj.bookId && CHURCH_BOOK_SLUGS_BY_ID[verseObj.bookId]) || CHURCH_BOOK_SLUGS[verseObj.book];
+  if (!slug) return null;
+  const langParam = getLang() === "pt" ? "por" : "eng";
+  return `https://www.churchofjesuschrist.org/study/scriptures/bofm/${slug}/${verseObj.ch}?lang=${langParam}#${verseObj.v}`;
+}
 
 // Canonical Church Bible & other scripture slugs
 const BIBLE_CHURCH_SLUGS = {
@@ -1820,18 +1860,24 @@ function selectVerse(verseId, shouldScroll = false) {
   if (verseObj) {
     selectedVerseRef.textContent = verseObj.ref;
     selectedVerseBadge.style.display = "inline-block";
-    selectedVerseBadge.textContent = book ? book.name : "Scripture";
+    selectedVerseBadge.textContent = book ? getBookDisplayName(book.name) : "Scripture";
     selectedVerseBadge.style.borderColor = book ? `${book.color}80` : "";
     selectedVerseBadge.style.color = book ? book.color : "";
 
-    verseTextBox.textContent = `"${verseObj.text}"`;
+    const verseChurchUrl = getChurchStudyUrl(verseObj);
+    const boxTitle = getLang() === "pt"
+      ? `Abrir ${verseObj.ref} em ChurchofJesusChrist.org ↗`
+      : `Open ${verseObj.ref} on ChurchofJesusChrist.org ↗`;
+    verseTextBox.title = boxTitle;
+    verseTextBox.setAttribute("aria-label", boxTitle);
+    verseTextBox.setAttribute("role", "button");
+    verseTextBox.setAttribute("tabindex", "0");
+    verseTextBox.innerHTML = `"${verseObj.text}" <span class="verse-box-link-hint" title="${boxTitle}" aria-hidden="true">${icons.externalLink}</span>`;
 
     // Official Church of Jesus Christ of Latter-day Saints study URL
-    const slug = CHURCH_BOOK_SLUGS[verseObj.book];
-    if (slug) {
+    if (verseChurchUrl) {
       officialLinkContainer.style.display = "block";
-      const langParam = getLang() === "pt" ? "por" : "eng";
-      officialLink.href = `https://www.churchofjesuschrist.org/study/scriptures/bofm/${slug}/${verseObj.ch}?lang=${langParam}#${verseObj.v}`;
+      officialLink.href = verseChurchUrl;
       officialLink.querySelector("span").textContent = t("readOnOfficial");
     } else {
       officialLinkContainer.style.display = "none";
@@ -1857,6 +1903,12 @@ function selectVerse(verseId, shouldScroll = false) {
       const isSource = link.source === verseId;
       const targetId = isSource ? link.target : link.source;
       const targetRefStr = isSource ? link.targetRef : link.sourceRef;
+      const targetVerse = verses[targetId - 1];
+      const targetChurchUrl = getChurchStudyUrl(targetVerse);
+      const displayRef = (getLang() === "pt" && targetVerse) ? targetVerse.ref : targetRefStr;
+      const churchTooltip = getLang() === "pt"
+        ? `Abrir ${displayRef} em ChurchofJesusChrist.org ↗`
+        : `Open ${displayRef} on ChurchofJesusChrist.org ↗`;
 
       let typeTag = link.type || "Parallel";
       let tagClass = "tag-internal";
@@ -1882,10 +1934,13 @@ function selectVerse(verseId, shouldScroll = false) {
       card.className = "connection-card";
       card.setAttribute("role", "button");
       card.setAttribute("tabindex", "0");
-      card.setAttribute("aria-label", `${t("jumpTo")} ${targetRefStr}`);
+      card.setAttribute("aria-label", `${t("jumpTo")} ${displayRef}`);
       card.innerHTML = `
         <div class="connection-left">
-          <div class="connection-title">${icons.link} ${targetRefStr}</div>
+          <div class="connection-title">
+            ${icons.link} ${displayRef}
+            ${targetChurchUrl ? `<a href="${targetChurchUrl}" target="_blank" rel="noopener noreferrer" class="external-link-hint" title="${churchTooltip}" onclick="event.stopPropagation()">${icons.externalLink}</a>` : ""}
+          </div>
           ${noteText ? `<div class="connection-note">${noteText}</div>` : ""}
         </div>
         <span class="tag ${tagClass}">${typeTag}</span>
@@ -2366,16 +2421,28 @@ function executeSearch(query) {
 
   // 1. Exact or prefix reference match
   let matched = verses.find(v => v.ref.toLowerCase() === q || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}` === q);
+  if (!matched && versesEn.length > 0) {
+    matched = versesEn.find(v => v.ref.toLowerCase() === q || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}` === q);
+  }
   if (!matched) {
     matched = verses.find(v => v.ref.toLowerCase().startsWith(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.startsWith(q));
+    if (!matched && versesEn.length > 0) {
+      matched = versesEn.find(v => v.ref.toLowerCase().startsWith(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.startsWith(q));
+    }
   }
   // 2. Substring reference match
   if (!matched) {
     matched = verses.find(v => v.ref.toLowerCase().includes(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.includes(q));
+    if (!matched && versesEn.length > 0) {
+      matched = versesEn.find(v => v.ref.toLowerCase().includes(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.includes(q));
+    }
   }
   // 3. Keyword / text search in verse body (for queries >= 3 chars)
   if (!matched && q.length >= 3) {
     matched = verses.find(v => v.text && v.text.toLowerCase().includes(q));
+    if (!matched && versesEn.length > 0) {
+      matched = versesEn.find(v => v.text && v.text.toLowerCase().includes(q));
+    }
   }
 
   if (matched) {
@@ -2475,6 +2542,26 @@ topicSelect.addEventListener("change", (e) => {
   }
 });
 
+// Verse Text Box click to open on ChurchofJesusChrist.org
+verseTextBox.addEventListener("click", () => {
+  const currentVerse = verses[selectedVerseId - 1];
+  const url = getChurchStudyUrl(currentVerse);
+  if (url) {
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+});
+
+verseTextBox.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    const currentVerse = verses[selectedVerseId - 1];
+    const url = getChurchStudyUrl(currentVerse);
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  }
+});
+
 // Language toggle button
 langToggleBtn.addEventListener("click", () => {
   const newLang = getLang() === "en" ? "pt" : "en";
@@ -2483,6 +2570,7 @@ langToggleBtn.addEventListener("click", () => {
 });
 
 function updateUILanguage() {
+  verses = getLang() === "pt" ? (versesPt.length ? versesPt : verses) : (versesEn.length ? versesEn : verses);
   document.getElementById("appTitle").textContent = t("title");
   document.getElementById("appSubtitle").textContent = t("subtitle");
   document.getElementById("badgeBooks").textContent = t("statsBooks");
@@ -2673,6 +2761,7 @@ async function init() {
       fetch("/data/cross_references.json"),
       fetch("/data/external_references.json"),
       fetch("/data/verses_en.json"),
+      fetch("/data/verses_pt.json"),
       fetch("/data/literary_structures.json")
     ]);
 
@@ -2682,11 +2771,13 @@ async function init() {
       }
     }
 
-    const [booksRes, internalRes, externalRes, versesRes, structuresRes] = responses;
+    const [booksRes, internalRes, externalRes, versesEnRes, versesPtRes, structuresRes] = responses;
     books = await booksRes.json();
     internalLinks = await internalRes.json();
     externalLinks = await externalRes.json();
-    verses = await versesRes.json();
+    versesEn = await versesEnRes.json();
+    versesPt = await versesPtRes.json();
+    verses = getLang() === "pt" ? versesPt : versesEn;
     literaryStructures = await structuresRes.json();
 
     // Precompute topic sets on all links for zero-alloc hot loop rendering
@@ -2705,10 +2796,10 @@ async function init() {
 
     // Dynamically resolve verseId & targetId for all featured connections!
     FEATURED_CONNECTIONS.forEach(item => {
-      const vSrc = verses.find(v => v.ref === item.srcRef);
+      const vSrc = versesEn.find(v => v.ref === item.srcRef);
       if (vSrc) item.verseId = vSrc.id;
       if (item.tgtRef) {
-        const vTgt = verses.find(v => v.ref === item.tgtRef);
+        const vTgt = versesEn.find(v => v.ref === item.tgtRef);
         if (vTgt) item.targetId = vTgt.id;
       }
     });
@@ -2751,6 +2842,10 @@ async function init() {
     renderAxis();
     renderFeaturedPills();
     setupCanvas();
+
+    if (getLang() === "pt") {
+      updateUILanguage();
+    }
 
     // Check URL parameters for direct link sharing
     const urlParams = new URLSearchParams(window.location.search);

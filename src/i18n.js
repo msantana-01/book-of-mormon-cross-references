@@ -225,7 +225,9 @@ export const translations = {
   }
 };
 
-let currentLang = "en";
+const savedLang = typeof localStorage !== "undefined" ? localStorage.getItem("app_lang") : null;
+const browserLang = typeof navigator !== "undefined" && navigator.language && navigator.language.startsWith("pt") ? "pt" : "en";
+let currentLang = (savedLang === "pt" || savedLang === "en") ? savedLang : (browserLang || "pt");
 
 export function getLang() {
   return currentLang;
@@ -234,6 +236,9 @@ export function getLang() {
 export function setLang(lang) {
   if (translations[lang]) {
     currentLang = lang;
+    if (typeof localStorage !== "undefined") {
+      try { localStorage.setItem("app_lang", lang); } catch (e) {}
+    }
     if (typeof document !== "undefined" && document.documentElement) {
       document.documentElement.lang = lang;
     }

@@ -44,6 +44,23 @@ verses.forEach((v, idx) => {
 });
 console.log(`✓ verses_en.json: 6,604 verses sequentially validated`);
 
+// 2b. Check Portuguese Verses
+const versesPtPath = path.join(DATA_DIR, "verses_pt.json");
+assert.ok(fs.existsSync(versesPtPath), "verses_pt.json must exist");
+const versesPt = JSON.parse(fs.readFileSync(versesPtPath, "utf-8"));
+assert.strictEqual(versesPt.length, 6604, "verses_pt.json must contain exactly 6,604 verses");
+
+versesPt.forEach((v, idx) => {
+  const expectedId = idx + 1;
+  assert.strictEqual(v.id, expectedId, `Verse PT at index ${idx} must have id ${expectedId}`);
+  assert.ok(v.ref, `Verse PT #${expectedId} must have a ref`);
+  assert.ok(v.book, `Verse PT #${expectedId} must have a book`);
+  assert.ok(typeof v.ch === "number" && v.ch >= 1, `Verse PT #${expectedId} must have ch >= 1`);
+  assert.ok(typeof v.v === "number" && v.v >= 1, `Verse PT #${expectedId} must have v >= 1`);
+  assert.ok(v.text && v.text.length > 0, `Verse PT #${expectedId} must have non-empty text`);
+});
+console.log(`✓ verses_pt.json: 6,604 verses sequentially validated`);
+
 // 3. Check Internal Cross-References
 const crossPath = path.join(DATA_DIR, "cross_references.json");
 assert.ok(fs.existsSync(crossPath), "cross_references.json must exist");
