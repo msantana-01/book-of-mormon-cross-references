@@ -403,6 +403,20 @@ const comparisonBibleText = document.getElementById("comparisonBibleText");
 const comparisonBibleChurchLink = document.getElementById("comparisonBibleChurchLink");
 const comparisonBibleChurchText = document.getElementById("comparisonBibleChurchText");
 
+// Bookmarks DOM Elements
+const bookmarksBtn = document.getElementById("bookmarksBtn");
+const bookmarksBtnText = document.getElementById("bookmarksBtnText");
+const bookmarksCountBadge = document.getElementById("bookmarksCountBadge");
+const bookmarkVerseBtn = document.getElementById("bookmarkVerseBtn");
+const bookmarksModal = document.getElementById("bookmarksModal");
+const bookmarksCloseBtn = document.getElementById("bookmarksCloseBtn");
+const bookmarksModalTitle = document.getElementById("bookmarksModalTitle");
+const bookmarksModalSubtitle = document.getElementById("bookmarksModalSubtitle");
+const bookmarksBody = document.getElementById("bookmarksBody");
+const bookmarksTotalCount = document.getElementById("bookmarksTotalCount");
+const clearBookmarksBtn = document.getElementById("clearBookmarksBtn");
+const clearBookmarksText = document.getElementById("clearBookmarksText");
+
 // Ancient Semitic Literary Structures DOM Elements
 const literaryStructureBox = document.getElementById("literaryStructureBox");
 const structureTypeBadge = document.getElementById("structureTypeBadge");
@@ -526,6 +540,163 @@ function openComparisonModal(bomVerse, link) {
 function closeComparisonModal() {
   if (!comparisonModal) return;
   comparisonModal.style.display = "none";
+  document.body.style.overflow = "";
+}
+
+// --- Scripture Bookmarks (localStorage) ---
+const BOOKMARKS_STORAGE_KEY = "app_bookmarks";
+
+function getSavedBookmarks() {
+  if (typeof localStorage === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr.filter(id => typeof id === "number" && id >= 1 && id <= 6604) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveBookmarks(ids) {
+  if (typeof localStorage === "undefined") return;
+  try {
+    localStorage.setItem(BOOKMARKS_STORAGE_KEY, JSON.stringify(ids));
+  } catch (e) {}
+}
+
+function toggleBookmarkVerse(verseId) {
+  if (!verseId) return;
+  let bookmarks = getSavedBookmarks();
+  if (bookmarks.includes(verseId)) {
+    bookmarks = bookmarks.filter(id => id !== verseId);
+  } else {
+    bookmarks.push(verseId);
+  }
+  saveBookmarks(bookmarks);
+  updateBookmarksUI();
+  if (bookmarksModal && bookmarksModal.style.display !== "none") {
+    renderBookmarksList();
+  }
+}
+
+function removeBookmark(verseId) {
+  let bookmarks = getSavedBookmarks().filter(id => id !== verseId);
+  saveBookmarks(bookmarks);
+  updateBookmarksUI();
+  if (bookmarksModal && bookmarksModal.style.display !== "none") {
+    renderBookmarksList();
+  }
+}
+
+function clearAllBookmarks() {
+  if (confirm(t("bookmarksConfirmClear"))) {
+    saveBookmarks([]);
+    updateBookmarksUI();
+    if (bookmarksModal && bookmarksModal.style.display !== "none") {
+      renderBookmarksList();
+    }
+  }
+}
+
+function updateBookmarksUI() {
+  const bookmarks = getSavedBookmarks();
+  const count = bookmarks.length;
+
+  if (bookmarksCountBadge) {
+    bookmarksCountBadge.textContent = String(count);
+    bookmarksCountBadge.style.display = count > 0 ? "inline-flex" : "none";
+  }
+
+  if (bookmarkVerseBtn && selectedVerseId) {
+    const isBookmarked = bookmarks.includes(selectedVerseId);
+    bookmarkVerseBtn.classList.toggle("bookmarked", isBookmarked);
+    const titleText = isBookmarked ? t("bookmarkRemove") : t("bookmarkAdd");
+    bookmarkVerseBtn.title = titleText;
+    bookmarkVerseBtn.setAttribute("aria-label", titleText);
+  }
+}
+
+function renderBookmarksList() {
+  if (!bookmarksBody) return;
+  const bookmarks = getSavedBookmarks();
+
+  if (bookmarks.length === 0) {
+    bookmarksBody.innerHTML = `
+      <div class="bookmarks-empty-state">
+        <p>${t("bookmarksEmpty")}</p>
+      </div>
+    `;
+    if (clearBookmarksBtn) clearBookmarksBtn.style.display = "none";
+    if (bookmarksTotalCount) bookmarksTotalCount.textContent = t("bookmarksCount", { n: 0 });
+    return;
+  }
+
+  if (clearBookmarksBtn) clearBookmarksBtn.style.display = "inline-flex";
+  if (bookmarksTotalCount) bookmarksTotalCount.textContent = t("bookmarksCount", { n: bookmarks.length });
+
+  bookmarksBody.innerHTML = bookmarks.map(id => {
+    const v = verses[id - 1];
+    if (!v) return "";
+    const book = getBookForVerse(id);
+    const bookColor = book ? book.color : "#d4af37";
+    const conns = verseConnectionsMap.get(id) || { internal: [], external: [] };
+    const totalConns = conns.internal.length + conns.external.length;
+
+    let snippet = v.text || "";
+    if (snippet.length > 140) snippet = snippet.substring(0, 140) + "...";
+
+    return `
+      <div class="bookmark-card" data-verse-id="${id}">
+        <div class="bookmark-card-top">
+          <div class="bookmark-ref-group">
+            <span class="search-result-ref-dot" style="background-color: ${bookColor}"></span>
+            <span class="bookmark-ref-title">${escapeHtml(v.ref)}</span>
+            ${totalConns > 0 ? `<span class="badge badge-gold" style="font-size:0.68rem; padding: 0.1rem 0.4rem;">🔗 ${totalConns}</span>` : ""}
+          </div>
+          <div class="bookmark-actions">
+            <button type="button" class="bookmark-delete-btn" data-delete-id="${id}" title="${t('bookmarkRemove')}" aria-label="${t('bookmarkRemove')}">
+              <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+          </div>
+        </div>
+        <div class="bookmark-snippet">"${escapeHtml(snippet)}"</div>
+      </div>
+    `;
+  }).join("");
+
+  bookmarksBody.querySelectorAll(".bookmark-card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".bookmark-delete-btn")) return;
+      const vId = parseInt(card.dataset.verseId, 10);
+      if (vId) {
+        selectVerse(vId, true);
+        closeBookmarksModal();
+      }
+    });
+  });
+
+  bookmarksBody.querySelectorAll(".bookmark-delete-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const delId = parseInt(btn.dataset.deleteId, 10);
+      if (delId) {
+        removeBookmark(delId);
+      }
+    });
+  });
+}
+
+function openBookmarksModal() {
+  if (!bookmarksModal) return;
+  renderBookmarksList();
+  bookmarksModal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeBookmarksModal() {
+  if (!bookmarksModal) return;
+  bookmarksModal.style.display = "none";
   document.body.style.overflow = "";
 }
 
@@ -2135,6 +2306,7 @@ function selectVerse(verseId, shouldScroll = false) {
   }
 
   syncURLParams();
+  updateBookmarksUI();
 
   // Auto-scroll to Study Panel when user explicitly clicks/selects a verse
   if (shouldScroll) {
@@ -2329,6 +2501,7 @@ viewBtns.forEach(btn => {
       renderThreadsChapter(true);
     }
     syncURLParams();
+  updateBookmarksUI();
   });
 });
 
@@ -2538,6 +2711,7 @@ function syncURLParams() {
 if (copyLinkBtn) {
   copyLinkBtn.addEventListener("click", async () => {
     syncURLParams();
+  updateBookmarksUI();
     const shareUrl = window.location.href;
     const currentVerse = verses[selectedVerseId - 1];
     const shareTitle = currentVerse ? `${currentVerse.ref} | Book of Mormon Cross-References` : document.title;
@@ -2876,6 +3050,9 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && comparisonModal && comparisonModal.style.display !== "none") {
     closeComparisonModal();
   }
+  if (e.key === "Escape" && bookmarksModal && bookmarksModal.style.display !== "none") {
+    closeBookmarksModal();
+  }
 });
 
 // Comparison Modal Event Listeners
@@ -2886,6 +3063,28 @@ if (comparisonModal) {
   comparisonModal.addEventListener("click", (e) => {
     if (e.target === comparisonModal) closeComparisonModal();
   });
+}
+
+// Bookmarks Event Listeners
+if (bookmarksBtn) {
+  bookmarksBtn.addEventListener("click", openBookmarksModal);
+}
+if (bookmarksCloseBtn) {
+  bookmarksCloseBtn.addEventListener("click", closeBookmarksModal);
+}
+if (bookmarksModal) {
+  bookmarksModal.addEventListener("click", (e) => {
+    if (e.target === bookmarksModal) closeBookmarksModal();
+  });
+}
+if (bookmarkVerseBtn) {
+  bookmarkVerseBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleBookmarkVerse(selectedVerseId);
+  });
+}
+if (clearBookmarksBtn) {
+  clearBookmarksBtn.addEventListener("click", clearAllBookmarks);
 }
 tutorialTabs.forEach((tab, idx) => {
   tab.addEventListener("click", () => {
@@ -3100,6 +3299,17 @@ function updateUILanguage() {
   if (comparisonBomChurchText) comparisonBomChurchText.textContent = t("readOnOfficial");
   if (comparisonBibleChurchText) comparisonBibleChurchText.textContent = t("readBibleFullChapter");
 
+  // Bookmarks translations
+  if (bookmarksBtnText) bookmarksBtnText.textContent = t("bookmarksBtn");
+  if (bookmarksBtn) bookmarksBtn.title = t("bookmarksTooltip");
+  if (bookmarksModalTitle) bookmarksModalTitle.textContent = t("bookmarksModalTitle");
+  if (bookmarksModalSubtitle) bookmarksModalSubtitle.textContent = t("bookmarksModalSubtitle");
+  if (clearBookmarksText) clearBookmarksText.textContent = t("bookmarksClearAll");
+  updateBookmarksUI();
+  if (bookmarksModal && bookmarksModal.style.display !== "none") {
+    renderBookmarksList();
+  }
+
   renderAxis();
   renderFeaturedPills();
   if (currentViewMode === "threads") {
@@ -3273,6 +3483,8 @@ async function init() {
     if (paramBook) {
       zoomToBook(paramBook);
     }
+
+    updateBookmarksUI();
 
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
   } catch (err) {

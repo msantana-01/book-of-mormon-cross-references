@@ -36,6 +36,11 @@
           <span class="badge" id="badgeChapters">239 Chapters</span>
           <span class="badge" id="badgeVerses">6,604 Verses</span>
         </div>
+        <button id="bookmarksBtn" class="bookmarks-btn" title="Saved Scripture Bookmarks" aria-haspopup="dialog">
+          <svg class="ui-icon ui-icon-gold" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span id="bookmarksBtnText">Bookmarks</span>
+          <span class="badge-count" id="bookmarksCountBadge" style="display: none;">0</span>
+        </button>
         <button id="howToUseBtn" class="how-to-use-btn" title="How to Use & Explore" aria-haspopup="dialog">
           <svg class="ui-icon ui-icon-gold" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
           <span id="howToUseText">How to Use</span>
@@ -195,6 +200,11 @@
         <h2 id="selectedVerseTitle">
           <span id="selectedVerseRef">Select a Verse</span>
           <span class="tag tag-book" id="selectedVerseBadge" style="display: none;">Active</span>
+          <button id="bookmarkVerseBtn" class="bookmark-verse-btn" title="Bookmark this verse" aria-label="Bookmark this verse">
+            <svg class="ui-icon bookmark-star-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </button>
         </h2>
         <div class="panel-header-actions">
           <span class="badge badge-gold badge-tabular" id="connectionsCountBadge">0 Connections</span>
@@ -522,6 +532,33 @@
             <span id="comparisonBibleChurchText">Read Bible chapter on ChurchofJesusChrist.org ↗</span>
           </a>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookmarks Modal -->
+  <div id="bookmarksModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="bookmarksModalTitle" style="display: none;">
+    <div class="modal-card modal-card-bookmarks">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="bookmarksModalTitle">⭐ Saved Scripture Bookmarks</h2>
+          <p id="bookmarksModalSubtitle">Your bookmarked verses saved for study, talks, and lessons</p>
+        </div>
+        <button id="bookmarksCloseBtn" class="modal-close-btn" aria-label="Close bookmarks">
+          <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="bookmarks-body" id="bookmarksBody">
+        <!-- Dynamically rendered list of bookmarks -->
+      </div>
+
+      <div class="modal-footer bookmarks-footer">
+        <span class="bookmarks-total-count" id="bookmarksTotalCount">0 Bookmarks</span>
+        <button id="clearBookmarksBtn" class="clear-bookmarks-btn" style="display: none;">
+          <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          <span id="clearBookmarksText">Clear All</span>
+        </button>
       </div>
     </div>
   </div>
