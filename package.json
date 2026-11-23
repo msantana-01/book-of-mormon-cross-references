@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node scripts/test_dataset.js"
+    "test": "node scripts/test_dataset.js",
+    "deploy": "npm run build && node scripts/deploy_gh_pages.js"
   },
   "devDependencies": {
     "vite": "^6.2.0"
