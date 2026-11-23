@@ -715,6 +715,193 @@ main {
   background: rgba(74, 222, 128, 0.15);
 }
 
+/* Side-by-Side Scripture Comparison Modal (BOM ↔ Holy Bible) */
+.modal-card-comparison {
+  max-width: 1060px;
+  background: #080d1a;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 280px 1fr;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(88vh - 80px);
+}
+
+.comparison-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.comparison-bom {
+  border-color: rgba(245, 158, 11, 0.3);
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, rgba(15, 23, 42, 0.5) 100%);
+}
+
+.comparison-bible {
+  border-color: rgba(56, 189, 248, 0.3);
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, rgba(15, 23, 42, 0.5) 100%);
+}
+
+.comparison-col-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.comparison-col-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+}
+
+.comparison-tag-bible {
+  color: var(--cyan);
+}
+
+.comparison-verse-ref {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: #fff;
+  margin: 0;
+}
+
+.comparison-verse-body {
+  font-family: var(--font-scripture);
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: #f1f5f9;
+  flex: 1 1 auto;
+}
+
+.comparison-church-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.15s;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.comparison-church-link:hover {
+  color: var(--gold);
+}
+
+.comparison-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.comparison-link-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.comparison-beam-icon {
+  font-size: 1.6rem;
+  color: var(--gold);
+  line-height: 1;
+  text-shadow: 0 0 12px var(--gold);
+}
+
+.comparison-note-box {
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: left;
+  width: 100%;
+}
+
+.comparison-note-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+
+.comparison-note-text {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+/* Card Button & Quote Preview */
+.connection-verse-quote {
+  font-family: var(--font-scripture);
+  font-size: 0.88rem;
+  font-style: italic;
+  line-height: 1.45;
+  color: #94a3b8;
+  margin-top: 0.35rem;
+  padding-left: 0.65rem;
+  border-left: 2px solid rgba(56, 189, 248, 0.4);
+}
+
+.btn-compare-side {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gold);
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 5px;
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: all 0.15s ease;
+}
+
+.btn-compare-side:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: var(--gold);
+  color: #fef08a;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 860px) {
+  .comparison-grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .comparison-center {
+    order: 2;
+    padding: 0;
+  }
+  .comparison-bom {
+    order: 1;
+  }
+  .comparison-bible {
+    order: 3;
+  }
+}
+
 .share-card-btn {
   display: inline-flex;
   align-items: center;

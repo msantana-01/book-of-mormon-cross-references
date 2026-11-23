@@ -91,6 +91,15 @@ extRefs.forEach((l, idx) => {
 });
 console.log(`✓ external_references.json: ${extRefs.length} external links validated (all notes localized)`);
 
+// 4b. Check External Verses Corpus
+const extVersesPath = path.join(DATA_DIR, "external_verses.json");
+assert.ok(fs.existsSync(extVersesPath), "external_verses.json must exist");
+const extVerses = JSON.parse(fs.readFileSync(extVersesPath, "utf-8"));
+assert.ok(Object.keys(extVerses).length >= 700, "external_verses.json must contain at least 700 verses");
+assert.ok(extVerses["Luke 22:42"].textPt.includes("cálice"), "Luke 22:42 in PT must contain 'cálice'");
+assert.ok(extVerses["Luke 22:42"].textEn.includes("cup"), "Luke 22:42 in EN must contain 'cup'");
+console.log(`✓ external_verses.json: ${Object.keys(extVerses).length} biblical/external verses validated (EN+PT)`);
+
 // 5. Check Literary Structures
 const structPath = path.join(DATA_DIR, "literary_structures.json");
 assert.ok(fs.existsSync(structPath), "literary_structures.json must exist");

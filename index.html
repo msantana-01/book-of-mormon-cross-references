@@ -473,6 +473,59 @@
     </div>
   </div>
 
+  <!-- Side-by-Side Scripture Comparison Modal (BOM ↔ Holy Bible) -->
+  <div id="comparisonModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="comparisonModalTitle" style="display: none;">
+    <div class="modal-card modal-card-comparison">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="comparisonModalTitle">⚖️ Scripture Parallel Comparison</h2>
+          <p id="comparisonModalSubtitle">Side-by-side doctrinal & textual alignment</p>
+        </div>
+        <button id="comparisonCloseBtn" class="modal-close-btn" aria-label="Close comparison">
+          <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- Left Column: Book of Mormon Verse -->
+        <div class="comparison-column comparison-bom">
+          <div class="comparison-col-header">
+            <span class="comparison-col-tag" id="comparisonBomTag">Book of Mormon</span>
+            <h3 class="comparison-verse-ref" id="comparisonBomRef">Alma 36:18</h3>
+          </div>
+          <div class="comparison-verse-body" id="comparisonBomText"></div>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="comparison-church-link" id="comparisonBomChurchLink">
+            <span id="comparisonBomChurchText">Read on ChurchofJesusChrist.org ↗</span>
+          </a>
+        </div>
+
+        <!-- Center Column: Doctrinal Connection & Note -->
+        <div class="comparison-center">
+          <div class="comparison-link-indicator">
+            <span class="comparison-beam-icon">↔</span>
+            <span class="tag tag-external" id="comparisonTypeBadge">Parallel</span>
+          </div>
+          <div class="comparison-note-box">
+            <div class="comparison-note-title" id="comparisonNoteTitle">Doctrinal Insight</div>
+            <div class="comparison-note-text" id="comparisonNoteText"></div>
+          </div>
+        </div>
+
+        <!-- Right Column: Holy Bible Verse -->
+        <div class="comparison-column comparison-bible">
+          <div class="comparison-col-header">
+            <span class="comparison-col-tag comparison-tag-bible" id="comparisonBibleTag">Holy Bible</span>
+            <h3 class="comparison-verse-ref" id="comparisonBibleRef">Luke 22:42</h3>
+          </div>
+          <div class="comparison-verse-body" id="comparisonBibleText"></div>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="comparison-church-link" id="comparisonBibleChurchLink">
+            <span id="comparisonBibleChurchText">Read Bible chapter on ChurchofJesusChrist.org ↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer>
     <p id="footerCredits">

@@ -9,6 +9,7 @@ let versesPt = [];
 let verses = [];
 let internalLinks = [];
 let externalLinks = [];
+let externalVerses = {};
 let currentTourIndex = 0;
 let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] }
 let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
@@ -383,6 +384,25 @@ const searchResultsDropdown = document.getElementById("searchResultsDropdown");
 const backToDiagramBtn = document.getElementById("backToDiagramBtn");
 const backToDiagramText = document.getElementById("backToDiagramText");
 
+// Side-by-Side Scripture Comparison Modal Elements
+const comparisonModal = document.getElementById("comparisonModal");
+const comparisonCloseBtn = document.getElementById("comparisonCloseBtn");
+const comparisonModalTitle = document.getElementById("comparisonModalTitle");
+const comparisonModalSubtitle = document.getElementById("comparisonModalSubtitle");
+const comparisonBomTag = document.getElementById("comparisonBomTag");
+const comparisonBomRef = document.getElementById("comparisonBomRef");
+const comparisonBomText = document.getElementById("comparisonBomText");
+const comparisonBomChurchLink = document.getElementById("comparisonBomChurchLink");
+const comparisonBomChurchText = document.getElementById("comparisonBomChurchText");
+const comparisonTypeBadge = document.getElementById("comparisonTypeBadge");
+const comparisonNoteTitle = document.getElementById("comparisonNoteTitle");
+const comparisonNoteText = document.getElementById("comparisonNoteText");
+const comparisonBibleTag = document.getElementById("comparisonBibleTag");
+const comparisonBibleRef = document.getElementById("comparisonBibleRef");
+const comparisonBibleText = document.getElementById("comparisonBibleText");
+const comparisonBibleChurchLink = document.getElementById("comparisonBibleChurchLink");
+const comparisonBibleChurchText = document.getElementById("comparisonBibleChurchText");
+
 // Ancient Semitic Literary Structures DOM Elements
 const literaryStructureBox = document.getElementById("literaryStructureBox");
 const structureTypeBadge = document.getElementById("structureTypeBadge");
@@ -452,6 +472,61 @@ function closeTutorialModal() {
     tutorialModal.style.display = "none";
     document.body.style.overflow = "";
   }
+}
+
+function openComparisonModal(bomVerse, link) {
+  if (!comparisonModal || !bomVerse || !link) return;
+  const isPt = getLang() === "pt";
+  const displayExtRef = getExternalRefDisplayName(link.externalRef);
+  const displayExtWork = getExternalWorkDisplayName(link.externalWork);
+
+  const extVerseObj = externalVerses[link.externalRef];
+  const bibleVerseText = extVerseObj
+    ? (isPt ? (extVerseObj.textPt || extVerseObj.textEn) : (extVerseObj.textEn || extVerseObj.textPt))
+    : "";
+
+  if (comparisonBomRef) comparisonBomRef.textContent = bomVerse.ref;
+  if (comparisonBomText) comparisonBomText.textContent = `"${bomVerse.text}"`;
+  const bomChurchUrl = getChurchStudyUrl(bomVerse);
+  if (comparisonBomChurchLink) {
+    if (bomChurchUrl) {
+      comparisonBomChurchLink.href = bomChurchUrl;
+      comparisonBomChurchLink.style.display = "inline-flex";
+    } else {
+      comparisonBomChurchLink.style.display = "none";
+    }
+  }
+
+  const extNoteText = isPt ? (link.notePt || link.note) : (link.noteEn || link.note);
+  if (comparisonNoteText) comparisonNoteText.textContent = extNoteText || "";
+  if (comparisonTypeBadge) comparisonTypeBadge.textContent = getConnectionTypeDisplayName(link.type);
+
+  if (comparisonBibleTag) comparisonBibleTag.textContent = displayExtWork;
+  if (comparisonBibleRef) comparisonBibleRef.textContent = displayExtRef;
+  if (comparisonBibleText) {
+    comparisonBibleText.textContent = bibleVerseText
+      ? `"${bibleVerseText}"`
+      : (isPt ? "(Texto bíblico disponível no link da Igreja)" : "(Biblical text available on Church link)");
+  }
+
+  const bibleChurchUrl = getBibleStudyUrl(link.externalRef);
+  if (comparisonBibleChurchLink) {
+    if (bibleChurchUrl) {
+      comparisonBibleChurchLink.href = bibleChurchUrl;
+      comparisonBibleChurchLink.style.display = "inline-flex";
+    } else {
+      comparisonBibleChurchLink.style.display = "none";
+    }
+  }
+
+  comparisonModal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeComparisonModal() {
+  if (!comparisonModal) return;
+  comparisonModal.style.display = "none";
+  document.body.style.overflow = "";
 }
 
 function scrollToStudyPanel() {
@@ -1965,33 +2040,36 @@ function selectVerse(verseId, shouldScroll = false) {
     filteredExternal.forEach(link => {
       const card = document.createElement("div");
       const studyUrl = getBibleStudyUrl(link.externalRef);
-      card.className = `connection-card ${studyUrl ? "connection-card-external" : ""}`;
+      card.className = "connection-card connection-card-external";
       const displayExternalRef = getExternalRefDisplayName(link.externalRef);
       const displayExternalWork = getExternalWorkDisplayName(link.externalWork);
       const displayType = getConnectionTypeDisplayName(link.type);
 
-      if (studyUrl) {
-        card.setAttribute("role", "button");
-        card.setAttribute("tabindex", "0");
-        const tooltipText = getLang() === "pt"
-          ? `Abrir ${displayExternalRef} em ChurchofJesusChrist.org ↗`
-          : `Open ${displayExternalRef} on ChurchofJesusChrist.org ↗`;
-        card.setAttribute("title", tooltipText);
-        card.setAttribute("aria-label", tooltipText);
-        card.addEventListener("click", () => {
-          window.open(studyUrl, "_blank", "noopener,noreferrer");
-        });
-        card.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            window.open(studyUrl, "_blank", "noopener,noreferrer");
-          }
-        });
-      } else {
-        card.style.cursor = "default";
-      }
+      const extVerseObj = externalVerses[link.externalRef];
+      const isPt = getLang() === "pt";
+      const bibleVerseText = extVerseObj
+        ? (isPt ? (extVerseObj.textPt || extVerseObj.textEn) : (extVerseObj.textEn || extVerseObj.textPt))
+        : "";
 
-      const extNoteText = getLang() === "pt"
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
+      const tooltipText = isPt
+        ? `Comparar ${verseObj.ref} com ${displayExternalRef} lado a lado`
+        : `Compare ${verseObj.ref} with ${displayExternalRef} side-by-side`;
+      card.setAttribute("title", tooltipText);
+      card.setAttribute("aria-label", tooltipText);
+
+      card.addEventListener("click", () => {
+        openComparisonModal(verseObj, link);
+      });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openComparisonModal(verseObj, link);
+        }
+      });
+
+      const extNoteText = isPt
         ? (link.notePt || link.note)
         : (link.noteEn || link.note);
 
@@ -1999,12 +2077,28 @@ function selectVerse(verseId, shouldScroll = false) {
         <div class="connection-left">
           <div class="connection-title">
             ${icons.bookOpen} ${displayExternalRef} (${displayExternalWork})
-            ${studyUrl ? `<span class="external-link-hint" aria-hidden="true">${icons.externalLink}</span>` : ""}
+            ${studyUrl ? `<a href="${studyUrl}" target="_blank" rel="noopener noreferrer" class="external-link-hint" title="${isPt ? 'Abrir no site oficial da Igreja ↗' : 'Open on ChurchofJesusChrist.org ↗'}" onclick="event.stopPropagation()">${icons.externalLink}</a>` : ""}
           </div>
+          ${bibleVerseText ? `<div class="connection-verse-quote">"${bibleVerseText}"</div>` : ""}
           ${extNoteText ? `<div class="connection-note">${extNoteText}</div>` : ""}
+          <div class="connection-actions-row">
+            <button type="button" class="btn-compare-side" title="${t('viewComparisonTooltip')}">
+              <svg class="ui-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+              <span>${t('viewComparisonBtn')}</span>
+            </button>
+          </div>
         </div>
         <span class="tag tag-external">${displayType}</span>
       `;
+
+      const compareBtn = card.querySelector(".btn-compare-side");
+      if (compareBtn) {
+        compareBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openComparisonModal(verseObj, link);
+        });
+      }
+
       connectionsList.appendChild(card);
     });
   }
@@ -2779,7 +2873,20 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && tutorialModal && tutorialModal.style.display !== "none") {
     closeTutorialModal();
   }
+  if (e.key === "Escape" && comparisonModal && comparisonModal.style.display !== "none") {
+    closeComparisonModal();
+  }
 });
+
+// Comparison Modal Event Listeners
+if (comparisonCloseBtn) {
+  comparisonCloseBtn.addEventListener("click", closeComparisonModal);
+}
+if (comparisonModal) {
+  comparisonModal.addEventListener("click", (e) => {
+    if (e.target === comparisonModal) closeComparisonModal();
+  });
+}
 tutorialTabs.forEach((tab, idx) => {
   tab.addEventListener("click", () => {
     setTutorialTab(idx);
@@ -2984,6 +3091,15 @@ function updateUILanguage() {
   const elTutorialDoneText = document.getElementById("tutorialDoneText");
   if (elTutorialDoneText) elTutorialDoneText.textContent = t("tutorialDone");
 
+  // Comparison Modal translations
+  if (comparisonModalTitle) comparisonModalTitle.textContent = `⚖️ ${t("comparisonModalTitle")}`;
+  if (comparisonModalSubtitle) comparisonModalSubtitle.textContent = t("comparisonModalSubtitle");
+  if (comparisonBomTag) comparisonBomTag.textContent = t("comparisonBomHeader");
+  if (comparisonBibleTag) comparisonBibleTag.textContent = t("comparisonBibleHeader");
+  if (comparisonNoteTitle) comparisonNoteTitle.textContent = t("comparisonConnectionHeader");
+  if (comparisonBomChurchText) comparisonBomChurchText.textContent = t("readOnOfficial");
+  if (comparisonBibleChurchText) comparisonBibleChurchText.textContent = t("readBibleFullChapter");
+
   renderAxis();
   renderFeaturedPills();
   if (currentViewMode === "threads") {
@@ -3036,7 +3152,8 @@ async function init() {
       fetch("/data/external_references.json"),
       fetch("/data/verses_en.json"),
       fetch("/data/verses_pt.json"),
-      fetch("/data/literary_structures.json")
+      fetch("/data/literary_structures.json"),
+      fetch("/data/external_verses.json")
     ]);
 
     for (const res of responses) {
@@ -3045,7 +3162,7 @@ async function init() {
       }
     }
 
-    const [booksRes, internalRes, externalRes, versesEnRes, versesPtRes, structuresRes] = responses;
+    const [booksRes, internalRes, externalRes, versesEnRes, versesPtRes, structuresRes, extVersesRes] = responses;
     books = await booksRes.json();
     internalLinks = await internalRes.json();
     externalLinks = await externalRes.json();
@@ -3053,6 +3170,7 @@ async function init() {
     versesPt = await versesPtRes.json();
     verses = getLang() === "pt" ? versesPt : versesEn;
     literaryStructures = await structuresRes.json();
+    externalVerses = await extVersesRes.json();
 
     // Precompute topic sets on all links for zero-alloc hot loop rendering
     internalLinks.forEach(computeLinkTopics);
