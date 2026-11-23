@@ -1,4 +1,4 @@
-import { t, getLang, setLang, getBookDisplayName } from "./i18n.js";
+import { t, getLang, setLang, getBookDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
 import { icons } from "./icons.js";
 import { generateVerseCard } from "./shareCard.js";
 
@@ -1962,13 +1962,16 @@ function selectVerse(verseId, shouldScroll = false) {
       const card = document.createElement("div");
       const studyUrl = getBibleStudyUrl(link.externalRef);
       card.className = `connection-card ${studyUrl ? "connection-card-external" : ""}`;
+      const displayExternalRef = getExternalRefDisplayName(link.externalRef);
+      const displayExternalWork = getExternalWorkDisplayName(link.externalWork);
+      const displayType = getConnectionTypeDisplayName(link.type);
 
       if (studyUrl) {
         card.setAttribute("role", "button");
         card.setAttribute("tabindex", "0");
         const tooltipText = getLang() === "pt"
-          ? `Abrir ${link.externalRef} em ChurchofJesusChrist.org ↗`
-          : `Open ${link.externalRef} on ChurchofJesusChrist.org ↗`;
+          ? `Abrir ${displayExternalRef} em ChurchofJesusChrist.org ↗`
+          : `Open ${displayExternalRef} on ChurchofJesusChrist.org ↗`;
         card.setAttribute("title", tooltipText);
         card.setAttribute("aria-label", tooltipText);
         card.addEventListener("click", () => {
@@ -1991,12 +1994,12 @@ function selectVerse(verseId, shouldScroll = false) {
       card.innerHTML = `
         <div class="connection-left">
           <div class="connection-title">
-            ${icons.bookOpen} ${link.externalRef} (${link.externalWork || "Bible"})
+            ${icons.bookOpen} ${displayExternalRef} (${displayExternalWork})
             ${studyUrl ? `<span class="external-link-hint" aria-hidden="true">${icons.externalLink}</span>` : ""}
           </div>
           ${extNoteText ? `<div class="connection-note">${extNoteText}</div>` : ""}
         </div>
-        <span class="tag tag-external">${link.type || "Biblical Reference"}</span>
+        <span class="tag tag-external">${displayType}</span>
       `;
       connectionsList.appendChild(card);
     });
@@ -2613,7 +2616,7 @@ function updateUILanguage() {
   }
 
   populateBookSelect();
-  document.getElementById("connectionsSectionTitle").textContent = t("drawerTitle");
+  document.getElementById("connectionsSectionTitle").textContent = t("connectionsHeader");
   document.getElementById("featuredLabel").innerHTML = `${icons.sparkles} ${t("featuredTitle")}`;
   document.getElementById("viewModeLabel").textContent = t("viewModeLabel");
   document.getElementById("labelViewDual").textContent = t("viewDual");

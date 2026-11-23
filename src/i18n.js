@@ -16,6 +16,7 @@ export const translations = {
     statsChapters: "239 Chapters",
     statsVerses: "6,604 Verses",
     drawerTitle: "Verse Inspector",
+    connectionsHeader: "Cross-References & Parallels",
     drawerEmpty: "Hover or click on any point along the scripture axis to inspect verses and connected arcs.",
     connectionsCount: "{n} Connections",
     noConnections: "No direct cross-references recorded for this specific verse.",
@@ -128,6 +129,7 @@ export const translations = {
     statsChapters: "239 Capítulos",
     statsVerses: "6.604 Versículos",
     drawerTitle: "Inspetor de Escrituras",
+    connectionsHeader: "Referências Cruzadas & Paralelos",
     drawerEmpty: "Passe o mouse ou clique em qualquer ponto do eixo para inspecionar versículos e arcos conectados.",
     connectionsCount: "{n} Conexões",
     noConnections: "Nenhuma referência cruzada direta registrada para este versículo.",
@@ -276,4 +278,129 @@ export function getBookDisplayName(bookName) {
     return BOOK_NAMES_PT[bookName];
   }
   return bookName;
+}
+
+export const BIBLE_BOOK_NAMES_PT = {
+  "Genesis": "Gênesis",
+  "Exodus": "Êxodo",
+  "Leviticus": "Levítico",
+  "Numbers": "Números",
+  "Deuteronomy": "Deuteronômio",
+  "Joshua": "Josué",
+  "Judges": "Juízes",
+  "Ruth": "Rute",
+  "1 Samuel": "1 Samuel",
+  "2 Samuel": "2 Samuel",
+  "1 Kings": "1 Reis",
+  "2 Kings": "2 Reis",
+  "1 Chronicles": "1 Crônicas",
+  "2 Chronicles": "2 Crônicas",
+  "Ezra": "Esdras",
+  "Nehemiah": "Neemias",
+  "Esther": "Ester",
+  "Job": "Jó",
+  "Psalm": "Salmos",
+  "Psalms": "Salmos",
+  "Proverbs": "Provérbios",
+  "Ecclesiastes": "Eclesiastes",
+  "Song of Solomon": "Cantares de Salomão",
+  "Isaiah": "Isaías",
+  "Jeremiah": "Jeremias",
+  "Lamentations": "Lamentações",
+  "Ezekiel": "Ezequiel",
+  "Daniel": "Daniel",
+  "Hosea": "Oséias",
+  "Joel": "Joel",
+  "Amos": "Amós",
+  "Obadiah": "Obadias",
+  "Jonah": "Jonas",
+  "Micah": "Miqueias",
+  "Nahum": "Naum",
+  "Habakkuk": "Habacuque",
+  "Zephaniah": "Sofonias",
+  "Haggai": "Ageu",
+  "Zechariah": "Zacarias",
+  "Malachi": "Malaquias",
+  "Matthew": "Mateus",
+  "Mark": "Marcos",
+  "Luke": "Lucas",
+  "John": "João",
+  "Acts": "Atos",
+  "Romans": "Romanos",
+  "1 Corinthians": "1 Coríntios",
+  "2 Corinthians": "2 Coríntios",
+  "Galatians": "Gálatas",
+  "Ephesians": "Efésios",
+  "Philippians": "Filipenses",
+  "Colossians": "Colossenses",
+  "1 Thessalonians": "1 Tessalonicenses",
+  "2 Thessalonians": "2 Tessalonicenses",
+  "1 Timothy": "1 Timóteo",
+  "2 Timothy": "2 Timóteo",
+  "Titus": "Tito",
+  "Philemon": "Filemom",
+  "Hebrews": "Hebreus",
+  "James": "Tiago",
+  "1 Peter": "1 Pedro",
+  "2 Peter": "2 Pedro",
+  "1 John": "1 João",
+  "2 John": "2 João",
+  "3 John": "3 João",
+  "Jude": "Judas",
+  "Revelation": "Apocalipse",
+  "Moses": "Moisés",
+  "Abraham": "Abraão",
+  "Joseph Smith--History": "Joseph Smith—História",
+  "Doctrine and Covenants": "Doutrina e Convênios"
+};
+
+export function getExternalRefDisplayName(refStr) {
+  if (currentLang !== "pt" || !refStr) return refStr;
+  for (const [enName, ptName] of Object.entries(BIBLE_BOOK_NAMES_PT)) {
+    if (refStr.startsWith(enName)) {
+      return refStr.replace(enName, ptName);
+    }
+  }
+  return refStr;
+}
+
+export function getExternalWorkDisplayName(workStr) {
+  if (currentLang !== "pt") return workStr || "Bible";
+  if (!workStr || workStr === "Holy Bible") return "Bíblia Sagrada";
+  if (workStr === "Bible-OT") return "Antigo Testamento";
+  if (workStr === "Bible-NT") return "Novo Testamento";
+  return workStr;
+}
+
+export function getConnectionTypeDisplayName(type) {
+  if (currentLang !== "pt") {
+    const mapEn = {
+      "quotation": "Quotation",
+      "parallel": "Parallel",
+      "fulfillment": "Prophecy Fulfillment",
+      "typology": "Typology / Symbol",
+      "crossref": "Cross-Reference",
+      "prophecy": "Prophecy",
+      "paraphrase": "Paraphrase",
+      "chiasmus": "Chiasmus",
+      "prophetic-formula": "Prophetic Formula",
+      "covenant-formula": "Covenant Formula",
+      "hebraism": "Hebraism"
+    };
+    return mapEn[type] || type || "Biblical Reference";
+  }
+  const mapPt = {
+    "quotation": "Citação",
+    "parallel": "Paralelo",
+    "fulfillment": "Cumprimento de Profecia",
+    "typology": "Tipologia / Símbolo",
+    "crossref": "Referência Cruzada",
+    "prophecy": "Profecia",
+    "paraphrase": "Paráfrase",
+    "chiasmus": "Quiasmo",
+    "prophetic-formula": "Fórmula Profética",
+    "covenant-formula": "Aliança da Terra",
+    "hebraism": "Hebraísmo"
+  };
+  return mapPt[type] || type || "Referência Bíblica";
 }
