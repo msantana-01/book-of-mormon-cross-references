@@ -70,8 +70,11 @@ assert.ok(crossRefs.length > 0, "cross_references.json must contain links");
 crossRefs.forEach((l, idx) => {
   assert.ok(l.source >= 1 && l.source <= 6604, `Internal link #${idx} source ${l.source} out of bounds`);
   assert.ok(l.target >= 1 && l.target <= 6604, `Internal link #${idx} target ${l.target} out of bounds`);
+  if (l.note) {
+    assert.ok(l.notePt && l.notePt.length > 0, `Internal link #${idx} must have non-empty notePt`);
+  }
 });
-console.log(`✓ cross_references.json: ${crossRefs.length} internal links validated (all within 1..6604)`);
+console.log(`✓ cross_references.json: ${crossRefs.length} internal links validated (all within 1..6604, all notes localized)`);
 
 // 4. Check External Biblical References
 const extPath = path.join(DATA_DIR, "external_references.json");
@@ -82,8 +85,11 @@ assert.ok(extRefs.length > 0, "external_references.json must contain links");
 extRefs.forEach((l, idx) => {
   assert.ok(l.source >= 1 && l.source <= 6604, `External link #${idx} source ${l.source} out of bounds`);
   assert.ok(l.externalRef && l.externalRef.length > 0, `External link #${idx} must have externalRef`);
+  if (l.note) {
+    assert.ok(l.notePt && l.notePt.length > 0, `External link #${idx} must have non-empty notePt`);
+  }
 });
-console.log(`✓ external_references.json: ${extRefs.length} external links validated`);
+console.log(`✓ external_references.json: ${extRefs.length} external links validated (all notes localized)`);
 
 // 5. Check Literary Structures
 const structPath = path.join(DATA_DIR, "literary_structures.json");

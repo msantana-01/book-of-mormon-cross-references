@@ -6,7 +6,8 @@
     "targetRef": "1 Nephi 19:21",
     "type": "quotation",
     "note": "Nephi traces his genealogy and explains the record kept on the plates of brass.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Néfi traça sua genealogia e explica o registro gravado nas placas de latão."
   },
   {
     "source": 165,
@@ -15,7 +16,8 @@
     "targetRef": "1 Nephi 11:1",
     "type": "prophecy-vision",
     "note": "Nephi desires to behold and understand the vision seen by his father Lehi.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Néfi deseja contemplar e compreender a visão tida por seu pai, Leí."
   },
   {
     "source": 182,
@@ -24,7 +26,8 @@
     "targetRef": "1 Nephi 11:25",
     "type": "typology",
     "note": "The iron rod which Lehi saw is interpreted as the word of God leading to the tree of life.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "A barra de ferro vista por Leí é explicada como a palavra de Deus que conduz à árvore da vida."
   },
   {
     "source": 193,
@@ -33,7 +36,8 @@
     "targetRef": "1 Nephi 15:24",
     "type": "fulfillment",
     "note": "Holding fast to the rod of iron protects against the fiery darts of the adversary.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Apegar-se à barra de ferro protege a pessoa dos dardos inflamados do adversário."
   },
   {
     "source": 588,
@@ -42,7 +46,8 @@
     "targetRef": "2 Nephi 25:1",
     "type": "parallel",
     "note": "Nephi expounds the words of Isaiah to his brethren.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Néfi explica as palavras de Isaías a seus irmãos."
   },
   {
     "source": 677,
@@ -52,7 +57,8 @@
     "type": "paraphrase",
     "topics": "agency",
     "note": "\"Free to choose liberty and eternal life... or to choose captivity and death\" and \"wickedness never was happiness\" both teach that agency's consequences are built into the choice itself, not arbitrarily assigned afterward.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "\"Livres para escolher a liberdade e a vida eterna... ou o cativeiro e a morte\" e \"a iniquidade nunca foi felicidade\" ensinam que as consequências do arbítrio são inerentes à própria escolha, e não arbitrárias."
   },
   {
     "source": 1221,
@@ -61,7 +67,8 @@
     "targetRef": "3 Nephi 11:8",
     "type": "fulfillment",
     "note": "Nephi foretells that Christ will appear unto his seed after His resurrection.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Néfi prediz que Cristo aparecerá a seus descendentes após Sua ressurreição."
   },
   {
     "source": 1754,
@@ -70,7 +77,8 @@
     "targetRef": "3 Nephi 11:10",
     "type": "fulfillment",
     "note": "King Benjamin's angelic prophecy of Christ descending among men is realized.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Cumpre-se a profecia angelical do Rei Benjamim sobre o Cristo descendo entre os homens."
   },
   {
     "source": 1803,
@@ -80,7 +88,8 @@
     "type": "paraphrase",
     "topics": "grace",
     "note": "\"My grace is sufficient for all men that humble themselves\" and \"it is not requisite that a man should run faster than he has strength\" both teach that the Lord's expectations are matched to what His grace actually enables, not to unaided human effort alone.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "\"Minha graça basta a todos os que se humilham\" e \"não se exige que o homem corra mais rapidamente do que suas forças o permitam\" ensinam que o Senhor equilibra Suas exigências com o que Sua graça capacita."
   },
   {
     "source": 1808,
@@ -90,7 +99,8 @@
     "type": "paraphrase",
     "topics": "repentance",
     "note": "Both use the same distinctive phrase for true conversion: Alma asks \"have ye experienced this mighty change in your hearts?\"; King Benjamin's people already had, having \"no more disposition to do evil, but to do good continually.\"",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Ambos usam a mesma frase distintiva para a verdadeira conversão: Alma pergunta \"haveis experimentado esta poderosa mudança em vosso coração?\"; e o povo do Rei Benjamim já não tinha \"disposição para fazer o mal, mas, sim, de fazer o bem continuamente\"."
   },
   {
     "source": 2025,
@@ -99,7 +109,8 @@
     "targetRef": "Mosiah 15:1",
     "type": "prophecy",
     "note": "Abinadi quotes Isaiah 53 and expounds how God himself shall redeem his people.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Abinádi cita Isaías 53 e explica como o próprio Deus redimirá o Seu povo."
   },
   {
     "source": 2084,
@@ -108,7 +119,8 @@
     "targetRef": "Mosiah 18:1",
     "type": "fulfillment",
     "note": "Alma repents at the words of Abinadi and secretly begins preaching the gospel at the Waters of Mormon.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Alma se arrepende com as palavras de Abinádi e passa a pregar secretamente o evangelho nas Águas de Mórmon."
   },
   {
     "source": 2097,
@@ -117,7 +129,8 @@
     "targetRef": "Mosiah 19:20",
     "type": "fulfillment",
     "note": "Abinadi's prophecy on King Noah's death by fire is fulfilled.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Cumpre-se a profecia de Abinádi sobre a morte do Rei Noé pelo fogo."
   },
   {
     "source": 2395,
@@ -126,7 +139,8 @@
     "targetRef": "Alma 36:18",
     "type": "parallel",
     "note": "Alma the Younger recounts his three-day experience of repentance through remembering Jesus Christ.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Alma, o Filho, relata sua experiência de três dias de arrependimento ao clamar a Jesus Cristo por misericórdia."
   },
   {
     "source": 2399,
@@ -135,7 +149,8 @@
     "targetRef": "Alma 38:8",
     "type": "parallel",
     "note": "Alma testifies to his son Shiblon of his miraculous conversion.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Alma testifica a seu filho Sibliom acerca de sua conversão milagrosa."
   },
   {
     "source": 4604,
@@ -145,7 +160,8 @@
     "type": "paraphrase",
     "topics": "jesus-christ",
     "note": "Both describe people \"encircled about as if by fire\" from heaven - Nephi and Lehi in a Lamanite prison, and the Nephite children surrounded by angels at Christ's own visit - the same divine manifestation, decades apart.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Ambos descrevem pessoas \"cercadas como que por fogo\" do céu: Néfi e Leí na prisão lamanita, e as crianças nefitas rodeadas por anjos na visita de Cristo — a mesma manifestação divina, décadas depois."
   },
   {
     "source": 4876,
@@ -155,7 +171,8 @@
     "type": "paraphrase",
     "topics": "prophets",
     "note": "Samuel the Lamanite prophesies a night and a day and a night without darkness as the sign of Christ's birth - fulfilled precisely as foretold, five years later.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Samuel, o Lamanita, profetiza uma noite, um dia e uma noite sem trevas como sinal do nascimento de Cristo — cumprido exatamente como predito, cinco anos depois."
   },
   {
     "source": 4894,
@@ -165,7 +182,8 @@
     "type": "paraphrase",
     "topics": "atonement",
     "note": "Samuel foretells three days of darkness, storms, and great destruction marking Christ's death on the other side of the world - fulfilled exactly as prophesied at the moment of the crucifixion.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Samuel prediz três dias de trevas, tempestades e grande destruição sinalizando a morte de Cristo no outro lado do mundo — cumprido com exatidão no momento da crucificação."
   },
   {
     "source": 4899,
@@ -174,7 +192,8 @@
     "targetRef": "3 Nephi 23:9",
     "type": "fulfillment",
     "note": "Jesus commands the Nephite record keepers to record that many saints arose from the dead, as prophesied by Samuel.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Jesus ordena aos registradores nefitas que registrem que muitos santos ressuscitaram dos mortos, conforme profetizado por Samuel."
   },
   {
     "source": 5230,
@@ -183,7 +202,8 @@
     "targetRef": "3 Nephi 28:10",
     "type": "doctrine",
     "note": "The doctrine of Christ: the Father, Son, and Holy Ghost are one.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "A doutrina de Cristo: o Pai, o Filho e o Espírito Santo são um."
   },
   {
     "source": 5931,
@@ -192,7 +212,8 @@
     "targetRef": "Moroni 1:1",
     "type": "narrative",
     "note": "Moroni takes up the record after the destruction of the Nephite nation at Cumorah.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "Morôni dá continuidade ao registro após a destruição da nação nefita em Cumora."
   },
   {
     "source": 6008,
@@ -201,7 +222,8 @@
     "targetRef": "Moroni 10:3",
     "type": "exhortation",
     "note": "Moroni's concluding farewell and final exhortation to remember God's mercy throughout all generations.",
-    "category": "internal"
+    "category": "internal",
+    "notePt": "A despedida final de Morôni e sua exortação para recordar a misericórdia de Deus em todas as gerações."
   },
   {
     "source": 3562,
