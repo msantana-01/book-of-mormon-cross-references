@@ -78,6 +78,11 @@ export const translations = {
     shareCardGenerating: "Generating...",
     shareCardSuccess: "Card saved!",
     shareCardTooltip: "Export scripture & parallels study card as high-res PNG",
+    copyLink: "Copy Link",
+    copyLinkSuccess: "Link Copied!",
+    copyLinkTooltip: "Copy shareable direct link with verse and language",
+    searchResultsHeader: "{n} search results",
+    noResultsFound: "No verses found matching \"{q}\"",
     howToUseBtn: "How to Use",
     howToUseTooltip: "Tutorial & visual walkthrough of features",
     tutorialTitle: "🧭 How to Use & Explore",
@@ -191,6 +196,11 @@ export const translations = {
     shareCardGenerating: "Gerando...",
     shareCardSuccess: "Card salvo!",
     shareCardTooltip: "Exportar card de estudo do versículo e referências em alta resolução (PNG)",
+    copyLink: "Copiar Link",
+    copyLinkSuccess: "Link Copiado!",
+    copyLinkTooltip: "Copiar link direto para compartilhar versículo e idioma",
+    searchResultsHeader: "{n} resultados encontrados",
+    noResultsFound: "Nenhum versículo encontrado para \"{q}\"",
     howToUseBtn: "Como Usar",
     howToUseTooltip: "Tutorial e guia visual das ferramentas",
     tutorialTitle: "🧭 Como Usar & Explorar",
@@ -227,9 +237,24 @@ export const translations = {
   }
 };
 
-const savedLang = typeof localStorage !== "undefined" ? localStorage.getItem("app_lang") : null;
-const browserLang = typeof navigator !== "undefined" && navigator.language && navigator.language.startsWith("pt") ? "pt" : "en";
-let currentLang = (savedLang === "pt" || savedLang === "en") ? savedLang : (browserLang || "pt");
+function getInitialLang() {
+  if (typeof window !== "undefined" && window.location) {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlLang = params.get("lang");
+      if (urlLang === "pt" || urlLang === "en") {
+        try { localStorage.setItem("app_lang", urlLang); } catch (e) {}
+        return urlLang;
+      }
+    } catch (e) {}
+  }
+  const savedLang = typeof localStorage !== "undefined" ? localStorage.getItem("app_lang") : null;
+  if (savedLang === "pt" || savedLang === "en") return savedLang;
+  const browserLang = typeof navigator !== "undefined" && navigator.language && navigator.language.startsWith("pt") ? "pt" : "en";
+  return browserLang || "pt";
+}
+
+let currentLang = getInitialLang();
 
 export function getLang() {
   return currentLang;
@@ -243,6 +268,13 @@ export function setLang(lang) {
     }
     if (typeof document !== "undefined" && document.documentElement) {
       document.documentElement.lang = lang;
+    }
+    if (typeof window !== "undefined" && window.history && window.location) {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("lang", lang);
+        window.history.replaceState(null, "", url.toString());
+      } catch (e) {}
     }
   }
 }

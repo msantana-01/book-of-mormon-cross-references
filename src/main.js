@@ -376,6 +376,10 @@ const officialLink = document.getElementById("officialLink");
 const studyPanel = document.getElementById("studyPanel");
 const shareCardBtn = document.getElementById("shareCardBtn");
 const shareCardText = document.getElementById("shareCardText");
+const copyLinkBtn = document.getElementById("copyLinkBtn");
+const copyLinkText = document.getElementById("copyLinkText");
+const searchClearBtn = document.getElementById("searchClearBtn");
+const searchResultsDropdown = document.getElementById("searchResultsDropdown");
 const backToDiagramBtn = document.getElementById("backToDiagramBtn");
 const backToDiagramText = document.getElementById("backToDiagramText");
 
@@ -2036,6 +2040,8 @@ function selectVerse(verseId, shouldScroll = false) {
     draw();
   }
 
+  syncURLParams();
+
   // Auto-scroll to Study Panel when user explicitly clicks/selects a verse
   if (shouldScroll) {
     setTimeout(() => {
@@ -2228,6 +2234,7 @@ viewBtns.forEach(btn => {
       }
       renderThreadsChapter(true);
     }
+    syncURLParams();
   });
 });
 
@@ -2415,55 +2422,313 @@ randomConnBtn.addEventListener("click", () => {
   selectVerse(list[currentTourIndex]);
 });
 
-// Search input handling with debounce and keyword search support
+// URL state synchronization helper (keeps ?v= & ?lang= & ?view= in sync)
+function syncURLParams() {
+  if (typeof window === "undefined" || !window.history || !window.location) return;
+  try {
+    const url = new URL(window.location.href);
+    if (selectedVerseId) {
+      url.searchParams.set("v", selectedVerseId);
+    }
+    url.searchParams.set("lang", getLang());
+    if (currentViewMode && currentViewMode !== "dual") {
+      url.searchParams.set("view", currentViewMode);
+    } else {
+      url.searchParams.delete("view");
+    }
+    window.history.replaceState(null, "", url.toString());
+  } catch (e) {}
+}
+
+// Copy direct verse link button with fallback and user feedback
+if (copyLinkBtn) {
+  copyLinkBtn.addEventListener("click", async () => {
+    syncURLParams();
+    const shareUrl = window.location.href;
+    const currentVerse = verses[selectedVerseId - 1];
+    const shareTitle = currentVerse ? `${currentVerse.ref} | Book of Mormon Cross-References` : document.title;
+
+    let copied = false;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        copied = true;
+      } catch (e) {}
+    }
+    if (!copied && navigator.share) {
+      try {
+        await navigator.share({ title: shareTitle, url: shareUrl });
+        copied = true;
+      } catch (e) {}
+    }
+
+    copyLinkBtn.classList.add("copied");
+    if (copyLinkText) copyLinkText.textContent = t("copyLinkSuccess");
+    setTimeout(() => {
+      copyLinkBtn.classList.remove("copied");
+      if (copyLinkText) copyLinkText.textContent = t("copyLink");
+    }, 2200);
+  });
+}
+
+// HTML escape helper for secure snippet rendering
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Search input handling with dropdown list, keyword search, and keyboard navigation
 let searchDebounceTimer = null;
+let currentSearchResults = [];
+let activeResultIndex = -1;
+
+function hideSearchResults() {
+  if (searchResultsDropdown) {
+    searchResultsDropdown.style.display = "none";
+    searchResultsDropdown.innerHTML = "";
+  }
+  if (searchClearBtn) {
+    searchClearBtn.style.display = searchInput && searchInput.value.trim() ? "flex" : "none";
+  }
+  activeResultIndex = -1;
+  currentSearchResults = [];
+}
+
+function updateActiveSearchResult() {
+  if (!searchResultsDropdown) return;
+  const items = searchResultsDropdown.querySelectorAll(".search-result-item");
+  items.forEach((item, idx) => {
+    const isActive = idx === activeResultIndex;
+    item.classList.toggle("highlighted", isActive);
+    if (isActive) {
+      item.scrollIntoView({ block: "nearest" });
+    }
+  });
+}
+
+function highlightMatch(text, query) {
+  if (!text || !query) return text || "";
+  const trimmed = query.trim();
+  if (!trimmed) return text;
+  const regex = new RegExp(`(${trimmed.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+  return text.replace(regex, "<mark>$1</mark>");
+}
+
+function renderSearchResults(results, query) {
+  if (!searchResultsDropdown) return;
+  currentSearchResults = results;
+  activeResultIndex = -1;
+
+  if (results.length === 0) {
+    searchResultsDropdown.innerHTML = `
+      <div class="search-no-results">
+        ${t("noResultsFound", { q: escapeHtml(query) })}
+      </div>
+    `;
+    searchResultsDropdown.style.display = "block";
+    return;
+  }
+
+  const countHeader = `
+    <div class="search-results-header">
+      <span>${t("searchResultsHeader", { n: results.length })}</span>
+      <span style="opacity: 0.6; font-size: 0.68rem;">Esc / ↑ ↓ Enter</span>
+    </div>
+  `;
+
+  const itemsHtml = results.map((v, idx) => {
+    const book = getBookForVerse(v.id);
+    const bookColor = book ? book.color : "#d4af37";
+    const conns = verseConnectionsMap.get(v.id) || { internal: [], external: [] };
+    const totalConns = conns.internal.length + conns.external.length;
+
+    let snippet = v.text || "";
+    if (snippet.length > 110) {
+      const lower = snippet.toLowerCase();
+      const qIndex = lower.indexOf(query.toLowerCase());
+      if (qIndex > 35) {
+        snippet = "..." + snippet.substring(qIndex - 20, qIndex + 80) + "...";
+      } else {
+        snippet = snippet.substring(0, 110) + "...";
+      }
+    }
+    const snippetHtml = highlightMatch(escapeHtml(snippet), query);
+    const connBadge = totalConns > 0
+      ? `<span class="search-result-conn-badge">🔗 ${totalConns}</span>`
+      : "";
+
+    return `
+      <div class="search-result-item" data-index="${idx}" data-verse-id="${v.id}" role="option">
+        <div class="search-result-top">
+          <span class="search-result-ref">
+            <span class="search-result-ref-dot" style="background-color: ${bookColor}"></span>
+            ${escapeHtml(v.ref)}
+          </span>
+          ${connBadge}
+        </div>
+        <div class="search-result-snippet">${snippetHtml}</div>
+      </div>
+    `;
+  }).join("");
+
+  searchResultsDropdown.innerHTML = countHeader + itemsHtml;
+  searchResultsDropdown.style.display = "block";
+
+  // Item click listeners
+  searchResultsDropdown.querySelectorAll(".search-result-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const vId = parseInt(item.dataset.verseId, 10);
+      if (vId) {
+        selectVerse(vId, true);
+        hideSearchResults();
+      }
+    });
+  });
+}
 
 function executeSearch(query) {
   const q = query.trim().toLowerCase();
-  if (!q || q.length < 2) return;
-
-  // 1. Exact or prefix reference match
-  let matched = verses.find(v => v.ref.toLowerCase() === q || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}` === q);
-  if (!matched && versesEn.length > 0) {
-    matched = versesEn.find(v => v.ref.toLowerCase() === q || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}` === q);
-  }
-  if (!matched) {
-    matched = verses.find(v => v.ref.toLowerCase().startsWith(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.startsWith(q));
-    if (!matched && versesEn.length > 0) {
-      matched = versesEn.find(v => v.ref.toLowerCase().startsWith(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.startsWith(q));
-    }
-  }
-  // 2. Substring reference match
-  if (!matched) {
-    matched = verses.find(v => v.ref.toLowerCase().includes(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.includes(q));
-    if (!matched && versesEn.length > 0) {
-      matched = versesEn.find(v => v.ref.toLowerCase().includes(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.includes(q));
-    }
-  }
-  // 3. Keyword / text search in verse body (for queries >= 3 chars)
-  if (!matched && q.length >= 3) {
-    matched = verses.find(v => v.text && v.text.toLowerCase().includes(q));
-    if (!matched && versesEn.length > 0) {
-      matched = versesEn.find(v => v.text && v.text.toLowerCase().includes(q));
-    }
+  if (!q || q.length < 2) {
+    hideSearchResults();
+    return;
   }
 
-  if (matched) {
-    selectVerse(matched.id, true);
+  // Accent-normalized query for seamless PT-BR and EN searching
+  const normQ = q.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  const results = [];
+  const activeCorpus = verses;
+  const secondaryCorpus = (versesEn && versesEn.length > 0 && verses !== versesEn) ? versesEn : [];
+
+  const matchesNorm = (str) => {
+    if (!str) return false;
+    const norm = str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return norm.includes(normQ);
+  };
+
+  // 1. Reference matching (exact, prefix, partial)
+  for (let i = 0; i < activeCorpus.length; i++) {
+    const v = activeCorpus[i];
+    const normRef = v.ref.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const shortRef = `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`;
+    const normShort = shortRef.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    if (normRef === normQ || normShort === normQ) {
+      results.unshift({ verse: v, score: 100 });
+    } else if (normRef.startsWith(normQ) || normShort.startsWith(normQ)) {
+      results.push({ verse: v, score: 80 });
+    } else if (normRef.includes(normQ) || normShort.includes(normQ)) {
+      results.push({ verse: v, score: 60 });
+    }
+    if (results.length >= 15) break;
   }
+
+  // Fallback to secondary English corpus if active is PT and no ref found
+  if (results.length === 0 && secondaryCorpus.length > 0) {
+    for (let i = 0; i < secondaryCorpus.length; i++) {
+      const v = secondaryCorpus[i];
+      const normRef = v.ref.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const shortRef = `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`;
+      const normShort = shortRef.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      if (normRef === normQ || normShort === normQ) {
+        results.unshift({ verse: activeCorpus[v.id - 1] || v, score: 95 });
+      } else if (normRef.startsWith(normQ) || normShort.startsWith(normQ)) {
+        results.push({ verse: activeCorpus[v.id - 1] || v, score: 75 });
+      }
+      if (results.length >= 10) break;
+    }
+  }
+
+  // 2. Keyword/text search in verse body (for queries >= 3 chars)
+  if (results.length < 8 && q.length >= 3) {
+    const seenIds = new Set(results.map(r => r.verse.id));
+    for (let i = 0; i < activeCorpus.length; i++) {
+      const v = activeCorpus[i];
+      if (seenIds.has(v.id)) continue;
+      if (matchesNorm(v.text)) {
+        const conns = verseConnectionsMap.get(v.id) || { internal: [], external: [] };
+        const totalConns = conns.internal.length + conns.external.length;
+        // Prioritize verses that have cross-references!
+        results.push({ verse: v, score: 30 + Math.min(totalConns * 4, 25) });
+        seenIds.add(v.id);
+        if (results.length >= 30) break;
+      }
+    }
+  }
+
+  results.sort((a, b) => b.score - a.score);
+  const top = results.slice(0, 8).map(r => r.verse);
+
+  renderSearchResults(top, q);
 }
 
 searchInput.addEventListener("input", (e) => {
+  const val = e.target.value.trim();
+  if (searchClearBtn) {
+    searchClearBtn.style.display = val ? "flex" : "none";
+  }
   clearTimeout(searchDebounceTimer);
+  if (val.length < 2) {
+    hideSearchResults();
+    return;
+  }
   searchDebounceTimer = setTimeout(() => {
-    executeSearch(e.target.value);
-  }, 260);
+    executeSearch(val);
+  }, 220);
 });
 
 searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    hideSearchResults();
+    return;
+  }
+
+  if (searchResultsDropdown && searchResultsDropdown.style.display !== "none" && currentSearchResults.length > 0) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      activeResultIndex = (activeResultIndex + 1) % currentSearchResults.length;
+      updateActiveSearchResult();
+      return;
+    }
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      activeResultIndex = (activeResultIndex - 1 + currentSearchResults.length) % currentSearchResults.length;
+      updateActiveSearchResult();
+      return;
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const chosen = activeResultIndex >= 0 ? currentSearchResults[activeResultIndex] : currentSearchResults[0];
+      if (chosen) {
+        selectVerse(chosen.id, true);
+        hideSearchResults();
+      }
+      return;
+    }
+  }
+
   if (e.key === "Enter") {
     clearTimeout(searchDebounceTimer);
     executeSearch(e.target.value);
+  }
+});
+
+if (searchClearBtn) {
+  searchClearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    hideSearchResults();
+    searchInput.focus();
+  });
+}
+
+document.addEventListener("click", (e) => {
+  if (searchResultsDropdown && !e.target.closest("#searchBoxContainer")) {
+    hideSearchResults();
   }
 });
 
@@ -2632,6 +2897,12 @@ function updateUILanguage() {
   }
   if (shareCardBtn) {
     shareCardBtn.title = t("shareCardTooltip");
+  }
+  if (copyLinkText && (!copyLinkBtn || !copyLinkBtn.classList.contains("copied"))) {
+    copyLinkText.textContent = t("copyLink");
+  }
+  if (copyLinkBtn) {
+    copyLinkBtn.title = t("copyLinkTooltip");
   }
   document.getElementById("bibleTopTitle").textContent = `📖 ${t("bibleTopTitle")}`;
   zoomResetText.textContent = t("zoomReset");
@@ -2846,14 +3117,11 @@ async function init() {
     renderFeaturedPills();
     setupCanvas();
 
-    if (getLang() === "pt") {
-      updateUILanguage();
-    }
-
-    // Check URL parameters for direct link sharing
+    // 1. Check URL parameters first so direct link sharing is honored before UI render
     const urlParams = new URLSearchParams(window.location.search);
     const paramView = urlParams.get("view");
     const paramBook = urlParams.get("book");
+    const paramVerse = urlParams.get("v") || urlParams.get("verse");
 
     if (paramView === "radial") {
       viewBtns.forEach(b => b.classList.toggle("active", b.dataset.view === "radial"));
@@ -2869,19 +3137,23 @@ async function init() {
       renderThreadsChapter(true);
     }
 
-    const paramVerse = urlParams.get("v") || urlParams.get("verse");
+    let initialVerseId = 1;
     if (paramVerse) {
       const vNum = parseInt(paramVerse, 10);
       if (vNum && vNum >= 1 && vNum <= 6604) {
-        selectVerse(vNum);
-      } else {
-        selectVerse(1);
+        initialVerseId = vNum;
       }
-    } else if (paramBook) {
-      zoomToBook(paramBook);
+    }
+    selectedVerseId = initialVerseId;
+
+    if (getLang() === "pt") {
+      updateUILanguage();
     } else {
-      // Default to 1 Nephi 1:1 (Opening verse of the Book of Mormon)
-      selectVerse(1);
+      selectVerse(initialVerseId);
+    }
+
+    if (paramBook) {
+      zoomToBook(paramBook);
     }
 
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
@@ -2892,3 +3164,14 @@ async function init() {
 }
 
 init();
+
+// Register Service Worker for Progressive Web App (PWA) offline capabilities
+if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").then((reg) => {
+      console.log("PWA Service Worker registered:", reg.scope);
+    }).catch((err) => {
+      console.warn("PWA Service Worker registration skipped or failed:", err);
+    });
+  });
+}
