@@ -90,6 +90,18 @@
 
       <!-- Filters & Selects Aligned to Right -->
       <div class="filter-group">
+        <!-- Arc Color Mode Toggle (Books vs Themes) -->
+        <div class="btn-group" role="group" aria-label="Arc Color Mode">
+          <button class="filter-btn active" id="btnColorBooks" data-color-mode="book" title="Color arcs by Book of Mormon books">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span id="labelColorBooks">Livros</span>
+          </button>
+          <button class="filter-btn" id="btnColorThemes" data-color-mode="theme" title="Color arcs by doctrinal theme">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+            <span id="labelColorThemes">Temas</span>
+          </button>
+        </div>
+
         <div class="btn-group" role="group" aria-label="Connection Type Filter">
           <button class="filter-btn active" data-filter="all" id="btnFilterAll">All</button>
           <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal</button>
@@ -113,6 +125,12 @@
       </div>
     </div>
   </section>
+
+  <!-- Doctrinal Theme Legend Bar (shown when Color Mode is 'theme') -->
+  <div id="themeLegendBar" class="theme-legend-bar" style="display: none;" role="region" aria-label="Doctrinal Theme Legend">
+    <span class="theme-legend-title" id="themeLegendTitle">Legenda de Temas:</span>
+    <div class="theme-legend-chips" id="themeLegendChips"></div>
+  </div>
 
   <!-- Main View Area -->
   <main>

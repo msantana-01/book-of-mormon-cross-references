@@ -23,6 +23,67 @@ let hoveredBookId = null;
 let currentFilter = "all"; // "all" | "internal" | "external"
 let activeBookFilter = "all";
 let activeTopicFilter = "all";
+let currentColorMode = "book"; // "book" | "theme"
+
+const DOCTRINAL_THEMES = {
+  christ: {
+    color: "#f59e0b", // Gold / amber
+    labelKey: "themeChrist",
+    dot: "🟡"
+  },
+  faith: {
+    color: "#38bdf8", // Sky blue
+    labelKey: "themeFaith",
+    dot: "🔵"
+  },
+  prophecy: {
+    color: "#c084fc", // Purple / violet
+    labelKey: "themeProphecy",
+    dot: "🟣"
+  },
+  isaiah: {
+    color: "#f43f5e", // Rose / crimson
+    labelKey: "themeIsaiah",
+    dot: "🌸"
+  },
+  chiasmus: {
+    color: "#2dd4bf", // Teal
+    labelKey: "themeChiasmus",
+    dot: "🔷"
+  },
+  formulas: {
+    color: "#10b981", // Emerald
+    labelKey: "themeFormulas",
+    dot: "🟢"
+  },
+  hebraisms: {
+    color: "#fbbf24", // Golden yellow
+    labelKey: "themeHebraisms",
+    dot: "⭐"
+  },
+  general: {
+    color: "#94a3b8", // Slate
+    labelKey: "themeGeneral",
+    dot: "⚪"
+  }
+};
+
+function getLinkThemeKey(link) {
+  if (!link._topics || link._topics.size === 0) return "general";
+  if (link._topics.has("christ")) return "christ";
+  if (link._topics.has("chiasmus")) return "chiasmus";
+  if (link._topics.has("formulas")) return "formulas";
+  if (link._topics.has("hebraisms")) return "hebraisms";
+  if (link._topics.has("prophecy")) return "prophecy";
+  if (link._topics.has("faith")) return "faith";
+  if (link._topics.has("isaiah")) return "isaiah";
+  return "general";
+}
+
+function getLinkThemeColor(link) {
+  const key = getLinkThemeKey(link);
+  return DOCTRINAL_THEMES[key]?.color || "#94a3b8";
+}
 
 // Threads View State (Inspired by trekhleb/bible-cross-references)
 let threadsCurrentBookId = 1; // 1 Nephi default
@@ -431,6 +492,107 @@ const structureOccurrencesContainer = document.getElementById("structureOccurren
 const structureOccurrencesHeaderTitle = document.getElementById("structureOccurrencesHeaderTitle");
 const structureOccurrencesHint = document.getElementById("structureOccurrencesHint");
 const structurePillsList = document.getElementById("structurePillsList");
+
+// Arc Color Mode DOM Elements & Handlers
+const btnColorBooks = document.getElementById("btnColorBooks");
+const btnColorThemes = document.getElementById("btnColorThemes");
+const labelColorBooks = document.getElementById("labelColorBooks");
+const labelColorThemes = document.getElementById("labelColorThemes");
+const themeLegendBar = document.getElementById("themeLegendBar");
+const themeLegendTitle = document.getElementById("themeLegendTitle");
+const themeLegendChips = document.getElementById("themeLegendChips");
+
+function setColorMode(mode) {
+  if (mode !== "book" && mode !== "theme") mode = "book";
+  currentColorMode = mode;
+
+  if (btnColorBooks && btnColorThemes) {
+    btnColorBooks.classList.toggle("active", mode === "book");
+    btnColorThemes.classList.toggle("active", mode === "theme");
+  }
+
+  if (themeLegendBar) {
+    themeLegendBar.style.display = (mode === "theme") ? "flex" : "none";
+    if (mode === "theme") {
+      renderThemeLegendChips();
+    }
+  }
+
+  syncURLParams();
+  if (currentViewMode === "threads") {
+    drawThreadsCanvas();
+  } else {
+    draw();
+  }
+}
+
+function renderThemeLegendChips() {
+  if (!themeLegendChips) return;
+  themeLegendChips.innerHTML = "";
+
+  const themeCounts = {
+    christ: 0,
+    faith: 0,
+    prophecy: 0,
+    isaiah: 0,
+    chiasmus: 0,
+    formulas: 0,
+    hebraisms: 0,
+    general: 0
+  };
+
+  const allVisibleLinks = [...(internalLinks || []), ...(externalLinks || [])];
+  allVisibleLinks.forEach(l => {
+    const key = getLinkThemeKey(l);
+    if (themeCounts[key] !== undefined) {
+      themeCounts[key]++;
+    } else {
+      themeCounts.general++;
+    }
+  });
+
+  const themeOrder = ["christ", "faith", "prophecy", "isaiah", "chiasmus", "formulas", "hebraisms", "general"];
+
+  themeOrder.forEach(key => {
+    const th = DOCTRINAL_THEMES[key];
+    if (!th || themeCounts[key] === 0) return;
+
+    const chip = document.createElement("button");
+    const isActive = (activeTopicFilter === key);
+    chip.className = `theme-chip ${isActive ? "active" : ""}`;
+    chip.style.borderColor = isActive ? th.color : "rgba(255, 255, 255, 0.15)";
+    chip.setAttribute("data-theme-key", key);
+
+    const label = t(th.labelKey);
+    chip.innerHTML = `
+      <span class="theme-chip-dot" style="background-color: ${th.color}; box-shadow: 0 0 6px ${th.color};"></span>
+      <span>${label}</span>
+      <span class="theme-chip-count">(${themeCounts[key]})</span>
+    `;
+
+    chip.addEventListener("click", () => {
+      if (activeTopicFilter === key) {
+        activeTopicFilter = "all";
+        if (topicSelect) topicSelect.value = "all";
+      } else {
+        activeTopicFilter = key;
+        if (topicSelect) {
+          if (topicSelect.querySelector(`option[value="${key}"]`)) {
+            topicSelect.value = key;
+          }
+        }
+      }
+      renderThemeLegendChips();
+      if (currentViewMode === "threads") {
+        drawThreadsCanvas();
+      } else {
+        draw();
+      }
+    });
+
+    themeLegendChips.appendChild(chip);
+  });
+}
 
 // How to Use Tutorial Modal Elements
 const howToUseBtn = document.getElementById("howToUseBtn");
@@ -1001,27 +1163,32 @@ function drawDualView() {
       ctx.bezierCurveTo(xBom, midY + 40, xBible, midY - 40, xBible, topY);
 
       if (isConnectedToActive) {
-        ctx.strokeStyle = "#fbbf24";
+        const strokeCol = (currentColorMode === "theme") ? getLinkThemeColor(link) : "#fbbf24";
+        ctx.strokeStyle = strokeCol;
         ctx.lineWidth = 3.2;
-        ctx.shadowColor = "rgba(245, 158, 11, 0.9)";
+        ctx.shadowColor = (currentColorMode === "theme") ? strokeCol : "rgba(245, 158, 11, 0.9)";
         ctx.shadowBlur = 15;
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        ctx.fillStyle = "#fbbf24";
+        ctx.fillStyle = strokeCol;
         ctx.beginPath();
         ctx.arc(xBible, topY, 5.5, 0, Math.PI * 2);
         ctx.fill();
       } else if (activeVerse) {
-        ctx.strokeStyle = "#10b981";
+        const strokeCol = (currentColorMode === "theme") ? getLinkThemeColor(link) : "#10b981";
+        ctx.strokeStyle = strokeCol;
         ctx.lineWidth = activeBook ? 1.0 : 0.6;
         ctx.globalAlpha = activeBook ? 0.20 : 0.05;
         ctx.stroke();
         ctx.globalAlpha = 1.0;
       } else {
-        ctx.strokeStyle = "rgba(16, 185, 129, 0.35)";
+        const strokeCol = (currentColorMode === "theme") ? getLinkThemeColor(link) : "rgba(16, 185, 129, 0.35)";
+        ctx.strokeStyle = strokeCol;
         ctx.lineWidth = activeBook ? 1.2 : 0.9;
+        ctx.globalAlpha = (currentColorMode === "theme") ? 0.55 : 1.0;
         ctx.stroke();
+        ctx.globalAlpha = 1.0;
       }
     });
   }
@@ -1061,16 +1228,19 @@ function drawDualView() {
       const cy = bottomY - arcHeight;
 
       const sourceBook = getBookForVerse(link.source);
-      const baseColor = sourceBook ? sourceBook.color : "#6366f1";
+      const baseColor = (currentColorMode === "theme")
+        ? getLinkThemeColor(link)
+        : (sourceBook ? sourceBook.color : "#6366f1");
 
       ctx.beginPath();
       ctx.moveTo(x1, bottomY);
       ctx.quadraticCurveTo(cx, cy, x2, bottomY);
 
       if (isConnectedToActive) {
-        ctx.strokeStyle = "#38bdf8";
+        const strokeCol = (currentColorMode === "theme") ? getLinkThemeColor(link) : "#38bdf8";
+        ctx.strokeStyle = strokeCol;
         ctx.lineWidth = 2.8;
-        ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
+        ctx.shadowColor = (currentColorMode === "theme") ? strokeCol : "rgba(56, 189, 248, 0.85)";
         ctx.shadowBlur = 12;
         ctx.stroke();
         ctx.shadowBlur = 0;
@@ -1104,7 +1274,7 @@ function drawDualView() {
       } else {
         ctx.strokeStyle = baseColor;
         ctx.lineWidth = 1.1;
-        ctx.globalAlpha = 0.4;
+        ctx.globalAlpha = (currentColorMode === "theme") ? 0.65 : 0.4;
         ctx.stroke();
         ctx.globalAlpha = 1.0;
       }
@@ -1267,12 +1437,15 @@ function drawRadialView() {
     ctx.quadraticCurveTo(cx, cy, x2, y2);
 
     const sourceBook = getBookForVerse(link.source);
-    const baseColor = sourceBook ? sourceBook.color : "#6366f1";
+    const baseColor = (currentColorMode === "theme")
+      ? getLinkThemeColor(link)
+      : (sourceBook ? sourceBook.color : "#6366f1");
 
     if (isConnectedToActive) {
-      ctx.strokeStyle = "#38bdf8";
+      const strokeCol = (currentColorMode === "theme") ? getLinkThemeColor(link) : "#38bdf8";
+      ctx.strokeStyle = strokeCol;
       ctx.lineWidth = 2.8;
-      ctx.shadowColor = "rgba(56, 189, 248, 0.85)";
+      ctx.shadowColor = (currentColorMode === "theme") ? strokeCol : "rgba(56, 189, 248, 0.85)";
       ctx.shadowBlur = 14;
       ctx.stroke();
       ctx.shadowBlur = 0;
@@ -1306,7 +1479,7 @@ function drawRadialView() {
     } else {
       ctx.strokeStyle = baseColor;
       ctx.lineWidth = 1.1;
-      ctx.globalAlpha = 0.35;
+      ctx.globalAlpha = (currentColorMode === "theme") ? 0.60 : 0.35;
       ctx.stroke();
       ctx.globalAlpha = 1.0;
     }
@@ -1509,7 +1682,7 @@ function drawThreadsCanvas() {
       threadsToDraw.push({
         y1: anchor.y,
         y2: targetY,
-        color: targetBook.color || "#38bdf8",
+        color: (currentColorMode === "theme") ? getLinkThemeColor(link) : (targetBook.color || "#38bdf8"),
         isEmphasized,
         targetName: targetBook.name,
         verseId: anchor.verseId
@@ -1533,7 +1706,7 @@ function drawThreadsCanvas() {
       threadsToDraw.push({
         y1: anchor.y,
         y2: targetY,
-        color: "#10b981", // Emerald green for Bible
+        color: (currentColorMode === "theme") ? getLinkThemeColor(link) : "#10b981", // Emerald green for Bible
         isEmphasized,
         targetName: bName,
         verseId: anchor.verseId
@@ -2703,6 +2876,11 @@ function syncURLParams() {
     } else {
       url.searchParams.delete("view");
     }
+    if (currentColorMode === "theme") {
+      url.searchParams.set("color", "theme");
+    } else {
+      url.searchParams.delete("color");
+    }
     window.history.replaceState(null, "", url.toString());
   } catch (e) {}
 }
@@ -3000,10 +3178,11 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Filter buttons
+// Filter buttons (Connection Type: All / Internal / External)
 filterBtns.forEach(btn => {
+  if (!btn.dataset.filter) return;
   btn.addEventListener("click", () => {
-    filterBtns.forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".btn-group[aria-label=\"Connection Type Filter\"] .filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     currentFilter = btn.dataset.filter;
     if (selectedVerseId) {
@@ -3013,6 +3192,14 @@ filterBtns.forEach(btn => {
     }
   });
 });
+
+// Arc Color Mode Buttons (Books vs Themes)
+if (btnColorBooks) {
+  btnColorBooks.addEventListener("click", () => setColorMode("book"));
+}
+if (btnColorThemes) {
+  btnColorThemes.addEventListener("click", () => setColorMode("theme"));
+}
 
 // Book selector (zooms in on chosen book)
 bookSelect.addEventListener("change", (e) => {
@@ -3105,6 +3292,9 @@ if (tutorialNextBtn) {
 // Topic selector
 topicSelect.addEventListener("change", (e) => {
   activeTopicFilter = e.target.value;
+  if (currentColorMode === "theme") {
+    renderThemeLegendChips();
+  }
   if (activeTopicFilter === "chiasmus") {
     selectVerse(3579, true); // Alma 36:18 (Center on Christ)
   } else if (activeTopicFilter === "formulas") {
@@ -3166,6 +3356,14 @@ function updateUILanguage() {
     btnFilterExternal.textContent = t("filterExternal");
     btnFilterExternal.title = t("filterExternalTooltip");
   }
+
+  // Arc Color Mode translations
+  if (labelColorBooks) labelColorBooks.textContent = t("colorModeBooks");
+  if (labelColorThemes) labelColorThemes.textContent = t("colorModeThemes");
+  if (btnColorBooks) btnColorBooks.title = t("colorModeBooksTooltip");
+  if (btnColorThemes) btnColorThemes.title = t("colorModeThemesTooltip");
+  if (themeLegendTitle) themeLegendTitle.textContent = t("themeLegendTitle");
+  if (currentColorMode === "theme") renderThemeLegendChips();
 
   // Update topicSelect options text
   const topicSelect = document.getElementById("topicSelect");
@@ -3450,6 +3648,19 @@ async function init() {
     const paramView = urlParams.get("view");
     const paramBook = urlParams.get("book");
     const paramVerse = urlParams.get("v") || urlParams.get("verse");
+    const paramColor = urlParams.get("color");
+
+    if (paramColor === "theme") {
+      currentColorMode = "theme";
+      if (btnColorBooks && btnColorThemes) {
+        btnColorBooks.classList.toggle("active", false);
+        btnColorThemes.classList.toggle("active", true);
+      }
+      if (themeLegendBar) {
+        themeLegendBar.style.display = "flex";
+        renderThemeLegendChips();
+      }
+    }
 
     if (paramView === "radial") {
       viewBtns.forEach(b => b.classList.toggle("active", b.dataset.view === "radial"));
