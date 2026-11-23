@@ -3540,6 +3540,17 @@ function updateUILanguage() {
   const elTutoShareDesc = document.getElementById("tutoShareDesc");
   if (elTutoShareDesc) elTutoShareDesc.innerHTML = t("tutoShareDesc");
 
+  const tutoLabelIds = [
+    "tutoBridgeLabel", "tutoRadialLabel", "tutoThreadsLabel",
+    "tutoSearchLabel", "tutoScopeLabel", "tutoZoomLabel", "tutoPillsLabel",
+    "tutoChiasmusLabel", "tutoTreeLabel", "tutoFormulasLabel", "tutoHebraismsLabel",
+    "tutoCardsLabel", "tutoChurchLabel", "tutoShareLabel"
+  ];
+  tutoLabelIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(id);
+  });
+
   const elTutorialPrevText = document.getElementById("tutorialPrevText");
   if (elTutorialPrevText) elTutorialPrevText.textContent = t("tutorialPrev");
   const elTutorialNextText = document.getElementById("tutorialNextText");
