@@ -411,5 +411,105 @@
     "category": "internal",
     "notePt": "Estado Construto Hebraico: Cadeias nominais semíticas ('placas de latão' e 'barra de ferro').",
     "noteEn": "Hebrew Construct State: Semitic noun-phrase construct chains ('plates of brass' and 'rod of iron')."
+  },
+  {
+    "source": 174,
+    "target": 3479,
+    "sourceRef": "1 Nephi 8:11",
+    "targetRef": "Alma 32:41",
+    "type": "typology",
+    "category": "internal",
+    "note": "Lehi partakes of the fruit of the tree of life, which Alma compares to nourishing the word until it springs up into eternal life.",
+    "notePt": "Leí come do fruto da árvore da vida, o qual Alma compara ao cultivo da semente da palavra até brotar para a vida eterna."
+  },
+  {
+    "source": 249,
+    "target": 2673,
+    "sourceRef": "1 Nephi 11:20",
+    "targetRef": "Alma 7:10",
+    "type": "prophecy",
+    "category": "internal",
+    "note": "Nephi's vision of the virgin bearing the Son of God aligns with Alma's prophecy in Gideon concerning Mary at Jerusalem.",
+    "notePt": "A visão de Néfi da virgem trazendo o Filho de Deus nos braços coincide com a profecia de Alma em Gideão a respeito de Maria."
+  },
+  {
+    "source": 4876,
+    "target": 4966,
+    "sourceRef": "Helaman 14:2",
+    "targetRef": "3 Nephi 1:19",
+    "type": "fulfillment",
+    "category": "internal",
+    "note": "Samuel the Lamanite prophesies of a night without darkness at Christ's birth, which is fulfilled precisely as the sun sets.",
+    "notePt": "Samuel, o Lamanita, profetiza uma noite inteira sem escuridão no nascimento de Cristo, cumprida fielmente ao pôr do sol."
+  },
+  {
+    "source": 525,
+    "target": 4894,
+    "sourceRef": "1 Nephi 19:10",
+    "targetRef": "Helaman 14:20",
+    "type": "prophecy",
+    "category": "internal",
+    "note": "Nephi records Zenos's prophecy of three days of total darkness at Christ's death, later reiterated by Samuel the Lamanite.",
+    "notePt": "Néfi registra a profecia de Zenos de três dias de escuridão total na morte do Senhor, posteriormente reiterada por Samuel, o Lamanita."
+  },
+  {
+    "source": 4894,
+    "target": 5157,
+    "sourceRef": "Helaman 14:20",
+    "targetRef": "3 Nephi 8:20",
+    "type": "fulfillment",
+    "category": "internal",
+    "note": "The prophecy of three days of vapor and darkness upon the land is fulfilled following the catastrophic storms and earthquakes.",
+    "notePt": "A profecia de três dias de espessa névoa e trevas sobre a terra cumpre-se após as tempestades e terremotos catastróficos."
+  },
+  {
+    "source": 2385,
+    "target": 3567,
+    "sourceRef": "Mosiah 27:14",
+    "targetRef": "Alma 36:6",
+    "type": "parallel",
+    "category": "internal",
+    "note": "The angelic visitation that called Alma to repentance is recounted firsthand by Alma in his personal chiastic testimony to Helaman.",
+    "notePt": "A aparição do anjo do Senhor chamando Alma ao arrependimento é narrada em primeira pessoa em seu testemunho quiástico a Helamã."
+  },
+  {
+    "source": 1229,
+    "target": 5211,
+    "sourceRef": "2 Nephi 26:9",
+    "targetRef": "3 Nephi 11:8",
+    "type": "fulfillment",
+    "category": "internal",
+    "note": "Nephi's prophetic vision that the Son of Righteousness will appear unto his descendants is realized at the Bountiful temple.",
+    "notePt": "A visão profética de Néfi de que o Filho da Retidão apareceria aos seus descendentes realiza-se no templo de Abundância."
+  },
+  {
+    "source": 6308,
+    "target": 6511,
+    "sourceRef": "Ether 12:4",
+    "targetRef": "Moroni 7:45",
+    "type": "doctrine",
+    "category": "internal",
+    "note": "Moroni's commentary on faith as an anchor to the souls of men complements Mormon's profound sermon on charity and pure love.",
+    "notePt": "O comentário de Morôni sobre a fé como âncora para a alma dos homens complementa o sermão de Mórmon sobre fé, esperança e caridade."
+  },
+  {
+    "source": 406,
+    "target": 3629,
+    "sourceRef": "1 Nephi 16:10",
+    "targetRef": "Alma 37:38",
+    "type": "typology",
+    "category": "internal",
+    "note": "The Liahona discovered by Lehi outside his tent is interpreted by Alma to Helaman as a shadow and type of the words of Christ.",
+    "notePt": "A bússola (Liahona) descoberta por Leí à porta de sua tenda é explicada por Alma como tipo e sombra das palavras de Cristo."
+  },
+  {
+    "source": 5944,
+    "target": 6574,
+    "sourceRef": "Mormon 8:14",
+    "targetRef": "Moroni 10:4",
+    "type": "exhortation",
+    "category": "internal",
+    "note": "Moroni declares that the sacred plates possess no worldly monetary worth, culminating in his farewell exhortation to ask God in sincerity.",
+    "notePt": "Morôni declara que o registro sagrado não tem valor monetário terreno, culminando em sua promessa final de perguntar a Deus com real intenção."
   }
 ]

@@ -387,5 +387,212 @@
         "tagPt": "Pacto Solene: Néfi faz juramento sagrado a Zorã"
       }
     ]
+  },
+  {
+    "id": "chiasmus-helaman-6",
+    "type": "chiasmus",
+    "titleEn": "Economic & Spiritual Prosperity Chiasmus (Helaman 6:7-13)",
+    "titlePt": "Quiasmo da Prosperidade Econômica e Espiritual (Helamã 6:7-13)",
+    "passage": "Helaman 6:7-13",
+    "descriptionEn": "Identified by ancient literature scholars and BYU Studies, this passage forms a balanced seven-part chiasm whose geographical center celebrates the Lord bringing both Lehi and Mulek into the promised land.",
+    "descriptionPt": "Identificado por biblistas e pesquisadores da BYU, este relato forma um notável quiasmo de sete níveis cujo ápice geográfico celebra a mão do Senhor trazendo tanto Leí quanto Muleque para a terra da promissão.",
+    "centerVerseId": 4623,
+    "verseIds": [
+      4620,
+      4621,
+      4622,
+      4623,
+      4624,
+      4625,
+      4626
+    ],
+    "chiasticTree": [
+      {
+        "level": "A",
+        "verseId": 4620,
+        "ref": "Helaman 6:7-8",
+        "textEn": "Peace in all the land; Nephites and Lamanites travel freely throughout the whole land",
+        "textPt": "Paz em toda a terra; nefitas e lamanitas viajam livremente por toda a terra"
+      },
+      {
+        "level": "B",
+        "verseId": 4622,
+        "ref": "Helaman 6:9",
+        "textEn": "Exceedingly rich in gold, silver, and precious metals",
+        "textPt": "Imensamente ricos em ouro, prata e metais preciosos"
+      },
+      {
+        "level": "⭐ ÁPICE",
+        "verseId": 4623,
+        "ref": "Helaman 6:10",
+        "isCenter": true,
+        "textEn": "Land South called Lehi, Land North called Mulek: Lord brought both to the promised land",
+        "textPt": "Terra do Sul chamada Leí, Terra do Norte chamada Muleque: o Senhor guiou ambos à promissão"
+      },
+      {
+        "level": "B'",
+        "verseId": 4624,
+        "ref": "Helaman 6:11",
+        "textEn": "All manner of gold, silver, and precious ore refined by curious workmen",
+        "textPt": "Toda espécie de ouro, prata e minérios refinados por hábeis artífices"
+      },
+      {
+        "level": "A'",
+        "verseId": 4626,
+        "ref": "Helaman 6:12-13",
+        "textEn": "Flourish in grain and flocks; women toil and spin fine-twined linen",
+        "textPt": "Prosperam em cereais e rebanhos; mulheres tecem e fiam linho fino"
+      }
+    ]
+  },
+  {
+    "id": "chiasmus-3nephi-9",
+    "type": "chiasmus",
+    "titleEn": "Christ's Voice in the Darkness Chiasmus (3 Nephi 9:15-22)",
+    "titlePt": "Quiasmo da Proclamação de Cristo nas Trevas (3 Néfi 9:15-22)",
+    "passage": "3 Nephi 9:15-22",
+    "descriptionEn": "Spoken directly by the resurrected Lord amidst the deep darkness following the cataclysm. Structured in ancient Hebrew poetic symmetry culminating in His divine eternal declaration.",
+    "descriptionPt": "Proferido diretamente pela voz do Senhor ressurreto em meio à profunda escuridão após o cataclismo. Estruturado em simetria poética hebraica cujo ápice proclama Sua identidade divina.",
+    "centerVerseId": 5180,
+    "verseIds": [
+      5177,
+      5178,
+      5179,
+      5180,
+      5181,
+      5182,
+      5184
+    ],
+    "chiasticTree": [
+      {
+        "level": "A",
+        "verseId": 5177,
+        "ref": "3 Nephi 9:15",
+        "textEn": "I am Jesus Christ the Son of God, Creator of heavens and earth",
+        "textPt": "Eu sou Jesus Cristo, o Filho de Deus, Criador dos céus e da terra"
+      },
+      {
+        "level": "B",
+        "verseId": 5178,
+        "ref": "3 Nephi 9:16",
+        "textEn": "I came unto my own and was not received; scriptures fulfilled",
+        "textPt": "Vim aos meus e os meus não me receberam; cumpriram-se as escrituras"
+      },
+      {
+        "level": "C",
+        "verseId": 5179,
+        "ref": "3 Nephi 9:17",
+        "textEn": "As many as receive me, to them have I given to become sons of God",
+        "textPt": "A todos os que me receberam permiti tornarem-se filhos de Deus"
+      },
+      {
+        "level": "⭐ ÁPICE",
+        "verseId": 5180,
+        "ref": "3 Nephi 9:18",
+        "isCenter": true,
+        "textEn": "I am the light and the life of the world. I am Alpha and Omega, the beginning and the end",
+        "textPt": "Eu sou a luz e a vida do mundo. Sou Alfa e Ômega, o princípio e o fim"
+      },
+      {
+        "level": "C'",
+        "verseId": 5181,
+        "ref": "3 Nephi 9:19",
+        "textEn": "Offer no more the shedding of blood; animal sacrifices shall cease",
+        "textPt": "Não me oferecereis mais sangue; vossos sacrifícios e holocaustos cessarão"
+      },
+      {
+        "level": "B'",
+        "verseId": 5182,
+        "ref": "3 Nephi 9:20",
+        "textEn": "Offer for a sacrifice a broken heart and a contrite spirit; baptized with fire",
+        "textPt": "Oferecei por sacrifício um coração quebrantado e espírito contrito; batismo de fogo"
+      },
+      {
+        "level": "A'",
+        "verseId": 5184,
+        "ref": "3 Nephi 9:21-22",
+        "textEn": "I came to bring redemption; whoso repenteth as a child, him will I receive",
+        "textPt": "Vim trazer redenção; quem se arrepender como criancinha, eu o receberei"
+      }
+    ]
+  },
+  {
+    "id": "chiasmus-alma-42",
+    "type": "chiasmus",
+    "titleEn": "Justice, Mercy, and the Atonement Chiasmus (Alma 42:13-26)",
+    "titlePt": "Quiasmo da Justiça, Misericórdia e Expiação (Alma 42:13-26)",
+    "passage": "Alma 42:13-26",
+    "descriptionEn": "Alma's doctrinal discourse to Corianton explaining the harmony between divine justice and divine mercy. The symmetrical structure anchors firmly in the theological truth that God remains God through the Atonement.",
+    "descriptionPt": "O discurso doutrinário de Alma a Coriânton demonstrando a harmonia entre a justiça e a misericórdia divinas. A estrutura quiástica ancora-se na verdade de que Deus permanece Deus graças à Expiação.",
+    "centerVerseId": 3736,
+    "verseIds": [
+      3726,
+      3728,
+      3731,
+      3735,
+      3736,
+      3737,
+      3738,
+      3739
+    ],
+    "chiasticTree": [
+      {
+        "level": "A",
+        "verseId": 3726,
+        "ref": "Alma 42:13",
+        "textEn": "Plan of redemption could not be brought about without repentance",
+        "textPt": "O plano de redenção não poderia realizar-se senão em face do arrependimento"
+      },
+      {
+        "level": "B",
+        "verseId": 3728,
+        "ref": "Alma 42:15",
+        "textEn": "Plan of mercy requires an infinite atonement made by God Himself",
+        "textPt": "O plano de misericórdia exige uma expiação infinita realizada pelo próprio Deus"
+      },
+      {
+        "level": "C",
+        "verseId": 3731,
+        "ref": "Alma 42:18",
+        "textEn": "A just law given and punishment affixed, bringing remorse of conscience",
+        "textPt": "Dada uma lei justa e castigo fixado, trazendo remorso de consciência"
+      },
+      {
+        "level": "D",
+        "verseId": 3735,
+        "ref": "Alma 42:22",
+        "textEn": "Law given, punishment affixed, and repentance granted to mankind",
+        "textPt": "Lei dada, castigo fixado e arrependimento concedido à humanidade"
+      },
+      {
+        "level": "⭐ ÁPICE",
+        "verseId": 3736,
+        "ref": "Alma 42:23",
+        "isCenter": true,
+        "textEn": "God ceaseth not to be God, and mercy claimeth the penitent through the atonement",
+        "textPt": "Deus não deixa de ser Deus, e a misericórdia reclama o penitente mediante a expiação"
+      },
+      {
+        "level": "D'",
+        "verseId": 3737,
+        "ref": "Alma 42:24",
+        "textEn": "Justice exerciseth all demands; mercy claimeth all which is her own",
+        "textPt": "A justiça exerce todos os seus direitos e a misericórdia reclama o que é seu"
+      },
+      {
+        "level": "C'",
+        "verseId": 3738,
+        "ref": "Alma 42:25",
+        "textEn": "Mercy cannot rob justice; if so, God would cease to be God",
+        "textPt": "A misericórdia não pode roubar a justiça; se o fizesse, Deus deixaria de ser Deus"
+      },
+      {
+        "level": "A'",
+        "verseId": 3739,
+        "ref": "Alma 42:26",
+        "textEn": "God bringeth about his eternal purposes prepared from foundation of the world",
+        "textPt": "Deus realiza seus eternos propósitos preparados desde a fundação do mundo"
+      }
+    ]
   }
 ]
