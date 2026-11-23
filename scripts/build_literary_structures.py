@@ -1,6 +1,6 @@
 import json
 
-with open('data/verses_en.json', 'r', encoding='utf-8') as f:
+with open('public/data/verses_en.json', 'r', encoding='utf-8') as f:
     verses = json.load(f)
 
 vmap = {v['ref']: v['id'] for v in verses}
@@ -139,7 +139,7 @@ structures = [
   }
 ]
 
-with open('data/literary_structures.json', 'w', encoding='utf-8') as f:
+with open('public/data/literary_structures.json', 'w', encoding='utf-8') as f:
     json.dump(structures, f, ensure_ascii=False, indent=2)
 
-print('Created data/literary_structures.json successfully with', len(structures), 'structures!')
+print('Created public/data/literary_structures.json successfully with', len(structures), 'structures!')

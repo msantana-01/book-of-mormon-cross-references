@@ -1,8 +1,8 @@
 import json
 
-path_data = 'data/external_references.json'
+path_data = 'public/data/external_references.json'
 path_public = 'public/data/external_references.json'
-path_dist = 'dist/data/external_references.json'
+path_dist = 'dist/public/data/external_references.json'
 
 with open(path_data, 'r', encoding='utf-8') as f:
     ext = json.load(f)

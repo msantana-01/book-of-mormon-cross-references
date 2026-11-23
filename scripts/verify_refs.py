@@ -1,6 +1,6 @@
 import json
 
-with open("data/verses_en.json", "r", encoding="utf-8") as f:
+with open("public/data/verses_en.json", "r", encoding="utf-8") as f:
     verses = json.load(f)
 
 ref_map = {v["ref"]: v["id"] for v in verses}

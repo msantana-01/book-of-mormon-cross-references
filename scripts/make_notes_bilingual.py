@@ -92,5 +92,5 @@ def update_bilingual_notes(filepath):
 
     print(f"Updated {updated} links in {filepath}")
 
-update_bilingual_notes('data/cross_references.json')
+update_bilingual_notes('public/data/cross_references.json')
 update_bilingual_notes('public/data/cross_references.json')

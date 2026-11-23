@@ -1,8 +1,8 @@
 import json
 
-books = json.load(open('data/books.json', encoding='utf-8'))
-cross = json.load(open('data/cross_references.json', encoding='utf-8'))
-ext = json.load(open('data/external_references.json', encoding='utf-8'))
+books = json.load(open('public/data/books.json', encoding='utf-8'))
+cross = json.load(open('public/data/cross_references.json', encoding='utf-8'))
+ext = json.load(open('public/data/external_references.json', encoding='utf-8'))
 
 for b in books:
     b_id = b['id']

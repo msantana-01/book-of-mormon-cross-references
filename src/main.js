@@ -481,19 +481,36 @@ function xToVerse(x) {
   return Math.max(1, Math.min(6604, Math.round(ratio * 6603) + 1));
 }
 
-// Snapping for horizontal axes (zoomed book aware)
+// Snapping for horizontal axes (zoomed book aware, with binary search and caching)
 function findNearestConnectedVerse(mouseX, pixelTolerance = 25) {
   const activeBook = getActiveBook();
   const relevantVerseIds = activeBook
-    ? connectedVerseIdsList.filter(vid => vid >= activeBook.startVerseId && vid <= activeBook.endVerseId)
+    ? (activeBook._connectedIds || (activeBook._connectedIds = connectedVerseIdsList.filter(vid => vid >= activeBook.startVerseId && vid <= activeBook.endVerseId)))
     : connectedVerseIdsList;
 
   if (relevantVerseIds.length === 0) return xToVerse(mouseX);
 
+  // Binary search for closest element
+  let low = 0;
+  let high = relevantVerseIds.length - 1;
+  while (low <= high) {
+    const mid = (low + high) >> 1;
+    const vx = verseToX(relevantVerseIds[mid]);
+    if (vx < mouseX) {
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
+  }
+
+  // Check neighborhood around insertion point
   let bestId = null;
   let minDiff = Infinity;
+  const startIdx = Math.max(0, low - 2);
+  const endIdx = Math.min(relevantVerseIds.length - 1, low + 2);
 
-  for (const vid of relevantVerseIds) {
+  for (let i = startIdx; i <= endIdx; i++) {
+    const vid = relevantVerseIds[i];
     const vx = verseToX(vid);
     const diff = Math.abs(vx - mouseX);
     if (diff < minDiff && diff <= pixelTolerance) {
@@ -1131,12 +1148,16 @@ function drawThreadsCanvas() {
   if (width <= 0 || height <= 0) return;
 
   const dpr = window.devicePixelRatio || 1;
-  threadsCanvas.width = width * dpr;
-  threadsCanvas.height = height * dpr;
-  threadsCtx.setTransform(1, 0, 0, 1, 0, 0);
-  threadsCtx.scale(dpr, dpr);
-
-  threadsCtx.clearRect(0, 0, width, height);
+  const targetW = width * dpr;
+  const targetH = height * dpr;
+  if (threadsCanvas.width !== targetW || threadsCanvas.height !== targetH) {
+    threadsCanvas.width = targetW;
+    threadsCanvas.height = targetH;
+    threadsCtx.setTransform(1, 0, 0, 1, 0, 0);
+    threadsCtx.scale(dpr, dpr);
+  } else {
+    threadsCtx.clearRect(0, 0, width, height);
+  }
 
   calculateSpineLayout(height, width);
 
@@ -1626,35 +1647,43 @@ function renderFeaturedPills() {
   });
 }
 
+// Precompute and index topic tags for links during initialization for zero-alloc hot loop rendering
+function computeLinkTopics(link) {
+  const topics = new Set();
+  const lType = (link.type || "").toLowerCase();
+  const note = (link.note || "").toLowerCase();
+  const notePt = (link.notePt || "").toLowerCase();
+  const noteAll = note + " " + notePt;
+  const extRef = (link.externalRef || "").toLowerCase();
+
+  if (lType === "chiasmus" || noteAll.includes("chiasm") || noteAll.includes("quiasm")) {
+    topics.add("chiasmus");
+  }
+  if (lType === "prophetic-formula" || lType === "covenant-formula" || noteAll.includes("thus we see") || noteAll.includes("assim vemos") || noteAll.includes("prosper")) {
+    topics.add("formulas");
+  }
+  if (lType === "hebraism" || noteAll.includes("construct") || noteAll.includes("hebraism") || noteAll.includes("oath") || noteAll.includes("colophon")) {
+    topics.add("hebraisms");
+  }
+  if (lType.includes("prophecy") || lType.includes("fulfillment") || noteAll.includes("prophe") || noteAll.includes("profec")) {
+    topics.add("prophecy");
+  }
+  if (noteAll.includes("christ") || noteAll.includes("jesus") || noteAll.includes("messiah") || noteAll.includes("lord") || noteAll.includes("cristo") || noteAll.includes("salvador")) {
+    topics.add("christ");
+  }
+  if (noteAll.includes("faith") || noteAll.includes("repent") || noteAll.includes("fé") || noteAll.includes("arrependimento")) {
+    topics.add("faith");
+  }
+  if (extRef.startsWith("isaiah") || noteAll.includes("isaiah") || noteAll.includes("isaías") || extRef.startsWith("isa")) {
+    topics.add("isaiah");
+  }
+  link._topics = topics;
+}
+
 // Check if a link matches the selected doctrinal or literary topic
 function isLinkMatchingTopic(link, topic) {
   if (!topic || topic === "all") return true;
-  const lType = (link.type || "").toLowerCase();
-  const note = (link.note || "").toLowerCase();
-  const extRef = (link.externalRef || "").toLowerCase();
-
-  if (topic === "chiasmus") {
-    return lType === "chiasmus" || note.includes("chiasm") || note.includes("quiasm");
-  }
-  if (topic === "formulas") {
-    return lType === "prophetic-formula" || lType === "covenant-formula" || note.includes("thus we see") || note.includes("assim vemos") || note.includes("prosper");
-  }
-  if (topic === "hebraisms") {
-    return lType === "hebraism" || note.includes("construct") || note.includes("hebraism") || note.includes("oath") || note.includes("colophon");
-  }
-  if (topic === "prophecy") {
-    return lType.includes("prophecy") || lType.includes("fulfillment") || note.includes("prophe");
-  }
-  if (topic === "christ") {
-    return note.includes("christ") || note.includes("jesus") || note.includes("messiah") || note.includes("lord") || note.includes("cristo") || note.includes("salvador");
-  }
-  if (topic === "faith") {
-    return note.includes("faith") || note.includes("repent") || note.includes("fé") || note.includes("arrependimento");
-  }
-  if (topic === "isaiah") {
-    return extRef.startsWith("isaiah") || note.includes("isaiah") || note.includes("isaías");
-  }
-  return true;
+  return link._topics ? link._topics.has(topic) : true;
 }
 
 // Render Ancient Semitic Literary Structures (Chiasmus, Formulas, Hebraisms) in the Study Panel
@@ -2328,14 +2357,43 @@ randomConnBtn.addEventListener("click", () => {
   selectVerse(list[currentTourIndex]);
 });
 
-// Search input handling
-searchInput.addEventListener("input", (e) => {
-  const q = e.target.value.trim().toLowerCase();
-  if (!q) return;
+// Search input handling with debounce and keyword search support
+let searchDebounceTimer = null;
 
-  const matchedVerse = verses.find(v => v.ref.toLowerCase().includes(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.includes(q));
-  if (matchedVerse) {
-    selectVerse(matchedVerse.id);
+function executeSearch(query) {
+  const q = query.trim().toLowerCase();
+  if (!q || q.length < 2) return;
+
+  // 1. Exact or prefix reference match
+  let matched = verses.find(v => v.ref.toLowerCase() === q || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}` === q);
+  if (!matched) {
+    matched = verses.find(v => v.ref.toLowerCase().startsWith(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.startsWith(q));
+  }
+  // 2. Substring reference match
+  if (!matched) {
+    matched = verses.find(v => v.ref.toLowerCase().includes(q) || `${v.shortBook.toLowerCase()} ${v.ch}:${v.v}`.includes(q));
+  }
+  // 3. Keyword / text search in verse body (for queries >= 3 chars)
+  if (!matched && q.length >= 3) {
+    matched = verses.find(v => v.text && v.text.toLowerCase().includes(q));
+  }
+
+  if (matched) {
+    selectVerse(matched.id, true);
+  }
+}
+
+searchInput.addEventListener("input", (e) => {
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => {
+    executeSearch(e.target.value);
+  }, 260);
+});
+
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    clearTimeout(searchDebounceTimer);
+    executeSearch(e.target.value);
   }
 });
 
@@ -2574,19 +2632,43 @@ function updateUILanguage() {
   }
 }
 
-// Responsive resize
+// Responsive resize with debounce & requestAnimationFrame
+let resizeDebounceTimer = null;
 window.addEventListener("resize", () => {
-  if (currentViewMode === "threads") {
-    drawThreadsCanvas();
-  } else {
-    setupCanvas();
-  }
+  clearTimeout(resizeDebounceTimer);
+  resizeDebounceTimer = setTimeout(() => {
+    requestAnimationFrame(() => {
+      if (currentViewMode === "threads") {
+        drawThreadsCanvas();
+      } else {
+        setupCanvas();
+      }
+    });
+  }, 100);
 });
+
+// User-facing network error display
+function showDataLoadError(err) {
+  if (!canvasWrapper) return;
+  const isPt = getLang() === "pt";
+  const title = isPt ? "Não foi possível carregar os dados das escrituras" : "Unable to load scripture data";
+  const desc = isPt ? "Verifique sua conexão com a internet ou tente recarregar." : "Please check your network connection or try reloading.";
+  const retryText = isPt ? "Tentar Novamente" : "Retry";
+
+  canvasWrapper.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;text-align:center;padding:2rem;color:#f1f5f9;gap:1rem;">
+      <div style="font-size:2rem;" aria-hidden="true">⚠️</div>
+      <h3 style="font-size:1.15rem;font-weight:700;margin:0;">${title}</h3>
+      <p style="color:#94a3b8;font-size:0.875rem;margin:0;max-width:420px;">${desc}</p>
+      <button onclick="window.location.reload()" style="background:#f59e0b;color:#090e1a;font-weight:600;padding:0.6rem 1.25rem;border-radius:8px;border:none;cursor:pointer;font-size:0.85rem;margin-top:0.5rem;">${retryText}</button>
+    </div>
+  `;
+}
 
 // Initial Data Load
 async function init() {
   try {
-    const [booksRes, internalRes, externalRes, versesRes, structuresRes] = await Promise.all([
+    const responses = await Promise.all([
       fetch("/data/books.json"),
       fetch("/data/cross_references.json"),
       fetch("/data/external_references.json"),
@@ -2594,11 +2676,22 @@ async function init() {
       fetch("/data/literary_structures.json")
     ]);
 
+    for (const res of responses) {
+      if (!res.ok) {
+        throw new Error(`Failed to load ${res.url}: HTTP ${res.status}`);
+      }
+    }
+
+    const [booksRes, internalRes, externalRes, versesRes, structuresRes] = responses;
     books = await booksRes.json();
     internalLinks = await internalRes.json();
     externalLinks = await externalRes.json();
     verses = await versesRes.json();
     literaryStructures = await structuresRes.json();
+
+    // Precompute topic sets on all links for zero-alloc hot loop rendering
+    internalLinks.forEach(computeLinkTopics);
+    externalLinks.forEach(computeLinkTopics);
 
     // Populate verseStructuresMap
     literaryStructures.forEach(struct => {
@@ -2649,6 +2742,11 @@ async function init() {
     });
     connectedVerseIdsList = Array.from(connectedSet).sort((a, b) => a - b);
 
+    // Ensure document lang matches current language
+    if (typeof document !== "undefined" && document.documentElement) {
+      document.documentElement.lang = getLang();
+    }
+
     populateBookSelect();
     renderAxis();
     renderFeaturedPills();
@@ -2691,6 +2789,7 @@ async function init() {
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
   } catch (err) {
     console.error("Error loading scripture data:", err);
+    showDataLoadError(err);
   }
 }
 

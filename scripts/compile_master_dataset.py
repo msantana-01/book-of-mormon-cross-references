@@ -5,9 +5,9 @@ import urllib.request
 
 def compile_dataset():
     print("1. Loading Book of Mormon verses...")
-    with open("data/verses_en.json", "r", encoding="utf-8") as f:
+    with open("public/data/verses_en.json", "r", encoding="utf-8") as f:
         verses = json.load(f)
-    with open("data/books.json", "r", encoding="utf-8") as f:
+    with open("public/data/books.json", "r", encoding="utf-8") as f:
         books = json.load(f)
 
     # Reference lookup: (book, chapter, verse) -> verse_id (1..6604)
@@ -34,7 +34,7 @@ def compile_dataset():
     # A. Ingest from bomdb (wordtreefoundation) refs.json
     # ----------------------------------------------------
     print("2. Ingesting from bomdb refs.json...")
-    bomdb_url = "https://raw.githubusercontent.com/wordtreefoundation/bomdb/master/data/refs.json"
+    bomdb_url = "https://raw.githubusercontent.com/wordtreefoundation/bomdb/master/public/data/refs.json"
     req = urllib.request.Request(bomdb_url, headers={"User-Agent": "Mozilla/5.0"})
     bomdb_data = json.loads(urllib.request.urlopen(req).read().decode("utf-8"))
 
@@ -237,12 +237,12 @@ def compile_dataset():
     external_links.sort(key=lambda x: x["source"])
 
     # Save to data and public/data
-    with open("data/cross_references.json", "w", encoding="utf-8") as f:
+    with open("public/data/cross_references.json", "w", encoding="utf-8") as f:
         json.dump(internal_links, f, indent=2, ensure_ascii=False)
     with open("public/data/cross_references.json", "w", encoding="utf-8") as f:
         json.dump(internal_links, f, indent=None, ensure_ascii=False)
 
-    with open("data/external_references.json", "w", encoding="utf-8") as f:
+    with open("public/data/external_references.json", "w", encoding="utf-8") as f:
         json.dump(external_links, f, indent=2, ensure_ascii=False)
     with open("public/data/external_references.json", "w", encoding="utf-8") as f:
         json.dump(external_links, f, indent=None, ensure_ascii=False)

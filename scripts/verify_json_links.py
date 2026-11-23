@@ -1,13 +1,13 @@
 import json
 
-with open("data/verses_en.json", "r", encoding="utf-8") as f:
+with open("public/data/verses_en.json", "r", encoding="utf-8") as f:
     verses = json.load(f)
 ref_map = {v["ref"]: v["id"] for v in verses}
 
-with open("data/cross_references.json", "r", encoding="utf-8") as f:
+with open("public/data/cross_references.json", "r", encoding="utf-8") as f:
     internal = json.load(f)
 
-with open("data/external_references.json", "r", encoding="utf-8") as f:
+with open("public/data/external_references.json", "r", encoding="utf-8") as f:
     external = json.load(f)
 
 # Test each featured item

@@ -109,19 +109,19 @@ def download_and_process():
     os.makedirs("data", exist_ok=True)
     os.makedirs("public/data", exist_ok=True)
 
-    with open("data/books.json", "w", encoding="utf-8") as f:
+    with open("public/data/books.json", "w", encoding="utf-8") as f:
         json.dump(books_list, f, indent=2, ensure_ascii=False)
     with open("public/data/books.json", "w", encoding="utf-8") as f:
         json.dump(books_list, f, indent=2, ensure_ascii=False)
 
-    with open("data/verses_en.json", "w", encoding="utf-8") as f:
+    with open("public/data/verses_en.json", "w", encoding="utf-8") as f:
         json.dump(verses_list, f, indent=None, ensure_ascii=False)
     with open("public/data/verses_en.json", "w", encoding="utf-8") as f:
         json.dump(verses_list, f, indent=None, ensure_ascii=False)
 
     print(f"Successfully generated:")
-    print(f"  - data/books.json ({len(books_list)} books)")
-    print(f"  - data/verses_en.json ({len(verses_list)} verses)")
+    print(f"  - public/data/books.json ({len(books_list)} books)")
+    print(f"  - public/data/verses_en.json ({len(verses_list)} verses)")
 
     # Print summary of books
     for b in books_list:

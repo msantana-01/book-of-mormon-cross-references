@@ -8,9 +8,9 @@ import zipfile
 
 def build_cross_references():
     print("Loading local verses and books...")
-    with open("data/verses_en.json", "r", encoding="utf-8") as f:
+    with open("public/data/verses_en.json", "r", encoding="utf-8") as f:
         local_verses = json.load(f)
-    with open("data/books.json", "r", encoding="utf-8") as f:
+    with open("public/data/books.json", "r", encoding="utf-8") as f:
         local_books = json.load(f)
 
     # Build reference lookup for local BOM verses: (book_name, chapter, verse) -> local_id (1..6604)
@@ -174,12 +174,12 @@ def build_cross_references():
         print(f"  BOM to Bible/External connections: {len(bom_to_bible_links)}")
 
         # Save output JSON files
-        with open("data/cross_references.json", "w", encoding="utf-8") as f:
+        with open("public/data/cross_references.json", "w", encoding="utf-8") as f:
             json.dump(internal_bom_links, f, indent=None)
         with open("public/data/cross_references.json", "w", encoding="utf-8") as f:
             json.dump(internal_bom_links, f, indent=None)
 
-        with open("data/external_references.json", "w", encoding="utf-8") as f:
+        with open("public/data/external_references.json", "w", encoding="utf-8") as f:
             json.dump(bom_to_bible_links, f, indent=None)
         with open("public/data/external_references.json", "w", encoding="utf-8") as f:
             json.dump(bom_to_bible_links, f, indent=None)

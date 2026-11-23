@@ -1,11 +1,11 @@
 import json
 
-with open('data/verses_en.json', 'r', encoding='utf-8') as f:
+with open('public/data/verses_en.json', 'r', encoding='utf-8') as f:
     verses = json.load(f)
 
 vmap = {v['ref']: v['id'] for v in verses}
 
-with open('data/cross_references.json', 'r', encoding='utf-8') as f:
+with open('public/data/cross_references.json', 'r', encoding='utf-8') as f:
     cross = json.load(f)
 
 # Track existing pairs
@@ -46,7 +46,7 @@ for link in new_links:
         existing_pairs.add(pair)
         added_count += 1
 
-with open('data/cross_references.json', 'w', encoding='utf-8') as f:
+with open('public/data/cross_references.json', 'w', encoding='utf-8') as f:
     json.dump(cross, f, ensure_ascii=False, indent=2)
 
 print(f'Successfully added {added_count} ancient structural links to cross_references.json!')

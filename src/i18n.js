@@ -234,6 +234,9 @@ export function getLang() {
 export function setLang(lang) {
   if (translations[lang]) {
     currentLang = lang;
+    if (typeof document !== "undefined" && document.documentElement) {
+      document.documentElement.lang = lang;
+    }
   }
 }
 
