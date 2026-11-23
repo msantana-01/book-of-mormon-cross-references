@@ -55,10 +55,17 @@ Inspired by Chris Harrison & Christoph Römhild's classic 2007 arc diagram and [
 - **Sequential Connection Tour:**
   - Step through hundreds of cross-references sequentially using `◀ Previous`, `Next ▶`, or `🎲 Random`.
   - Book-aware counter adapts when zoomed (e.g. `12 / 431 in 2 Nephi`).
-- **Bilingual Interface (i18n):**
-  - Instant 1-click toggle between **English** and **Português**.
+- **Bilingual Edition & Complete Portuguese Corpus (i18n):**
+  - Instant 1-click toggle between **English** and **Português** with automatic browser language detection (`pt-BR`) and saved preference.
+  - Complete dual-language corpus with all 6,604 verses in English (`data/verses_en.json`) and Portuguese (`data/verses_pt.json`).
+  - 100% of all 234 cross-reference notes, Bible book names (`Lucas`, `Isaías`, `Salmos`), and classification tags fully localized.
 - **Official Scripture Study Links:**
-  - Direct contextual links to read every passage on [ChurchofJesusChrist.org](https://www.churchofjesuschrist.org/study/scriptures/bofm).
+  - Tapping any verse text box, connection card, or official link button opens the exact chapter and verse on [ChurchofJesusChrist.org](https://www.churchofjesuschrist.org/study/scriptures/bofm) in the active language (`lang=por` or `lang=eng`).
+- **Ancient Semitic Literary Structures:**
+  - Interactive Chiastic Tree explorer (e.g. Alma 36 inverted parallelism revolving symmetrically around verse 18: crying unto Jesus Christ for mercy).
+  - Mormon's editorial formulas (*"And thus we see"*), the Land Covenant, and authentic Semitic Hebraisms (construct states, solemn oaths).
+- **High-Resolution Study Card Export (PNG):**
+  - 1-click `Save Card (PNG)` client-side exporter rendering beautiful 1200x630px study cards with scripture text, parallels, and mini-arc diagrams for social sharing (Instagram, WhatsApp, presentations).
 - **100% Static & Free to Host:**
   - Zero server requirements, 0 API dependencies, instant load times, 100% client-side static application.
 
@@ -70,10 +77,12 @@ Inspired by Chris Harrison & Christoph Römhild's classic 2007 arc diagram and [
 - **Design Intelligence:** Scholarly Editorial & Swiss Modernism 2.0 system (WCAG AA 4.5:1 contrast, Cinzel & Cormorant Garamond typography, 44px touch targets).
 - **Tooling:** [Vite](https://vitejs.dev/) for sub-second development HMR and optimized production bundling (< 30 kB compressed).
 - **Data Engineering:**
-  - `data/verses_en.json`: All 6,604 verses of the Book of Mormon with book, chapter, and text.
+  - `data/verses_en.json`: All 6,604 verses in English (canonical text & chapter pagination).
+  - `data/verses_pt.json`: All 6,604 verses in Portuguese matching official Church scripture text.
   - `data/books.json`: Metadata for all 15 books with chapter pagination and color palettes.
-  - `data/cross_references.json`: Curated internal fulfillments, prophecies, typologies, and citations.
-  - `data/external_references.json`: Canonical biblical parallels connecting to OT and NT passages.
+  - `data/cross_references.json`: Curated internal fulfillments, prophecies, typologies, and citations with bilingual notes (`note` & `notePt`).
+  - `data/external_references.json`: 846 canonical biblical parallels connecting to Old and New Testament passages with bilingual notes.
+  - `data/literary_structures.json`: Ancient Semitic chiastic structures, editorial formulas, and Hebraisms.
 
 ---
 
@@ -87,10 +96,13 @@ cd book-of-mormon-cross-references
 # 2. Install dependencies
 npm install
 
-# 3. Start local development server
+# 3. Run automated data integrity tests
+npm test
+
+# 4. Start local development server
 npm run dev
 
-# 4. Build production static bundle
+# 5. Build production static bundle
 npm run build
 ```
 
@@ -111,6 +123,6 @@ npm run build
 
 ## 📜 Data Sources & Legal Attribution
 
-- **Scripture Text:** Public domain records provided by the [LDS Documentation Project / scriptures.nephi.org](https://scriptures.nephi.org/) (maintained by `@beandog`).
+- **Scripture Text:** English public domain records provided by the [LDS Documentation Project / scriptures.nephi.org](https://scriptures.nephi.org/) (maintained by `@beandog`); Portuguese text sourced from official public scripture resources ([ChurchofJesusChrist.org](https://www.churchofjesuschrist.org/study/scriptures/bofm?lang=por)).
 - **Cross-Reference Corpus:** Curated open datasets from `wordtreefoundation/bomdb` and open scripture scholarship.
 - **License:** [MIT License](LICENSE) © 2026.
