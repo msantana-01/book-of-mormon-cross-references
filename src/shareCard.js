@@ -1,4 +1,4 @@
-import { t, getLang, getBookDisplayName, BOOK_NAMES_PT } from "./i18n.js";
+import { t, getLang, getBookDisplayName, BOOK_NAMES_PT, getExternalRefDisplayName, getExternalWorkDisplayName } from "./i18n.js";
 
 /**
  * Renders a high-resolution, visually stunning Scripture Study Card (PNG)
@@ -349,7 +349,7 @@ export async function generateVerseCard({
     sampleLinks.slice(0, 3).forEach(link => {
       const isExternal = Boolean(link.externalRef);
       let targetRefStr = isExternal
-        ? link.externalRef
+        ? (isPt ? getExternalRefDisplayName(link.externalRef) : link.externalRef)
         : (link.source === verseObj.id ? link.targetRef : link.sourceRef);
 
       if (!isExternal && isPt) {
@@ -362,7 +362,7 @@ export async function generateVerseCard({
       }
 
       const sourceWorkLabel = isExternal
-        ? (link.externalWork || (isPt ? "Bíblia" : "Bible"))
+        ? (isPt ? getExternalWorkDisplayName(link.externalWork) : (link.externalWork || "Bible"))
         : (isPt ? "Livro de Mórmon" : "Book of Mormon");
       const refTitle = `${targetRefStr} (${sourceWorkLabel})`;
 

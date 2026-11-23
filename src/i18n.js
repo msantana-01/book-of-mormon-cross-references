@@ -356,9 +356,12 @@ export const BIBLE_BOOK_NAMES_PT = {
 
 export function getExternalRefDisplayName(refStr) {
   if (currentLang !== "pt" || !refStr) return refStr;
-  for (const [enName, ptName] of Object.entries(BIBLE_BOOK_NAMES_PT)) {
-    if (refStr.startsWith(enName)) {
-      return refStr.replace(enName, ptName);
+  const m = refStr.trim().match(/^([1-3]?\s?[A-Za-z\s\-]+?)\s+(\d+(?::\d+(?:-\d+)?)?.*)$/);
+  if (m) {
+    const bookName = m[1].trim();
+    const ptBook = BIBLE_BOOK_NAMES_PT[bookName];
+    if (ptBook) {
+      return `${ptBook} ${m[2]}`;
     }
   }
   return refStr;
