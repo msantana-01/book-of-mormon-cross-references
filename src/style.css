@@ -2663,3 +2663,34 @@ footer a:hover {
     line-height: 1.35;
   }
 }
+
+/* Mobile Touch Swipe Slide Animations */
+@keyframes swipeSlideLeft {
+  0% {
+    transform: translateX(18px);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes swipeSlideRight {
+  0% {
+    transform: translateX(-18px);
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.swipe-slide-left {
+  animation: swipeSlideLeft 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.swipe-slide-right {
+  animation: swipeSlideRight 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}

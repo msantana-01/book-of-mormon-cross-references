@@ -2887,6 +2887,12 @@ function setupTouchSwipeNavigation() {
 
       // Threshold: horizontal swipe at least 45px, more horizontal than vertical, under 600ms
       if (elapsed < 600 && Math.abs(diffX) >= 45 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+        const animClass = diffX < 0 ? "swipe-slide-left" : "swipe-slide-right";
+        el.classList.remove("swipe-slide-left", "swipe-slide-right");
+        void el.offsetWidth; // trigger reflow for smooth re-animation
+        el.classList.add(animClass);
+        setTimeout(() => el.classList.remove(animClass), 160);
+
         if (diffX < 0) {
           if (typeof onLeft === "function") onLeft();
         } else {
