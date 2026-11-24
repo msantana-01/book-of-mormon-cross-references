@@ -1,6 +1,10 @@
+import { inject } from '@vercel/analytics';
 import { t, getLang, setLang, getBookDisplayName, getBookShortDisplayName, getBibleBookDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
 import { icons } from "./icons.js";
 import { generateVerseCard } from "./shareCard.js";
+
+// Initialize Vercel Analytics
+inject();
 
 // State
 let books = [];
