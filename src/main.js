@@ -1,4 +1,4 @@
-import { t, getLang, setLang, getBookDisplayName, getBookShortDisplayName, getBibleBookDisplayName, getBibleBookShortDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
+import { t, getLang, setLang, getBookDisplayName, getBookShortDisplayName, getBibleBookDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
 import { icons } from "./icons.js";
 import { generateVerseCard } from "./shareCard.js";
 
@@ -185,13 +185,13 @@ const BIBLE_BOOKS = [
   { name: "Deuteronomy", short: "Deut", color: "#f59e0b", pos: 0.20 },
   { name: "Psalms", short: "Ps", color: "#d97706", pos: 0.26 },
   { name: "Proverbs", short: "Prov", color: "#d97706", pos: 0.31 },
-  { name: "Isaiah", short: "Isa (525 refs)", color: "#fbbf24", pos: 0.40, weight: 2.5 },
+  { name: "Isaiah", short: "Isa", refCount: 525, color: "#fbbf24", pos: 0.40, weight: 2.5 },
   { name: "Jeremiah", short: "Jer", color: "#d97706", pos: 0.48 },
   { name: "Ezekiel", short: "Ezek", color: "#d97706", pos: 0.52 },
   { name: "Micah", short: "Mic", color: "#d97706", pos: 0.56 },
   { name: "Malachi", short: "Mal", color: "#f59e0b", pos: 0.60 },
   // New Testament
-  { name: "Matthew", short: "Matt (113 refs)", color: "#10b981", pos: 0.68, weight: 2.0 },
+  { name: "Matthew", short: "Matt", refCount: 113, color: "#10b981", pos: 0.68, weight: 2.0 },
   { name: "Mark", short: "Mark", color: "#10b981", pos: 0.74 },
   { name: "Luke", short: "Luke", color: "#10b981", pos: 0.78 },
   { name: "John", short: "John", color: "#10b981", pos: 0.82 },
@@ -1067,12 +1067,9 @@ function drawDualView() {
 
     const isMilestone = b.weight || ["Gen", "Ps", "John", "Rev"].includes(b.short);
     if (!isMobileCanvas || isMilestone) {
-      let label = getLang() === "pt" ? getBibleBookShortDisplayName(b.name, b.short) : b.short;
-      if (isMobileCanvas) {
-        if (b.name === "Isaiah") label = "Isa";
-        if (b.name === "Matthew") label = getLang() === "pt" ? "Mt" : "Matt";
-      } else if (getLang() === "pt" && b.weight) {
-        label = `${label} (${b.short.match(/\d+ refs/)?.[0] || ""})`.replace(" ()", "");
+      let label = getBookShortDisplayName(b.name, b.short);
+      if (!isMobileCanvas && b.refCount) {
+        label = `${label} (${b.refCount} refs)`;
       }
       ctx.fillStyle = b.color;
       ctx.font = b.weight ? "bold 10px Inter, sans-serif" : "9px Inter, sans-serif";
@@ -2276,7 +2273,7 @@ function selectVerse(verseId, shouldScroll = false) {
   } else {
     connCounterBadge.textContent = activeBook
       ? `${relevantList.length} ${bookPrep} ${shortBookName}`
-      : `${connectedVerseIdsList.length}`;
+      : `${connectedVerseIdsList.length} ${getLang() === "pt" ? "Conectados" : "Connected"}`;
   }
 
   const verseObj = verses[verseId - 1];

@@ -407,7 +407,7 @@ export const BOOK_NAMES_PT = {
   "Moroni": "Morôni"
 };
 
-export const BOOK_SHORT_NAMES_PT = {
+export const SHORT_BOOK_NAMES_PT = {
   "1 Nephi": "1 Néfi",
   "2 Nephi": "2 Néfi",
   "Jacob": "Jacó",
@@ -422,10 +422,7 @@ export const BOOK_SHORT_NAMES_PT = {
   "4 Nephi": "4 Néfi",
   "Mormon": "Mórm.",
   "Ether": "Éter",
-  "Moroni": "Morô."
-};
-
-export const BIBLE_SHORT_NAMES_PT = {
+  "Moroni": "Morô.",
   "Genesis": "Gên",
   "Exodus": "Êxo",
   "Numbers": "Núm",
@@ -456,15 +453,8 @@ export function getBookDisplayName(bookName) {
 }
 
 export function getBookShortDisplayName(bookName, fallbackShort) {
-  if (currentLang === "pt" && BOOK_SHORT_NAMES_PT[bookName]) {
-    return BOOK_SHORT_NAMES_PT[bookName];
-  }
-  return fallbackShort || bookName;
-}
-
-export function getBibleBookShortDisplayName(bookName, fallbackShort) {
-  if (currentLang === "pt" && BIBLE_SHORT_NAMES_PT[bookName]) {
-    return BIBLE_SHORT_NAMES_PT[bookName];
+  if (currentLang === "pt" && SHORT_BOOK_NAMES_PT[bookName]) {
+    return SHORT_BOOK_NAMES_PT[bookName];
   }
   return fallbackShort || bookName;
 }
