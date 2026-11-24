@@ -19,6 +19,7 @@ let verseConnectionsMap = new Map(); // verseId -> { internal: [], external: [] 
 let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
 let literaryStructures = [];
 let verseStructuresMap = new Map(); // verseId -> array of structure objects
+let studyResources = [];
 
 let currentViewMode = "dual"; // "dual" | "radial" | "threads"
 let selectedVerseId = 1; // Default to 1 Nephi 1:1 (First verse of the Book of Mormon)
@@ -1853,6 +1854,19 @@ function renderThreadsChapter(scrollToTop = true) {
   // Header & subtitle
   threadsChapterHeaderTitle.textContent = `${bookDisplayName} ${threadsCurrentChapter}`;
   threadsChapterHeaderSub.textContent = t("threadsHoverHint");
+  const threadsStudySlot = document.getElementById("threadsStudyResourceSlot");
+  if (threadsStudySlot) {
+    const chResources = getStudyResourcesForChapter(currentBookObj.name, threadsCurrentChapter);
+    if (chResources.length > 0 && chResources[0].links?.length) {
+      const langParam = getLang() === "pt" ? "por" : "eng";
+      threadsStudySlot.innerHTML = chResources[0].links.map(l => {
+        const label = getLang() === "pt" ? l.labelPt : l.labelEn;
+        return `<a href="${l.urlBase}?lang=${langParam}" target="_blank" rel="noopener noreferrer" class="threads-study-pill">${icons.bookOpen} ${label} ${icons.externalLink}</a>`;
+      }).join("");
+    } else {
+      threadsStudySlot.innerHTML = "";
+    }
+  }
 
   // Calculate connections in chapter
   let totalConnectionsInChapter = 0;
@@ -2163,6 +2177,47 @@ function isLinkMatchingTopic(link, topic) {
   return link._topics ? link._topics.has(topic) : true;
 }
 
+function getStudyResourcesForChapter(bookName, chapter) {
+  return studyResources.filter(r => r.book === bookName && r.chapter === chapter);
+}
+
+function getStudyResourcesForVerse(verseObj) {
+  if (!verseObj) return [];
+  const canonicalBook = getBookForVerse(verseObj.id)?.name || verseObj.book;
+  return studyResources.filter(
+    r => r.book === canonicalBook && r.chapter === verseObj.ch && verseObj.v >= r.verseStart && verseObj.v <= r.verseEnd
+  );
+}
+
+function renderStudyResources(verseObj) {
+  const box = document.getElementById("studyResourcesBox");
+  if (!box) return;
+  const matches = getStudyResourcesForVerse(verseObj);
+  if (matches.length === 0) {
+    box.style.display = "none";
+    return;
+  }
+
+  const res = matches[0];
+  const isPt = getLang() === "pt";
+  const langParam = isPt ? "por" : "eng";
+  const badgeEl = document.getElementById("studyResourcesBadge");
+  const titleEl = document.getElementById("studyResourcesTitle");
+  const summaryEl = document.getElementById("studyResourcesSummary");
+  const linksEl = document.getElementById("studyResourcesLinks");
+
+  if (badgeEl) badgeEl.textContent = t("studyResourcesBadge");
+  if (titleEl) titleEl.textContent = isPt ? res.titlePt : res.titleEn;
+  if (summaryEl) summaryEl.textContent = isPt ? res.summaryPt : res.summaryEn;
+  if (linksEl) {
+    linksEl.innerHTML = (res.links || []).map(l => {
+      const label = isPt ? l.labelPt : l.labelEn;
+      return `<a href="${l.urlBase}?lang=${langParam}" target="_blank" rel="noopener noreferrer" class="study-resource-link">${icons.bookOpen} ${label} ${icons.externalLink}</a>`;
+    }).join("");
+  }
+  box.style.display = "flex";
+}
+
 // Render Ancient Semitic Literary Structures (Chiasmus, Formulas, Hebraisms) in the Study Panel
 function renderLiteraryStructure(verseId) {
   if (!literaryStructureBox) return;
@@ -2459,6 +2514,7 @@ function selectVerse(verseId, shouldScroll = false) {
 
   // Render Ancient Semitic Literary Structures (Chiasmus, Formulas, Hebraisms)
   renderLiteraryStructure(verseId);
+  renderStudyResources(verseObj);
 
   // Update pills highlight if matching
   document.querySelectorAll(".featured-pill").forEach((pill, idx) => {
@@ -3651,7 +3707,8 @@ async function init() {
       fetch(`${dataPrefix}data/verses_en.json`),
       fetch(`${dataPrefix}data/verses_pt.json`),
       fetch(`${dataPrefix}data/literary_structures.json`),
-      fetch(`${dataPrefix}data/external_verses.json`)
+      fetch(`${dataPrefix}data/external_verses.json`),
+      fetch(`${dataPrefix}data/study_resources.json`)
     ]);
 
     for (const res of responses) {
@@ -3660,7 +3717,7 @@ async function init() {
       }
     }
 
-    const [booksRes, internalRes, externalRes, versesEnRes, versesPtRes, structuresRes, extVersesRes] = responses;
+    const [booksRes, internalRes, externalRes, versesEnRes, versesPtRes, structuresRes, extVersesRes, studyRes] = responses;
     books = await booksRes.json();
     internalLinks = await internalRes.json();
     externalLinks = await externalRes.json();
@@ -3669,6 +3726,7 @@ async function init() {
     verses = getLang() === "pt" ? versesPt : versesEn;
     literaryStructures = await structuresRes.json();
     externalVerses = await extVersesRes.json();
+    studyResources = await studyRes.json();
 
     // Precompute topic sets on all links for zero-alloc hot loop rendering
     internalLinks.forEach(computeLinkTopics);

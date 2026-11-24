@@ -7351,5 +7351,115 @@
     "note": "Moroni's solemn farewell and prayer that God may remember His covenant unto the house of Israel harmonizes with Jude's apostolic benediction.",
     "category": "external",
     "notePt": "A despedida solene de Morôni e sua oração para que Deus Se lembre de Seu convênio com a casa de Israel harmonizam-se com a bênção apostólica de Judas."
+  },
+  {
+    "source": 1486,
+    "sourceRef": "Jacob 5:3",
+    "externalRef": "Isaiah 5:1",
+    "externalWork": "Bible-OT",
+    "type": "typology",
+    "topics": "israel,covenant",
+    "note": "Both Zenos and Isaiah depict Israel as the Lord's carefully tended vineyard that requires divine care and pruning.",
+    "notePt": "Tanto Zenos quanto Isaías retratam Israel como a vinha cuidadosamente cultivada pelo Senhor, que exige zelo e poda divinos.",
+    "category": "external"
+  },
+  {
+    "source": 1486,
+    "sourceRef": "Jacob 5:3",
+    "externalRef": "Jeremiah 11:16",
+    "externalWork": "Bible-OT",
+    "type": "typology",
+    "topics": "israel,covenant",
+    "note": "Jeremiah calls Israel 'a green olive tree, fair, and of goodly fruit' whose branches are broken, echoing Zenos's olive-tree metaphor.",
+    "notePt": "Jeremias chama Israel de 'oliveira verde, formosa por seus deliciosos frutos' cujos ramos são quebrados, ecoando a metáfora da oliveira de Zenos.",
+    "category": "external"
+  },
+  {
+    "source": 1497,
+    "sourceRef": "Jacob 5:14",
+    "externalRef": "Romans 11:17",
+    "externalWork": "Bible-NT",
+    "type": "parallel",
+    "topics": "israel,gentiles",
+    "note": "Paul uses the exact same metaphor of wild olive branches grafted into the tame olive tree to explain how the Gentiles partake of Israel's covenant blessings.",
+    "notePt": "Paulo utiliza a mesma metáfora de ramos de zambujeiro (oliveira brava) enxertados na oliveira mansa para explicar como os gentios participam das bênçãos do convênio de Israel.",
+    "category": "external"
+  },
+  {
+    "source": 1544,
+    "sourceRef": "Jacob 5:61",
+    "externalRef": "D&C 101:44",
+    "externalWork": "Doctrine and Covenants",
+    "type": "parallel",
+    "topics": "gathering,service",
+    "note": "The Lord's parable of the nobleman's vineyard and twelve olive trees in D&C 101 parallels Zenos's servants laboring to prepare the vineyard for the Master's return.",
+    "notePt": "A parábola da vinha do nobre e das doze oliveiras em D&C 101 faz paralelo com os servos de Zenos trabalhando para preparar a vinha para o retorno do Senhor.",
+    "category": "external"
+  },
+  {
+    "source": 1602,
+    "sourceRef": "Enos 1:2",
+    "externalRef": "Genesis 32:24",
+    "externalWork": "Bible-OT",
+    "type": "parallel",
+    "topics": "prayer,grace",
+    "note": "Enos's 'wrestle which I had before God' echoes Jacob wrestling until daybreak for a covenant blessing.",
+    "notePt": "A 'luta que travei perante Deus' vivida por Enos ecoa Jacó lutando até o romper do dia por uma bênção do convênio.",
+    "category": "external"
+  },
+  {
+    "source": 1768,
+    "sourceRef": "Mosiah 3:19",
+    "externalRef": "Acts 4:12",
+    "externalWork": "Bible-NT",
+    "type": "doctrine",
+    "topics": "atonement,salvation",
+    "note": "Only through the Atonement of Christ can the natural man be put off, harmonizing with Peter's witness that there is salvation in no other name.",
+    "notePt": "Somente pela Expiação de Cristo o homem natural pode ser despojado, em harmonia com o testemunho de Pedro de que não há salvação em nenhum outro nome.",
+    "category": "external"
+  },
+  {
+    "source": 3466,
+    "sourceRef": "Alma 32:28",
+    "externalRef": "Matthew 13:31",
+    "externalWork": "Bible-NT",
+    "type": "typology",
+    "topics": "faith,word",
+    "note": "Both Alma and Jesus compare faith in the word of God to a tiny seed that swells and grows into a great tree.",
+    "notePt": "Tanto Alma quanto Jesus comparam a fé na palavra de Deus a uma pequena semente que incha e cresce até tornar-se uma grande árvore.",
+    "category": "external"
+  },
+  {
+    "source": 3695,
+    "sourceRef": "Alma 40:23",
+    "externalRef": "1 Corinthians 15:42",
+    "externalWork": "Bible-NT",
+    "type": "doctrine",
+    "topics": "resurrection",
+    "note": "Alma teaches that soul and body shall be reunited in a perfect, immortal frame, aligning with Paul's witness that the body is raised in incorruption.",
+    "notePt": "Alma ensina que alma e corpo serão reunidos em forma perfeita e imortal, alinhando-se ao testemunho de Paulo de que o corpo ressuscita em incorrupção.",
+    "category": "external"
+  },
+  {
+    "source": 3728,
+    "sourceRef": "Alma 42:15",
+    "externalRef": "Romans 3:24",
+    "externalWork": "Bible-NT",
+    "type": "doctrine",
+    "topics": "atonement,mercy",
+    "note": "Alma explains that the Atonement appeases justice so mercy can operate, matching Paul's teaching that we are justified through the redemption in Christ Jesus.",
+    "notePt": "Alma explica que a Expiação satisfaz a justiça para que a misericórdia atue, em harmonia com o ensino de Paulo de que somos justificados pela redenção em Cristo Jesus.",
+    "category": "external"
+  },
+  {
+    "source": 6578,
+    "sourceRef": "Moroni 10:8",
+    "externalRef": "1 Corinthians 12:4",
+    "externalWork": "Bible-NT",
+    "type": "parallel",
+    "topics": "spirit,gifts",
+    "note": "Moroni exhorts readers not to deny the gifts of God, which differ in administration but come by the same Spirit, just as Paul teaches in 1 Corinthians 12.",
+    "notePt": "Morôni exorta os leitores a não negarem os dons de Deus, que diferem em operação mas procedem do mesmo Espírito, assim como ensina Paulo em 1 Coríntios 12.",
+    "category": "external"
   }
 ]

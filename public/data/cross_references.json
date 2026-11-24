@@ -511,5 +511,95 @@
     "category": "internal",
     "note": "Moroni declares that the sacred plates possess no worldly monetary worth, culminating in his farewell exhortation to ask God in sincerity.",
     "notePt": "Morôni declara que o registro sagrado não tem valor monetário terreno, culminando em sua promessa final de perguntar a Deus com real intenção."
+  },
+  {
+    "source": 1486,
+    "target": 219,
+    "sourceRef": "Jacob 5:3",
+    "targetRef": "1 Nephi 10:12",
+    "type": "typology",
+    "note": "Zenos compares Israel to a tame olive tree planted in a goodly vineyard, the same olive-tree symbol Lehi uses to teach of Israel's scattering and gathering.",
+    "notePt": "Zenos compara Israel a uma oliveira mansa plantada em boa vinha — o mesmo símbolo da oliveira usado por Leí para ensinar a dispersão e a coligação de Israel.",
+    "category": "internal"
+  },
+  {
+    "source": 1497,
+    "target": 372,
+    "sourceRef": "Jacob 5:14",
+    "targetRef": "1 Nephi 15:12",
+    "type": "fulfillment",
+    "note": "Nephi explains to his brothers that the Nephites themselves are a natural branch broken off and planted in a distant part of the vineyard.",
+    "notePt": "Néfi explica a seus irmãos que os próprios nefitas são um ramo natural quebrado e plantado em uma parte distante da vinha.",
+    "category": "internal"
+  },
+  {
+    "source": 1535,
+    "target": 372,
+    "sourceRef": "Jacob 5:52",
+    "targetRef": "1 Nephi 15:12",
+    "type": "prophecy",
+    "note": "The Lord of the vineyard grafts the natural branches back into the mother tree, matching Nephi's promise that Israel's remnants will be grafted back through the fullness of the gospel.",
+    "notePt": "O Senhor da vinha enxerta os ramos naturais de volta na árvore-mãe, alinhando-se à promessa de Néfi de que os remanescentes de Israel serão enxertados novamente pela plenitude do evangelho.",
+    "category": "internal"
+  },
+  {
+    "source": 1544,
+    "target": 5544,
+    "sourceRef": "Jacob 5:61",
+    "targetRef": "3 Nephi 21:1",
+    "type": "fulfillment",
+    "note": "The Lord calls servants to labor for the last time in the vineyard, which the resurrected Savior ties to the latter-day sign of gathering Israel.",
+    "notePt": "O Senhor chama servos para trabalhar pela última vez na vinha, trabalho que o Salvador ressuscitado liga ao sinal dos últimos dias da coligação de Israel.",
+    "category": "internal"
+  },
+  {
+    "source": 1553,
+    "target": 1562,
+    "sourceRef": "Jacob 5:70",
+    "targetRef": "Jacob 6:2",
+    "type": "parallel",
+    "note": "Jacob immediately applies Zenos's allegory of the final labor to his own people, testifying that the Lord sets His hand the second time to recover Israel.",
+    "notePt": "Jacó aplica imediatamente a alegoria do último labor de Zenos ao seu próprio povo, testificando que o Senhor estende a mão pela segunda vez para recuperar Israel.",
+    "category": "internal"
+  },
+  {
+    "source": 1558,
+    "target": 1321,
+    "sourceRef": "Jacob 5:75",
+    "targetRef": "2 Nephi 29:1",
+    "type": "prophecy",
+    "note": "The vineyard brings forth only natural, good fruit once more as the Lord's covenant work remembers the house of Israel.",
+    "notePt": "A vinha volta a produzir apenas frutos naturais e bons quando a obra do convênio do Senhor se lembra da casa de Israel.",
+    "category": "internal"
+  },
+  {
+    "source": 1604,
+    "target": 3459,
+    "sourceRef": "Enos 1:4",
+    "targetRef": "Alma 32:21",
+    "type": "parallel",
+    "note": "Enos's soul hungers after hearing his father's words of eternal life, illustrating how faith begins when the word takes root in a receptive heart.",
+    "notePt": "A alma de Enos sente fome ao ouvir as palavras de seu pai sobre a vida eterna, ilustrando como a fé começa quando a palavra cria raiz em um coração receptivo.",
+    "category": "internal"
+  },
+  {
+    "source": 3466,
+    "target": 6310,
+    "sourceRef": "Alma 32:28",
+    "targetRef": "Ether 12:6",
+    "type": "doctrine",
+    "note": "Alma's test of planting the seed and Moroni's principle that witness comes after the trial of faith teach the same experiential pattern of belief.",
+    "notePt": "O experimento de plantar a semente em Alma e o princípio de Morôni de que o testemunho vem após a prova da fé ensinam o mesmo padrão prático de fé.",
+    "category": "internal"
+  },
+  {
+    "source": 6511,
+    "target": 6513,
+    "sourceRef": "Moroni 7:45",
+    "targetRef": "Moroni 7:47",
+    "type": "doctrine",
+    "note": "Mormon defines charity's attributes—suffering long, kind, not puffed up—and declares it the pure love of Christ that endureth forever.",
+    "notePt": "Mórmon define os atributos da caridade — sofredora, benigna, não se ensoberbece — e a declara o puro amor de Cristo que dura para sempre.",
+    "category": "internal"
   }
 ]

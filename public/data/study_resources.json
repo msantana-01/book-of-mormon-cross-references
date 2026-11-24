@@ -1,0 +1,293 @@
+[
+  {
+    "id": "jacob-5-olive-tree",
+    "book": "Jacob",
+    "chapter": 5,
+    "verseStart": 1,
+    "verseEnd": 77,
+    "titleEn": "Allegory of the Olive Trees (Zenos)",
+    "titlePt": "Alegoria das Oliveiras (Zenos)",
+    "summaryEn": "Come, Follow Me (Jacob 5–7): How the Lord of the vineyard labors alongside His servants to nourish, graft, gather, and redeem scattered Israel.",
+    "summaryPt": "Vem, e Segue-Me (Jacó 5–7): Como o Senhor da vinha trabalha com Seus servos para nutrir, enxertar, coligar e redimir a Israel dispersa.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Jacob 5–7",
+        "labelPt": "Vem, e Segue-Me: Jacó 5–7",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/15"
+      },
+      {
+        "labelEn": "Gospel Topics: Gathering of Israel",
+        "labelPt": "Tópicos do Evangelho: Coligação de Israel",
+        "type": "topic",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/gospel-topics/gathering-of-israel"
+      }
+    ]
+  },
+  {
+    "id": "1-nephi-8-11-tree-of-life",
+    "book": "1 Nephi",
+    "chapter": 8,
+    "verseStart": 1,
+    "verseEnd": 38,
+    "titleEn": "Lehi's Vision of the Tree of Life",
+    "titlePt": "Visão de Leí da Árvore da Vida",
+    "summaryEn": "Come, Follow Me (1 Nephi 6–10): The Tree of Life represents the love of God, and the iron rod is the word of God leading through mists of darkness.",
+    "summaryPt": "Vem, e Segue-Me (1 Néfi 6–10): A Árvore da Vida representa o amor de Deus, e a barra de ferro é a palavra de Deus que guia pelas névoas de escuridão.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: 1 Nephi 6–10",
+        "labelPt": "Vem, e Segue-Me: 1 Néfi 6–10",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/03"
+      }
+    ]
+  },
+  {
+    "id": "1-nephi-11-condescension",
+    "book": "1 Nephi",
+    "chapter": 11,
+    "verseStart": 1,
+    "verseEnd": 36,
+    "titleEn": "Nephi's Vision & Condescension of God",
+    "titlePt": "Visão de Néfi e Condescendência de Deus",
+    "summaryEn": "Come, Follow Me (1 Nephi 11–15): The angel interprets the Tree of Life through the birth, ministry, and Atonement of Jesus Christ.",
+    "summaryPt": "Vem, e Segue-Me (1 Néfi 11–15): O anjo interpreta a Árvore da Vida por meio do nascimento, ministério e Expiação de Jesus Cristo.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: 1 Nephi 11–15",
+        "labelPt": "Vem, e Segue-Me: 1 Néfi 11–15",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/04"
+      }
+    ]
+  },
+  {
+    "id": "2-nephi-2-agency-fall",
+    "book": "2 Nephi",
+    "chapter": 2,
+    "verseStart": 1,
+    "verseEnd": 30,
+    "titleEn": "Opposition, the Fall, and Moral Agency",
+    "titlePt": "Oposição, Queda e Arbítrio Moral",
+    "summaryEn": "Come, Follow Me (2 Nephi 1–2): Lehi teaches Jacob why opposition in all things and the Fall of Adam make joy and eternal liberty possible through Christ.",
+    "summaryPt": "Vem, e Segue-Me (2 Néfi 1–2): Leí ensina a Jacó por que a oposição em todas as coisas e a Queda de Adão tornam possíveis a alegria e a liberdade eterna por meio de Cristo.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: 2 Nephi 1–2",
+        "labelPt": "Vem, e Segue-Me: 2 Néfi 1–2",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/06"
+      }
+    ]
+  },
+  {
+    "id": "enos-1-mighty-prayer",
+    "book": "Enos",
+    "chapter": 1,
+    "verseStart": 1,
+    "verseEnd": 27,
+    "titleEn": "Enos's Wrestle Before God",
+    "titlePt": "A Luta de Enos Perante Deus",
+    "summaryEn": "Come, Follow Me (Enos–Words of Mormon): Personal conversion through persistent prayer, forgiveness of guilt, and intercession for both friends and enemies.",
+    "summaryPt": "Vem, e Segue-Me (Enos–Palavras de Mórmon): Conversão pessoal pela oração persistente, perdão da culpa e intercessão por amigos e inimigos.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Enos–Words of Mormon",
+        "labelPt": "Vem, e Segue-Me: Enos–Palavras de Mórmon",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/16"
+      }
+    ]
+  },
+  {
+    "id": "mosiah-2-3-king-benjamin",
+    "book": "Mosiah",
+    "chapter": 2,
+    "verseStart": 1,
+    "verseEnd": 41,
+    "titleEn": "King Benjamin's Temple Discourse",
+    "titlePt": "Discurso do Rei Benjamim no Templo",
+    "summaryEn": "Come, Follow Me (Mosiah 1–3): Service to our fellow beings is service to God, preparing hearts to receive the Savior's name and Atonement.",
+    "summaryPt": "Vem, e Segue-Me (Mosias 1–3): Servir ao próximo é servir a Deus, preparando o coração para tomar sobre nós o nome e a Expiação do Salvador.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Mosiah 1–3",
+        "labelPt": "Vem, e Segue-Me: Mosias 1–3",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/17"
+      }
+    ]
+  },
+  {
+    "id": "mosiah-3-natural-man",
+    "book": "Mosiah",
+    "chapter": 3,
+    "verseStart": 1,
+    "verseEnd": 27,
+    "titleEn": "Putting Off the Natural Man",
+    "titlePt": "Despojar-se do Homem Natural",
+    "summaryEn": "Come, Follow Me (Mosiah 1–3): Through the Atonement of Christ the Lord Omnipotent, we become saints—submissive, meek, humble, and full of love.",
+    "summaryPt": "Vem, e Segue-Me (Mosias 1–3): Pela Expiação de Cristo, o Senhor Onipotente, tornamo-nos santos — submissos, mansos, humildes e cheios de amor.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Mosiah 1–3",
+        "labelPt": "Vem, e Segue-Me: Mosias 1–3",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/17"
+      }
+    ]
+  },
+  {
+    "id": "mosiah-4-covenant-grace",
+    "book": "Mosiah",
+    "chapter": 4,
+    "verseStart": 1,
+    "verseEnd": 30,
+    "titleEn": "Retaining a Remission of Sins",
+    "titlePt": "Reter a Remissão dos Pecados",
+    "summaryEn": "Come, Follow Me (Mosiah 4–6): Walking guiltless by imparting of our substance to the poor and remembering the greatness of God.",
+    "summaryPt": "Vem, e Segue-Me (Mosias 4–6): Caminhar sem culpa repartindo nossos bens com os necessitados e lembrando-nos da grandeza de Deus.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Mosiah 4–6",
+        "labelPt": "Vem, e Segue-Me: Mosias 4–6",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/18"
+      }
+    ]
+  },
+  {
+    "id": "alma-32-seed-of-faith",
+    "book": "Alma",
+    "chapter": 32,
+    "verseStart": 1,
+    "verseEnd": 43,
+    "titleEn": "Experimenting Upon the Word (Seed of Faith)",
+    "titlePt": "Experimentar a Palavra (Semente da Fé)",
+    "summaryEn": "Come, Follow Me (Alma 32–35): Alma teaches the Zoramites how to plant the word in the heart and nourish faith until it grows into a tree of everlasting life.",
+    "summaryPt": "Vem, e Segue-Me (Alma 32–35): Alma ensina aos zoramitas como plantar a palavra no coração e nutrir a fé até que se torne uma árvore para a vida eterna.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Alma 32–35",
+        "labelPt": "Vem, e Segue-Me: Alma 32–35",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/30"
+      }
+    ]
+  },
+  {
+    "id": "alma-36-chiasmus-conversion",
+    "book": "Alma",
+    "chapter": 36,
+    "verseStart": 1,
+    "verseEnd": 30,
+    "titleEn": "Alma's Conversion & Chiasmus",
+    "titlePt": "Conversão de Alma e Quiasmo",
+    "summaryEn": "Come, Follow Me (Alma 36–38): Turning from bitter torment to exquisite joy at the remembrance of Jesus Christ, structured as a classic Hebrew chiasmus.",
+    "summaryPt": "Vem, e Segue-Me (Alma 36–38): Da amargura à alegria indizível ao lembrar-se de Jesus Cristo, em um quiasmo hebraico clássico.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Alma 36–38",
+        "labelPt": "Vem, e Segue-Me: Alma 36–38",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/31"
+      }
+    ]
+  },
+  {
+    "id": "alma-40-42-plan-of-mercy",
+    "book": "Alma",
+    "chapter": 42,
+    "verseStart": 1,
+    "verseEnd": 31,
+    "titleEn": "The Plan of Mercy & Justice",
+    "titlePt": "O Plano de Misericórdia e Justiça",
+    "summaryEn": "Come, Follow Me (Alma 39–42): How the Atonement satisfies the demands of justice while extending mercy to the truly penitent.",
+    "summaryPt": "Vem, e Segue-Me (Alma 39–42): Como a Expiação satisfaz as exigências da justiça enquanto estende misericórdia aos que verdadeiramente se arrependem.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Alma 39–42",
+        "labelPt": "Vem, e Segue-Me: Alma 39–42",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/32"
+      }
+    ]
+  },
+  {
+    "id": "3-nephi-11-risen-christ",
+    "book": "3 Nephi",
+    "chapter": 11,
+    "verseStart": 1,
+    "verseEnd": 41,
+    "titleEn": "Christ Appears at Bountiful",
+    "titlePt": "Cristo Aparece em Abundância",
+    "summaryEn": "Come, Follow Me (3 Nephi 8–11): The resurrected Savior invites the multitude to feel His wounds and teaches His foundational doctrine.",
+    "summaryPt": "Vem, e Segue-Me (3 Néfi 8–11): O Salvador ressuscitado convida a multidão a sentir Suas feridas e ensina Sua doutrina fundamental.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: 3 Nephi 8–11",
+        "labelPt": "Vem, e Segue-Me: 3 Néfi 8–11",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/39"
+      }
+    ]
+  },
+  {
+    "id": "ether-12-faith-weakness",
+    "book": "Ether",
+    "chapter": 12,
+    "verseStart": 1,
+    "verseEnd": 41,
+    "titleEn": "Faith, Hope, and Strength in Weakness",
+    "titlePt": "Fé, Esperança e Força na Fraqueza",
+    "summaryEn": "Come, Follow Me (Ether 12–15): Witness comes after the trial of faith, and the Savior's grace makes weak things become strong.",
+    "summaryPt": "Vem, e Segue-Me (Éter 12–15): O testemunho vem depois da prova da fé, e a graça do Salvador transforma coisas fracas em fortes.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Ether 12–15",
+        "labelPt": "Vem, e Segue-Me: Éter 12–15",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/48"
+      }
+    ]
+  },
+  {
+    "id": "moroni-7-charity-light",
+    "book": "Moroni",
+    "chapter": 7,
+    "verseStart": 1,
+    "verseEnd": 48,
+    "titleEn": "The Light of Christ, Faith, Hope & Charity",
+    "titlePt": "A Luz de Cristo, Fé, Esperança e Caridade",
+    "summaryEn": "Come, Follow Me (Moroni 7–9): Mormon's sermon on discerning good from evil and praying with all the energy of heart to be filled with charity.",
+    "summaryPt": "Vem, e Segue-Me (Morôni 7–9): O sermão de Mórmon sobre discernir o bem do mal e orar com toda a energia do coração para ser cheio de caridade.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Moroni 7–9",
+        "labelPt": "Vem, e Segue-Me: Morôni 7–9",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/50"
+      }
+    ]
+  },
+  {
+    "id": "moroni-10-promise-gifts",
+    "book": "Moroni",
+    "chapter": 10,
+    "verseStart": 1,
+    "verseEnd": 34,
+    "titleEn": "Moroni's Promise & Spiritual Gifts",
+    "titlePt": "A Promessa de Morôni e os Dons do Espírito",
+    "summaryEn": "Come, Follow Me (Moroni 10): Asking God with a sincere heart, real intent, and faith in Christ to know the truth of all things by the Holy Ghost.",
+    "summaryPt": "Vem, e Segue-Me (Morôni 10): Perguntar a Deus com coração sincero, real intenção e fé em Cristo para conhecer a verdade de todas as coisas pelo Espírito Santo.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Moroni 10",
+        "labelPt": "Vem, e Segue-Me: Morôni 10",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/51"
+      }
+    ]
+  }
+]

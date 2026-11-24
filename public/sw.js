@@ -1,5 +1,5 @@
 // Book of Mormon Cross-References Service Worker
-const CACHE_NAME = "bom-crossref-v3";
+const CACHE_NAME = "bom-crossref-v4";
 const STATIC_PRECACHE = [
   "./",
   "./index.html",
@@ -11,7 +11,8 @@ const STATIC_PRECACHE = [
   "./data/cross_references.json",
   "./data/external_references.json",
   "./data/external_verses.json",
-  "./data/literary_structures.json"
+  "./data/literary_structures.json",
+  "./data/study_resources.json"
 ];
 
 // Install: precache app shell and structural data

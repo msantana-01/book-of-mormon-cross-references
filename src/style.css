@@ -2803,3 +2803,85 @@ footer a {
 .swipe-slide-right {
   animation: swipeSlideRight 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Curated Study Resources (Come, Follow Me) */
+.study-resources-box {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 10px;
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.study-resources-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.study-resources-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cyan);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.18rem 0.55rem;
+  border-radius: 9999px;
+}
+
+.study-resources-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.study-resources-summary {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.study-resources-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.study-resource-link,
+.threads-study-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cyan);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.32);
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.study-resource-link:hover,
+.threads-study-pill:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--cyan);
+  color: #fff;
+}
+
+.threads-study-resource-slot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.6rem;
+}

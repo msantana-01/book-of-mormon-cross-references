@@ -116,4 +116,21 @@ structures.forEach((s, idx) => {
 });
 console.log(`✓ literary_structures.json: ${structures.length} structures validated`);
 
+// 6. Check Curated Study Resources
+const studyResPath = path.join(DATA_DIR, "study_resources.json");
+assert.ok(fs.existsSync(studyResPath), "study_resources.json must exist");
+const studyResources = JSON.parse(fs.readFileSync(studyResPath, "utf-8"));
+assert.ok(studyResources.length > 0, "study_resources.json must contain entries");
+const bookNames = new Set(books.map(b => b.name));
+studyResources.forEach((r, idx) => {
+  assert.ok(r.id && bookNames.has(r.book), `Study resource #${idx} must have valid id and book`);
+  assert.ok(r.chapter >= 1 && r.verseStart >= 1 && r.verseEnd >= r.verseStart, `Study resource ${r.id} invalid chapter/verse bounds`);
+  assert.ok(r.titleEn && r.titlePt && r.summaryEn && r.summaryPt, `Study resource ${r.id} missing bilingual fields`);
+  assert.ok(Array.isArray(r.links) && r.links.length > 0, `Study resource ${r.id} must have links`);
+  r.links.forEach(l => {
+    assert.ok(l.labelEn && l.labelPt && l.urlBase && l.urlBase.startsWith("https://www.churchofjesuschrist.org/"), `Study resource ${r.id} invalid link`);
+  });
+});
+console.log(`✓ study_resources.json: ${studyResources.length} curated study resources validated`);
+
 console.log("\n✅ All data integrity checks PASSED successfully!");
