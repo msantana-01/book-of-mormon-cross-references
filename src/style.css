@@ -980,6 +980,7 @@ main {
   letter-spacing: 0.06em;
   color: var(--gold);
   margin-bottom: 0.4rem;
+  text-align: center;
 }
 
 .comparison-note-text {

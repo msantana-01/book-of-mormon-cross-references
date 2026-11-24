@@ -1,4 +1,4 @@
-import { t, getLang, setLang, getBookDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
+import { t, getLang, setLang, getBookDisplayName, getBibleBookDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
 import { icons } from "./icons.js";
 import { generateVerseCard } from "./shareCard.js";
 
@@ -675,6 +675,7 @@ function openComparisonModal(bomVerse, link) {
 
   const extNoteText = isPt ? (link.notePt || link.note) : (link.noteEn || link.note);
   if (comparisonNoteText) comparisonNoteText.textContent = extNoteText || "";
+  if (comparisonNoteTitle) comparisonNoteTitle.style.marginBottom = extNoteText ? "" : "0";
   if (comparisonTypeBadge) comparisonTypeBadge.textContent = getConnectionTypeDisplayName(link.type);
 
   if (comparisonBibleTag) comparisonBibleTag.textContent = displayExtWork;
@@ -1548,10 +1549,11 @@ function calculateSpineLayout(canvasH, canvasW) {
   let curY = bibleStartY;
   SPINE_BIBLE_BOOKS.forEach(b => {
     const segH = ((b.weight || 1) / totalBibleWeight) * bibleTotalH;
+    const displayName = getBibleBookDisplayName(b.name);
     threadsSpineSegments.push({
       name: b.name,
-      short: b.short,
-      displayName: b.name,
+      short: getLang() === "pt" ? displayName.slice(0, 4) : b.short,
+      displayName,
       color: b.color,
       top: curY,
       bottom: curY + segH,
@@ -2333,19 +2335,13 @@ function selectVerse(verseId, shouldScroll = false) {
         ? `Abrir ${displayRef} em ChurchofJesusChrist.org ↗`
         : `Open ${displayRef} on ChurchofJesusChrist.org ↗`;
 
-      let typeTag = link.type || "Parallel";
+      const typeTag = getConnectionTypeDisplayName(link.type || "parallel");
       let tagClass = "tag-internal";
       if (link.type === "chiasmus") {
-        typeTag = getLang() === "pt" ? "Quiasmo" : "Chiasmus";
         tagClass = "tag-chiasmus";
-      } else if (link.type === "prophetic-formula") {
-        typeTag = getLang() === "pt" ? "Fórmula Profética" : "Prophetic Formula";
-        tagClass = "tag-formula";
-      } else if (link.type === "covenant-formula") {
-        typeTag = getLang() === "pt" ? "Aliança da Terra" : "Covenant Formula";
+      } else if (link.type === "prophetic-formula" || link.type === "covenant-formula") {
         tagClass = "tag-formula";
       } else if (link.type === "hebraism") {
-        typeTag = getLang() === "pt" ? "Hebraísmo" : "Hebraism";
         tagClass = "tag-hebraism";
       }
 
@@ -3573,6 +3569,8 @@ function updateUILanguage() {
   if (bookmarksModalTitle) bookmarksModalTitle.textContent = t("bookmarksModalTitle");
   if (bookmarksModalSubtitle) bookmarksModalSubtitle.textContent = t("bookmarksModalSubtitle");
   if (clearBookmarksText) clearBookmarksText.textContent = t("bookmarksClearAll");
+  const elFooterCredits = document.getElementById("footerCredits");
+  if (elFooterCredits) elFooterCredits.innerHTML = t("footerCredits");
   updateBookmarksUI();
   if (bookmarksModal && bookmarksModal.style.display !== "none") {
     renderBookmarksList();

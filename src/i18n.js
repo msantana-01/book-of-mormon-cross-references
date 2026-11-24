@@ -113,6 +113,7 @@ export const translations = {
     bookmarksEmpty: "No bookmarked verses yet. Click the star icon (⭐) on any verse to save it for quick access.",
     bookmarksCount: "{n} Bookmarks",
     bookmarksClearAll: "Clear All",
+    footerCredits: 'Public Domain scripture data via <a href="https://scriptures.nephi.org/" target="_blank" rel="noopener">scriptures.nephi.org</a> (LDS Documentation Project) and open scripture research. Inspired by <a href="https://github.com/trekhleb/bible-cross-references" target="_blank" rel="noopener">trekhleb/bible-cross-references</a> and Chris Harrison.',
     bookmarksConfirmClear: "Are you sure you want to remove all saved bookmarks?",
     searchResultsHeader: "{n} search results",
     noResultsFound: "No verses found matching \"{q}\"",
@@ -278,6 +279,7 @@ export const translations = {
     bookmarksEmpty: "Nenhum versículo favoritado ainda. Toque no ícone de estrela (⭐) em qualquer versículo para salvá-lo aqui.",
     bookmarksCount: "{n} Favoritos",
     bookmarksClearAll: "Limpar Todos",
+    footerCredits: 'Dados de escrituras em Domínio Público via <a href="https://scriptures.nephi.org/" target="_blank" rel="noopener">scriptures.nephi.org</a> (LDS Documentation Project) e pesquisa aberta de escrituras. Inspirado por <a href="https://github.com/trekhleb/bible-cross-references" target="_blank" rel="noopener">trekhleb/bible-cross-references</a> e Chris Harrison.',
     bookmarksConfirmClear: "Tem certeza de que deseja remover todos os versículos favoritos?",
     searchResultsHeader: "{n} resultados encontrados",
     noResultsFound: "Nenhum versículo encontrado para \"{q}\"",
@@ -480,6 +482,13 @@ export const BIBLE_BOOK_NAMES_PT = {
   "Doctrine and Covenants": "Doutrina e Convênios"
 };
 
+export function getBibleBookDisplayName(bookName) {
+  if (currentLang === "pt" && BIBLE_BOOK_NAMES_PT[bookName]) {
+    return BIBLE_BOOK_NAMES_PT[bookName];
+  }
+  return bookName;
+}
+
 export function getExternalRefDisplayName(refStr) {
   if (currentLang !== "pt" || !refStr) return refStr;
   const m = refStr.trim().match(/^([1-3]?\s?[A-Za-z\s\-]+?)\s+(\d+(?::\d+(?:-\d+)?)?.*)$/);
@@ -510,7 +519,15 @@ export function getConnectionTypeDisplayName(type) {
       "typology": "Typology / Symbol",
       "crossref": "Cross-Reference",
       "prophecy": "Prophecy",
+      "prophecy-vision": "Prophetic Vision",
       "paraphrase": "Paraphrase",
+      "doctrine": "Doctrine",
+      "narrative": "Narrative",
+      "exhortation": "Exhortation",
+      "tradition": "Tradition",
+      "witness": "Witness",
+      "martyrdom": "Martyrdom",
+      "doxology": "Doxology",
       "chiasmus": "Chiasmus",
       "prophetic-formula": "Prophetic Formula",
       "covenant-formula": "Covenant Formula",
@@ -525,7 +542,15 @@ export function getConnectionTypeDisplayName(type) {
     "typology": "Tipologia / Símbolo",
     "crossref": "Referência Cruzada",
     "prophecy": "Profecia",
+    "prophecy-vision": "Visão Profética",
     "paraphrase": "Paráfrase",
+    "doctrine": "Doutrina",
+    "narrative": "Narrativa",
+    "exhortation": "Exortação",
+    "tradition": "Tradição",
+    "witness": "Testemunho",
+    "martyrdom": "Martírio",
+    "doxology": "Doxologia",
     "chiasmus": "Quiasmo",
     "prophetic-formula": "Fórmula Profética",
     "covenant-formula": "Aliança da Terra",

@@ -1,5 +1,5 @@
 // Book of Mormon Cross-References Service Worker
-const CACHE_NAME = "bom-crossref-v2";
+const CACHE_NAME = "bom-crossref-v3";
 const STATIC_PRECACHE = [
   "./",
   "./index.html",
@@ -41,8 +41,10 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(req.url);
 
-  // Skip cross-origin non-CDN requests (like church study external links)
-  if (url.origin !== self.location.origin && !url.hostname.includes("fonts.g")) {
+  // Skip cross-origin non-CDN requests and Vite dev server modules
+  if ((url.origin !== self.location.origin && !url.hostname.includes("fonts.g")) ||
+      url.pathname.startsWith("/src/") ||
+      url.pathname.startsWith("/@")) {
     return;
   }
 
