@@ -10,8 +10,11 @@ if (!fs.existsSync(distDir) || !fs.existsSync(path.join(distDir, "index.html")))
   process.exit(1);
 }
 
-// Ensure .nojekyll exists
+// Ensure .nojekyll exists and disable Vercel builds on gh-pages
 fs.writeFileSync(path.join(distDir, ".nojekyll"), "");
+if (fs.existsSync("vercel.json")) {
+  fs.copyFileSync("vercel.json", path.join(distDir, "vercel.json"));
+}
 
 // Get current git remote origin url
 let remoteUrl = "";
