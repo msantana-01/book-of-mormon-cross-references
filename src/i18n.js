@@ -116,6 +116,9 @@ export const translations = {
     footerCredits: 'Public Domain scripture data via <a href="https://scriptures.nephi.org/" target="_blank" rel="noopener">scriptures.nephi.org</a> (LDS Documentation Project) and open scripture research. Inspired by <a href="https://github.com/trekhleb/bible-cross-references" target="_blank" rel="noopener">trekhleb/bible-cross-references</a> and Chris Harrison.',
     bookmarksConfirmClear: "Are you sure you want to remove all saved bookmarks?",
     searchResultsHeader: "{n} search results",
+    searchResultsHeaderSingle: "1 search result",
+    mobileFiltersToggle: "Filters",
+    threadsHoverHintTouch: "Tap a book on the spine",
     noResultsFound: "No verses found matching \"{q}\"",
     howToUseBtn: "How to Use",
     howToUseTooltip: "Tutorial & visual walkthrough of features",
@@ -282,6 +285,9 @@ export const translations = {
     footerCredits: 'Dados de escrituras em Domínio Público via <a href="https://scriptures.nephi.org/" target="_blank" rel="noopener">scriptures.nephi.org</a> (LDS Documentation Project) e pesquisa aberta de escrituras. Inspirado por <a href="https://github.com/trekhleb/bible-cross-references" target="_blank" rel="noopener">trekhleb/bible-cross-references</a> e Chris Harrison.',
     bookmarksConfirmClear: "Tem certeza de que deseja remover todos os versículos favoritos?",
     searchResultsHeader: "{n} resultados encontrados",
+    searchResultsHeaderSingle: "1 resultado encontrado",
+    mobileFiltersToggle: "Filtros",
+    threadsHoverHintTouch: "Toque em um livro na coluna",
     noResultsFound: "Nenhum versículo encontrado para \"{q}\"",
     howToUseBtn: "Como Usar",
     howToUseTooltip: "Tutorial e guia visual das ferramentas",
@@ -401,11 +407,66 @@ export const BOOK_NAMES_PT = {
   "Moroni": "Morôni"
 };
 
+export const BOOK_SHORT_NAMES_PT = {
+  "1 Nephi": "1 Néfi",
+  "2 Nephi": "2 Néfi",
+  "Jacob": "Jacó",
+  "Enos": "Enos",
+  "Jarom": "Jarom",
+  "Omni": "Ômni",
+  "Words of Mormon": "P. Mór",
+  "Mosiah": "Mosias",
+  "Alma": "Alma",
+  "Helaman": "Hel.",
+  "3 Nephi": "3 Néfi",
+  "4 Nephi": "4 Néfi",
+  "Mormon": "Mórm.",
+  "Ether": "Éter",
+  "Moroni": "Morô."
+};
+
+export const BIBLE_SHORT_NAMES_PT = {
+  "Genesis": "Gên",
+  "Exodus": "Êxo",
+  "Numbers": "Núm",
+  "Deuteronomy": "Deut",
+  "Psalms": "Sl",
+  "Proverbs": "Prov",
+  "Isaiah": "Isa",
+  "Jeremiah": "Jer",
+  "Ezekiel": "Ezeq",
+  "Micah": "Miq",
+  "Malachi": "Mal",
+  "Matthew": "Mt",
+  "Mark": "Mc",
+  "Luke": "Lc",
+  "John": "Jo",
+  "Acts": "At",
+  "Romans": "Rm",
+  "1 Corinthians": "1 Cor",
+  "Hebrews": "Hb",
+  "Revelation": "Ap"
+};
+
 export function getBookDisplayName(bookName) {
   if (currentLang === "pt" && BOOK_NAMES_PT[bookName]) {
     return BOOK_NAMES_PT[bookName];
   }
   return bookName;
+}
+
+export function getBookShortDisplayName(bookName, fallbackShort) {
+  if (currentLang === "pt" && BOOK_SHORT_NAMES_PT[bookName]) {
+    return BOOK_SHORT_NAMES_PT[bookName];
+  }
+  return fallbackShort || bookName;
+}
+
+export function getBibleBookShortDisplayName(bookName, fallbackShort) {
+  if (currentLang === "pt" && BIBLE_SHORT_NAMES_PT[bookName]) {
+    return BIBLE_SHORT_NAMES_PT[bookName];
+  }
+  return fallbackShort || bookName;
 }
 
 export const BIBLE_BOOK_NAMES_PT = {
@@ -494,7 +555,7 @@ export function getExternalRefDisplayName(refStr) {
   const m = refStr.trim().match(/^([1-3]?\s?[A-Za-z\s\-]+?)\s+(\d+(?::\d+(?:-\d+)?)?.*)$/);
   if (m) {
     const bookName = m[1].trim();
-    const ptBook = BIBLE_BOOK_NAMES_PT[bookName];
+    const ptBook = BIBLE_BOOK_NAMES_PT[bookName] || BOOK_NAMES_PT[bookName];
     if (ptBook) {
       return `${ptBook} ${m[2]}`;
     }

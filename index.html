@@ -89,7 +89,11 @@
       </div>
 
       <!-- Filters & Selects Aligned to Right -->
-      <div class="filter-group">
+      <button type="button" id="mobileFiltersToggleBtn" class="mobile-filters-toggle-btn" aria-expanded="false" aria-controls="filterGroup">
+        <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+        <span id="mobileFiltersToggleText">Filters</span>
+      </button>
+      <div class="filter-group" id="filterGroup">
         <!-- Arc Color Mode Toggle (Books vs Themes) -->
         <div class="btn-group" role="group" aria-label="Arc Color Mode">
           <button class="filter-btn active" id="btnColorBooks" data-color-mode="book" title="Color arcs by Book of Mormon books">
@@ -252,7 +256,7 @@
             <span class="structure-type-badge" id="structureTypeBadge">📜 Quiasmo Hebraico</span>
             <span class="structure-scope-badge" id="structureScopeBadge">Alma 36:1–30</span>
           </div>
-          <h4 class="structure-title" id="structureTitle"></h4>
+          <h3 class="structure-title" id="structureTitle"></h3>
           <p class="structure-desc" id="structureDesc"></p>
         </div>
 

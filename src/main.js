@@ -1,4 +1,4 @@
-import { t, getLang, setLang, getBookDisplayName, getBibleBookDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
+import { t, getLang, setLang, getBookDisplayName, getBookShortDisplayName, getBibleBookDisplayName, getBibleBookShortDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
 import { icons } from "./icons.js";
 import { generateVerseCard } from "./shareCard.js";
 
@@ -1067,10 +1067,12 @@ function drawDualView() {
 
     const isMilestone = b.weight || ["Gen", "Ps", "John", "Rev"].includes(b.short);
     if (!isMobileCanvas || isMilestone) {
-      let label = b.short;
+      let label = getLang() === "pt" ? getBibleBookShortDisplayName(b.name, b.short) : b.short;
       if (isMobileCanvas) {
-        if (label.startsWith("Isa")) label = "Isa";
-        if (label.startsWith("Matt")) label = "Matt";
+        if (b.name === "Isaiah") label = "Isa";
+        if (b.name === "Matthew") label = getLang() === "pt" ? "Mt" : "Matt";
+      } else if (getLang() === "pt" && b.weight) {
+        label = `${label} (${b.short.match(/\d+ refs/)?.[0] || ""})`.replace(" ()", "");
       }
       ctx.fillStyle = b.color;
       ctx.font = b.weight ? "bold 10px Inter, sans-serif" : "9px Inter, sans-serif";
@@ -1358,7 +1360,8 @@ function drawRadialView() {
         ctx.font = "bold 9px Inter, sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(`Ch ${ch.chapter}`, lx, ly);
+        const chPrefix = getLang() === "pt" ? "Cap" : "Ch";
+        ctx.fillText(`${chPrefix} ${ch.chapter}`, lx, ly);
       }
     });
 
@@ -1377,6 +1380,7 @@ function drawRadialView() {
     });
   } else {
     // Whole Book of Mormon: Draw 15 Book Segments
+    const isNarrowRadial = rect.width < 480;
     books.forEach(b => {
       const a1 = verseAngle(b.startVerseId);
       const a2 = verseAngle(b.endVerseId);
@@ -1387,16 +1391,19 @@ function drawRadialView() {
       ctx.arc(cx, cy, outerR, a1, a2);
       ctx.stroke();
 
+      const isHovered = hoveredBookId && hoveredBookId.id === b.id;
+      if (isNarrowRadial && b.versesCount < 100 && !isHovered) return;
+
       const midAngle = (a1 + a2) / 2;
-      const labelR = outerR + 18;
+      const labelR = outerR + (isNarrowRadial ? 16 : 18);
       const lx = cx + labelR * Math.cos(midAngle);
       const ly = cy + labelR * Math.sin(midAngle);
 
       ctx.fillStyle = b.color;
-      ctx.font = "bold 9.5px Inter, sans-serif";
+      ctx.font = isNarrowRadial ? "bold 8.5px Inter, sans-serif" : "bold 9.5px Inter, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(b.shortName, lx, ly);
+      ctx.fillText(getBookShortDisplayName(b.name, b.shortName), lx, ly);
     });
 
     // Hotspots on the Ring for all books
@@ -1509,11 +1516,15 @@ function drawRadialView() {
 
     ctx.fillStyle = "#38bdf8";
     ctx.font = "bold 11px Inter, sans-serif";
-    ctx.fillText(`${total} Connections`, cx, cy + 8);
+    ctx.fillText(t("connectionsCount", { n: total }), cx, cy + 8);
 
     ctx.fillStyle = "#94a3b8";
     ctx.font = "9.5px Inter, sans-serif";
-    ctx.fillText(activeBook ? `${activeBook.name} (${activeBook.chaptersCount} Ch)` : (vObj ? vObj.book : "The Book of Mormon"), cx, cy + 24);
+    const chLabel = getLang() === "pt" ? "Cap" : "Ch";
+    const orbSub = activeBook
+      ? `${getBookDisplayName(activeBook.name)} (${activeBook.chaptersCount} ${chLabel})`
+      : (vObj ? getBookDisplayName(vObj.book) : t("wholeBom"));
+    ctx.fillText(orbSub, cx, cy + 24);
 
     const activeAng = verseAngle(activeVerse);
     const ax = cx + outerR * Math.cos(activeAng);
@@ -1571,7 +1582,7 @@ function calculateSpineLayout(canvasH, canvasW) {
     const segH = (b.versesCount / totalBomVerses) * bomTotalH;
     threadsSpineSegments.push({
       name: b.name,
-      short: b.shortName || b.name,
+      short: getBookShortDisplayName(b.name, b.shortName || b.name),
       displayName: getBookDisplayName(b.name),
       color: b.color,
       top: curY,
@@ -2044,9 +2055,9 @@ function renderAxis() {
 
       const pill = document.createElement("button");
       pill.className = "book-label-pill";
-      pill.textContent = b.shortName;
+      pill.textContent = getBookShortDisplayName(b.name, b.shortName);
       pill.style.borderBottom = `2px solid ${b.color}`;
-      pill.title = `Zoom into ${b.name}`;
+      pill.title = getLang() === "pt" ? `Ampliar ${getBookDisplayName(b.name)}` : `Zoom into ${b.name}`;
       pill.addEventListener("click", () => {
         zoomToBook(b.id);
       });
@@ -2175,7 +2186,7 @@ function renderLiteraryStructure(verseId) {
     structureTypeBadge.textContent = struct.type;
   }
 
-  structureScopeBadge.textContent = struct.passage;
+  structureScopeBadge.textContent = getExternalRefDisplayName(struct.passage);
   structureTitle.textContent = getLang() === "pt" ? struct.titlePt : struct.titleEn;
   structureDesc.textContent = getLang() === "pt" ? struct.descriptionPt : struct.descriptionEn;
 
@@ -2207,7 +2218,7 @@ function renderLiteraryStructure(verseId) {
       const textSnippet = getLang() === "pt" ? item.textPt : item.textEn;
       row.innerHTML = `
         <span class="chiastic-level">${item.level}</span>
-        <span class="chiastic-ref">${item.ref}</span>
+        <span class="chiastic-ref">${getExternalRefDisplayName(item.ref)}</span>
         <span class="chiastic-text" title="${textSnippet}">"${textSnippet}"</span>
       `;
       row.addEventListener("click", () => {
@@ -2229,7 +2240,7 @@ function renderLiteraryStructure(verseId) {
       pill.className = `structure-pill ${isActive ? "active" : ""}`;
       const tagText = getLang() === "pt" ? item.tagPt : item.tagEn;
       pill.innerHTML = `
-        <strong>${item.ref}</strong>
+        <strong>${getExternalRefDisplayName(item.ref)}</strong>
         <span class="structure-pill-tag">${tagText}</span>
       `;
       pill.addEventListener("click", () => {
@@ -2255,15 +2266,17 @@ function selectVerse(verseId, shouldScroll = false) {
     : connectedVerseIdsList;
 
   const tourIdx = relevantList.indexOf(verseId);
+  const shortBookName = activeBook ? getBookShortDisplayName(activeBook.name, activeBook.shortName) : "";
+  const bookPrep = getLang() === "pt" ? "em" : "in";
   if (tourIdx !== -1) {
     currentTourIndex = tourIdx;
     connCounterBadge.textContent = activeBook
-      ? `${currentTourIndex + 1} / ${relevantList.length} in ${activeBook.shortName}`
+      ? `${currentTourIndex + 1} / ${relevantList.length} ${bookPrep} ${shortBookName}`
       : `${currentTourIndex + 1} / ${connectedVerseIdsList.length}`;
   } else {
     connCounterBadge.textContent = activeBook
-      ? `${relevantList.length} in ${activeBook.shortName}`
-      : `${connectedVerseIdsList.length} Connected`;
+      ? `${relevantList.length} ${bookPrep} ${shortBookName}`
+      : `${connectedVerseIdsList.length}`;
   }
 
   const verseObj = verses[verseId - 1];
@@ -3035,10 +3048,13 @@ function renderSearchResults(results, query) {
     return;
   }
 
+  const countLabel = results.length === 1
+    ? t("searchResultsHeaderSingle")
+    : t("searchResultsHeader", { n: results.length });
   const countHeader = `
     <div class="search-results-header">
-      <span>${t("searchResultsHeader", { n: results.length })}</span>
-      <span style="opacity: 0.6; font-size: 0.68rem;">Esc / ↑ ↓ Enter</span>
+      <span>${countLabel}</span>
+      <span class="search-kbd-hint" style="opacity: 0.7; font-size: 0.68rem;">Esc / ↑ ↓ Enter</span>
     </div>
   `;
 
@@ -3449,7 +3465,10 @@ function updateUILanguage() {
   if (threadsPrevText) threadsPrevText.textContent = t("threadsPrevCh");
   if (threadsNextText) threadsNextText.textContent = t("threadsNextCh");
   if (threadsSpineHeaderTitle) threadsSpineHeaderTitle.textContent = t("threadsSpineTitle");
-  if (threadsHoverHintText) threadsHoverHintText.textContent = t("threadsHoverHint");
+  const isCoarsePointer = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+  if (threadsHoverHintText) threadsHoverHintText.textContent = t(isCoarsePointer ? "threadsHoverHintTouch" : "threadsHoverHint");
+  const elMobileFiltersText = document.getElementById("mobileFiltersToggleText");
+  if (elMobileFiltersText) elMobileFiltersText.textContent = t("mobileFiltersToggle");
   if (backToDiagramText) backToDiagramText.textContent = t("backToDiagram");
   if (shareCardText && (!shareCardBtn || !shareCardBtn.disabled)) {
     shareCardText.textContent = t("shareCard");
@@ -3767,6 +3786,15 @@ async function init() {
 
     updateBookmarksUI();
     setupTouchSwipeNavigation();
+
+    const mobileFiltersToggleBtn = document.getElementById("mobileFiltersToggleBtn");
+    const filterGroupEl = document.getElementById("filterGroup");
+    if (mobileFiltersToggleBtn && filterGroupEl) {
+      mobileFiltersToggleBtn.addEventListener("click", () => {
+        const isOpen = filterGroupEl.classList.toggle("is-open");
+        mobileFiltersToggleBtn.setAttribute("aria-expanded", String(isOpen));
+      });
+    }
 
     console.log(`Loaded ${connectedVerseIdsList.length} connected verses successfully.`);
   } catch (err) {

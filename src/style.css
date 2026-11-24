@@ -6,7 +6,7 @@
   --border-focus: #f59e0b;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --text-dim: #64748b;
+  --text-dim: #8b9bb4;
   
   --gold: #f59e0b;
   --gold-glow: rgba(245, 158, 11, 0.35);
@@ -1491,7 +1491,11 @@ main {
   gap: 0.65rem;
   overflow-x: auto;
   padding: 0.2rem 0.2rem 0.5rem 0.2rem;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.featured-pills-row::-webkit-scrollbar {
+  display: none;
 }
 
 .featured-pill {
@@ -2090,6 +2094,12 @@ footer a:hover {
   background: rgba(15, 23, 42, 0.45);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.tutorial-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tutorial-tab {
@@ -2293,18 +2303,43 @@ footer a:hover {
 
 /* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  html, .threads-reading-pane {
     scroll-behavior: auto !important;
   }
-  .featured-pill:hover {
+  .swipe-slide-left, .swipe-slide-right {
+    animation: none !important;
+  }
+  .featured-pill:hover, .connection-card:hover, .copy-link-btn:hover {
     transform: none;
   }
-  .connection-card:hover {
-    transform: none;
+}
+
+.mobile-filters-toggle-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .search-kbd-hint {
+    display: none;
   }
+}
+
+footer a {
+  display: inline-block;
+  padding: 0.35rem 0.15rem;
 }
 
 /* Responsive */
@@ -2321,21 +2356,23 @@ footer a:hover {
   .header-container {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.75rem;
+    gap: 0.65rem;
+    padding: 0.75rem 0.85rem;
   }
   .brand {
     text-align: center;
   }
   .brand h1 {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
   }
   .brand p {
     font-size: 0.75rem;
   }
   .header-actions {
     width: 100%;
-    justify-content: space-between;
-    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
   }
   .badges {
     flex-wrap: wrap;
@@ -2346,9 +2383,11 @@ footer a:hover {
     padding: 0.25rem 0.5rem;
   }
   .bookmarks-btn, .how-to-use-btn, .lang-btn {
-    min-height: 42px;
-    padding: 0.4rem 0.65rem;
-    font-size: 0.75rem;
+    min-height: 44px;
+    justify-content: center;
+    padding: 0.4rem 0.35rem;
+    font-size: 0.74rem;
+    white-space: nowrap;
   }
 
   .controls-bar {
@@ -2359,7 +2398,20 @@ footer a:hover {
   .controls-row-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.65rem;
+    gap: 0.55rem;
+  }
+  .mobile-filters-toggle-btn {
+    display: inline-flex;
+  }
+  .filter-group {
+    display: none;
+    width: 100%;
+    margin-left: 0;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .filter-group.is-open {
+    display: flex;
   }
   .view-mode-container {
     width: 100%;
@@ -2388,13 +2440,6 @@ footer a:hover {
     white-space: normal;
     line-height: 1.2;
     gap: 0.35rem;
-  }
-  .filter-group {
-    width: 100%;
-    margin-left: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
   }
   .filter-group .btn-group {
     width: 100%;
@@ -2438,12 +2483,29 @@ footer a:hover {
     padding: 0.4rem 0;
     gap: 0.35rem;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .book-labels-row::-webkit-scrollbar {
+    display: none;
   }
   .book-label-pill, .chapter-label-pill {
     padding: 0.3rem 0.6rem;
-    min-height: 34px;
+    min-height: 40px;
   }
 
+  main {
+    padding: 0 0.5rem 1.25rem;
+  }
+  .featured-container {
+    padding: 0.85rem 0.75rem;
+  }
+  .featured-pill {
+    max-width: 100%;
+    min-height: 44px;
+    font-size: 0.76rem;
+    padding: 0.45rem 0.75rem;
+  }
   .featured-header {
     flex-direction: column;
     align-items: flex-start;
@@ -2454,13 +2516,13 @@ footer a:hover {
     justify-content: space-between;
   }
   .tour-btn {
-    min-height: 42px;
+    min-height: 44px;
     padding: 0.45rem 0.7rem;
   }
 
   /* Verse Study Panel Mobile Ergonomics */
   .study-panel {
-    padding: 1rem 0.85rem;
+    padding: 0.9rem 0.75rem;
     gap: 1.15rem;
   }
   .panel-header {
@@ -2477,8 +2539,39 @@ footer a:hover {
   .copy-link-btn, .share-card-btn, .back-to-diagram-btn {
     flex: 1 1 auto;
     justify-content: center;
-    min-height: 42px;
+    min-height: 44px;
     font-size: 0.78rem;
+  }
+  .search-clear-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .bookmark-verse-btn, .bookmark-delete-btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .clear-bookmarks-btn {
+    min-height: 44px;
+    padding: 0.5rem 0.9rem;
+  }
+  .btn-compare-side {
+    min-height: 44px;
+    padding: 0.5rem 0.85rem;
+  }
+  .external-link-hint {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: -10px -8px;
+  }
+  .comparison-church-link {
+    min-height: 44px;
+    padding: 0.5rem 0;
   }
   .verse-text-box {
     padding: 1rem 1rem;
@@ -2549,25 +2642,39 @@ footer a:hover {
   }
 
   /* Threads Mode Mobile */
+  .threads-container {
+    padding: 0.85rem 0.75rem;
+  }
   .threads-controls-bar {
     flex-direction: column;
     align-items: stretch;
     gap: 0.65rem;
   }
-  .threads-nav-group {
-    width: 100%;
-    justify-content: space-between;
-  }
-  .threads-select-group {
-    flex: 1;
+  .threads-nav-controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.4rem;
+    gap: 0.45rem;
+    width: 100%;
+  }
+  .threads-select-group {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
   }
   .threads-select-group .select-input {
     width: 100%;
     max-width: none;
-    min-height: 42px;
+    min-height: 44px;
+    font-size: 0.82rem;
+  }
+  .threads-verse-pill {
+    min-height: 36px;
+    padding: 0.25rem 0.6rem;
+    display: inline-flex;
+    align-items: center;
   }
   .threads-stage {
     flex-direction: column;
@@ -2575,6 +2682,7 @@ footer a:hover {
   }
   .threads-reading-pane {
     max-height: 460px;
+    padding-right: 0.4rem;
   }
   .threads-canvas-pane {
     height: 360px;
@@ -2641,7 +2749,7 @@ footer a:hover {
     display: none; /* Hide 3 count pills on very narrow screens to prevent header clutter */
   }
   .header-actions {
-    justify-content: flex-end;
+    justify-content: stretch;
   }
 
   /* Chiasmus Tree Compact Indentation */
