@@ -133,4 +133,19 @@ studyResources.forEach((r, idx) => {
 });
 console.log(`✓ study_resources.json: ${studyResources.length} curated study resources validated`);
 
+// 7. Check Guided Study Trails
+const trailsPath = path.join(DATA_DIR, "guided_trails.json");
+assert.ok(fs.existsSync(trailsPath), "guided_trails.json must exist");
+const guidedTrails = JSON.parse(fs.readFileSync(trailsPath, "utf-8"));
+assert.ok(guidedTrails.length >= 4, "guided_trails.json must contain guided trails");
+guidedTrails.forEach((tr, idx) => {
+  assert.ok(tr.id && tr.titleEn && tr.titlePt && tr.tagEn && tr.tagPt, `Trail #${idx} missing metadata`);
+  assert.ok(Array.isArray(tr.steps) && tr.steps.length >= 3, `Trail ${tr.id} must have >= 3 steps`);
+  tr.steps.forEach(st => {
+    assert.ok(Number.isInteger(st.verseId) && st.verseId >= 1 && st.verseId <= 6604, `Trail ${tr.id} invalid verseId ${st.verseId}`);
+    assert.ok(st.noteEn && st.notePt, `Trail ${tr.id} step ${st.verseId} missing bilingual notes`);
+  });
+});
+console.log(`✓ guided_trails.json: ${guidedTrails.length} guided study trails validated`);
+
 console.log("\n✅ All data integrity checks PASSED successfully!");

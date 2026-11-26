@@ -229,6 +229,16 @@
         <div class="study-trail-chips" id="studyTrailChips" role="list"></div>
         <button type="button" id="studyTrailClearBtn" class="study-trail-clear-btn" title="Clear study trail">Clear</button>
       </nav>
+      <div class="guided-trail-banner" id="guidedTrailBanner" style="display: none;">
+        <div class="guided-trail-banner-top">
+          <span class="guided-trail-banner-title" id="guidedTrailBannerTitle"></span>
+          <div class="guided-trail-banner-actions">
+            <span class="guided-trail-step-badge" id="guidedTrailStepBadge">1 / 6</span>
+            <button type="button" id="guidedTrailNextBtn" class="guided-trail-next-btn">Next →</button>
+          </div>
+        </div>
+        <p class="guided-trail-banner-note" id="guidedTrailBannerNote"></p>
+      </div>
       <div class="panel-header">
         <h2 id="selectedVerseTitle">
           <span id="selectedVerseRef">Select a Verse</span>
@@ -343,6 +353,12 @@
       
       <div class="featured-pills-row" id="featuredPillsRow" role="region" aria-label="Quick Access Connections">
         <!-- Populated dynamically via main.js -->
+      </div>
+      <div class="guided-trails-section" id="guidedTrailsSection">
+        <div class="guided-trails-header">
+          <span class="guided-trails-label" id="guidedTrailsTitle">🧭 Guided Doctrinal Study Trails:</span>
+        </div>
+        <div class="featured-pills-row" id="guidedTrailsRow" role="region" aria-label="Guided Doctrinal Study Trails"></div>
       </div>
     </section>
   </main>
@@ -592,16 +608,24 @@
         </button>
       </div>
 
+      <div class="bookmark-folder-bar" id="bookmarkFolderFilterBar" role="tablist" aria-label="Filter Study Notebook by Folder"></div>
+
       <div class="bookmarks-body" id="bookmarksBody">
         <!-- Dynamically rendered list of bookmarks -->
       </div>
 
       <div class="modal-footer bookmarks-footer">
         <span class="bookmarks-total-count" id="bookmarksTotalCount">0 Bookmarks</span>
-        <button id="clearBookmarksBtn" class="clear-bookmarks-btn" style="display: none;">
-          <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          <span id="clearBookmarksText">Clear All</span>
-        </button>
+        <div class="bookmarks-footer-actions">
+          <button type="button" id="printStudySheetBtn" class="print-study-btn" style="display: none;">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            <span id="printStudySheetText">Print Study Sheet</span>
+          </button>
+          <button id="clearBookmarksBtn" class="clear-bookmarks-btn" style="display: none;">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span id="clearBookmarksText">Clear All</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -613,6 +637,9 @@
       Inspired by <a href="https://github.com/trekhleb/bible-cross-references" target="_blank" rel="noopener">trekhleb/bible-cross-references</a> and Chris Harrison.
     </p>
   </footer>
+
+  <!-- Printable Study Sheet (visible only when printing) -->
+  <section id="printStudySheet" class="print-study-sheet" aria-hidden="true"></section>
 
   <script type="module" src="/src/main.js"></script>
 </body>

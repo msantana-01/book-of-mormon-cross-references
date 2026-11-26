@@ -20,6 +20,8 @@ let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
 let literaryStructures = [];
 let verseStructuresMap = new Map(); // verseId -> array of structure objects
 let studyResources = [];
+let guidedTrails = [];
+let activeGuidedTrail = null;
 const STUDY_TRAIL_STORAGE_KEY = "bom_study_trail_v1";
 const MAX_STUDY_TRAIL = 20;
 let studyTrail = [];
@@ -715,8 +717,57 @@ function closeComparisonModal() {
   document.body.style.overflow = "";
 }
 
-// --- Scripture Bookmarks (localStorage) ---
+// --- Scripture Bookmarks & Study Notebook (localStorage) ---
 const BOOKMARKS_STORAGE_KEY = "app_bookmarks";
+const BOOKMARK_META_STORAGE_KEY = "app_bookmark_meta_v1";
+let activeNotebookFolder = "all";
+
+const NOTEBOOK_FOLDERS = [
+  { id: "all", key: "notebookFolderAll" },
+  { id: "talk", key: "notebookFolderTalk" },
+  { id: "lesson", key: "notebookFolderLesson" },
+  { id: "study", key: "notebookFolderStudy" },
+  { id: "general", key: "notebookFolderGeneral" }
+];
+
+function getBookmarkMetaMap() {
+  if (typeof localStorage === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(BOOKMARK_META_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveBookmarkMetaMap(meta) {
+  if (typeof localStorage === "undefined") return;
+  try {
+    localStorage.setItem(BOOKMARK_META_STORAGE_KEY, JSON.stringify(meta));
+  } catch (e) {}
+}
+
+function getVerseNotebookMeta(verseId) {
+  const map = getBookmarkMetaMap();
+  const entry = map[String(verseId)];
+  return {
+    folder: entry?.folder || "general",
+    note: typeof entry?.note === "string" ? entry.note : ""
+  };
+}
+
+function setVerseNotebookMeta(verseId, patch) {
+  const map = getBookmarkMetaMap();
+  const cur = getVerseNotebookMeta(verseId);
+  map[String(verseId)] = { ...cur, ...patch };
+  saveBookmarkMetaMap(map);
+}
+
+function getFolderLabel(folderId) {
+  const found = NOTEBOOK_FOLDERS.find(f => f.id === folderId);
+  return found ? t(found.key) : t("notebookFolderGeneral");
+}
 
 function getSavedBookmarks() {
   if (typeof localStorage === "undefined") return [];
@@ -724,7 +775,7 @@ function getSavedBookmarks() {
     const raw = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
     if (!raw) return [];
     const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr.filter(id => typeof id === "number" && id >= 1 && id <= 6604) : [];
+    return Array.isArray(arr) ? arr.filter(id => Number.isInteger(id) && id >= 1 && id <= 6604) : [];
   } catch (e) {
     return [];
   }
@@ -764,6 +815,7 @@ function removeBookmark(verseId) {
 function clearAllBookmarks() {
   if (confirm(t("bookmarksConfirmClear"))) {
     saveBookmarks([]);
+    saveBookmarkMetaMap({});
     updateBookmarksUI();
     if (bookmarksModal && bookmarksModal.style.display !== "none") {
       renderBookmarksList();
@@ -789,9 +841,71 @@ function updateBookmarksUI() {
   }
 }
 
+function printStudySheet() {
+  const sheet = document.getElementById("printStudySheet");
+  if (!sheet) return;
+  const bookmarks = getSavedBookmarks();
+  const filtered = activeNotebookFolder === "all"
+    ? bookmarks
+    : bookmarks.filter(id => getVerseNotebookMeta(id).folder === activeNotebookFolder);
+  if (filtered.length === 0) return;
+
+  const isPt = getLang() === "pt";
+  const dateStr = new Date().toLocaleDateString(isPt ? "pt-BR" : "en-US");
+  const filterTitle = activeNotebookFolder === "all" ? "" : ` — ${getFolderLabel(activeNotebookFolder)}`;
+
+  const itemsHtml = filtered.map(id => {
+    const v = verses[id - 1];
+    if (!v) return "";
+    const meta = getVerseNotebookMeta(id);
+    const folderLabel = getFolderLabel(meta.folder);
+    return `
+      <article class="print-sheet-item">
+        <div class="print-sheet-item-head">
+          <strong>${escapeHtml(v.ref)}</strong>
+          <span class="print-sheet-folder">${escapeHtml(folderLabel)}</span>
+        </div>
+        <blockquote class="print-sheet-verse">"${escapeHtml(v.text)}"</blockquote>
+        ${meta.note.trim() ? `<p class="print-sheet-note">${escapeHtml(meta.note.trim())}</p>` : ""}
+      </article>
+    `;
+  }).join("");
+
+  sheet.innerHTML = `
+    <header class="print-sheet-header">
+      <h1>${escapeHtml(t("notebookPrintTitle"))}${escapeHtml(filterTitle)}</h1>
+      <p>${escapeHtml(dateStr)} · ${escapeHtml(t("bookmarksCount", { n: filtered.length }))}</p>
+    </header>
+    <div class="print-sheet-list">${itemsHtml}</div>
+  `;
+  window.print();
+}
+
 function renderBookmarksList() {
   if (!bookmarksBody) return;
   const bookmarks = getSavedBookmarks();
+  const folderBar = document.getElementById("bookmarkFolderFilterBar");
+  const printBtn = document.getElementById("printStudySheetBtn");
+  const printText = document.getElementById("printStudySheetText");
+
+  if (printText) printText.textContent = t("notebookPrintBtn");
+
+  if (folderBar) {
+    folderBar.innerHTML = NOTEBOOK_FOLDERS.map(f => {
+      const count = f.id === "all"
+        ? bookmarks.length
+        : bookmarks.filter(id => getVerseNotebookMeta(id).folder === f.id).length;
+      const isActive = activeNotebookFolder === f.id;
+      return `<button type="button" class="bookmark-folder-pill${isActive ? " active" : ""}" data-folder="${f.id}" role="tab" aria-selected="${isActive}">${escapeHtml(t(f.key))} (${count})</button>`;
+    }).join("");
+    folderBar.style.display = bookmarks.length > 0 ? "flex" : "none";
+    folderBar.querySelectorAll(".bookmark-folder-pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeNotebookFolder = btn.dataset.folder || "all";
+        renderBookmarksList();
+      });
+    });
+  }
 
   if (bookmarks.length === 0) {
     bookmarksBody.innerHTML = `
@@ -800,23 +914,43 @@ function renderBookmarksList() {
       </div>
     `;
     if (clearBookmarksBtn) clearBookmarksBtn.style.display = "none";
+    if (printBtn) printBtn.style.display = "none";
     if (bookmarksTotalCount) bookmarksTotalCount.textContent = t("bookmarksCount", { n: 0 });
     return;
   }
 
-  if (clearBookmarksBtn) clearBookmarksBtn.style.display = "inline-flex";
-  if (bookmarksTotalCount) bookmarksTotalCount.textContent = t("bookmarksCount", { n: bookmarks.length });
+  const visibleIds = activeNotebookFolder === "all"
+    ? bookmarks
+    : bookmarks.filter(id => getVerseNotebookMeta(id).folder === activeNotebookFolder);
 
-  bookmarksBody.innerHTML = bookmarks.map(id => {
+  if (clearBookmarksBtn) clearBookmarksBtn.style.display = "inline-flex";
+  if (printBtn) printBtn.style.display = visibleIds.length > 0 ? "inline-flex" : "none";
+  if (bookmarksTotalCount) bookmarksTotalCount.textContent = t("bookmarksCount", { n: visibleIds.length });
+
+  if (visibleIds.length === 0) {
+    bookmarksBody.innerHTML = `
+      <div class="bookmarks-empty-state">
+        <p>${t("notebookEmptyFiltered")}</p>
+      </div>
+    `;
+    return;
+  }
+
+  bookmarksBody.innerHTML = visibleIds.map(id => {
     const v = verses[id - 1];
     if (!v) return "";
     const book = getBookForVerse(id);
     const bookColor = book ? book.color : "#d4af37";
     const conns = verseConnectionsMap.get(id) || { internal: [], external: [] };
     const totalConns = conns.internal.length + conns.external.length;
+    const meta = getVerseNotebookMeta(id);
 
     let snippet = v.text || "";
     if (snippet.length > 140) snippet = snippet.substring(0, 140) + "...";
+
+    const folderOptionsHtml = NOTEBOOK_FOLDERS.filter(f => f.id !== "all").map(f => {
+      return `<option value="${f.id}"${meta.folder === f.id ? " selected" : ""}>${escapeHtml(t(f.key))}</option>`;
+    }).join("");
 
     return `
       <div class="bookmark-card" data-verse-id="${id}">
@@ -824,27 +958,48 @@ function renderBookmarksList() {
           <div class="bookmark-ref-group">
             <span class="search-result-ref-dot" style="background-color: ${bookColor}"></span>
             <span class="bookmark-ref-title">${escapeHtml(v.ref)}</span>
-            ${totalConns > 0 ? `<span class="badge badge-gold" style="font-size:0.68rem; padding: 0.1rem 0.4rem;">🔗 ${totalConns}</span>` : ""}
+            ${totalConns > 0 ? `<span class="badge badge-gold" style="font-size:0.72rem; padding: 0.1rem 0.4rem;">🔗 ${totalConns}</span>` : ""}
           </div>
           <div class="bookmark-actions">
+            <select class="bookmark-folder-select" data-meta-id="${id}" aria-label="Folder">${folderOptionsHtml}</select>
             <button type="button" class="bookmark-delete-btn" data-delete-id="${id}" title="${t('bookmarkRemove')}" aria-label="${t('bookmarkRemove')}">
               <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
         </div>
         <div class="bookmark-snippet">"${escapeHtml(snippet)}"</div>
+        <textarea class="bookmark-note-input" data-note-id="${id}" rows="2" placeholder="${escapeHtml(t('notebookNotePlaceholder'))}">${escapeHtml(meta.note)}</textarea>
       </div>
     `;
   }).join("");
 
   bookmarksBody.querySelectorAll(".bookmark-card").forEach(card => {
     card.addEventListener("click", (e) => {
-      if (e.target.closest(".bookmark-delete-btn")) return;
+      if (e.target.closest(".bookmark-delete-btn, .bookmark-folder-select, .bookmark-note-input")) return;
       const vId = parseInt(card.dataset.verseId, 10);
       if (vId) {
         selectVerse(vId, true);
         closeBookmarksModal();
       }
+    });
+  });
+
+  bookmarksBody.querySelectorAll(".bookmark-folder-select").forEach(sel => {
+    sel.addEventListener("click", (e) => e.stopPropagation());
+    sel.addEventListener("change", (e) => {
+      const mId = parseInt(sel.dataset.metaId, 10);
+      if (mId) {
+        setVerseNotebookMeta(mId, { folder: sel.value });
+        renderBookmarksList();
+      }
+    });
+  });
+
+  bookmarksBody.querySelectorAll(".bookmark-note-input").forEach(ta => {
+    ta.addEventListener("click", (e) => e.stopPropagation());
+    ta.addEventListener("input", () => {
+      const mId = parseInt(ta.dataset.noteId, 10);
+      if (mId) setVerseNotebookMeta(mId, { note: ta.value });
     });
   });
 
@@ -2142,6 +2297,33 @@ function renderFeaturedPills() {
   });
 }
 
+function renderGuidedTrails() {
+  const row = document.getElementById("guidedTrailsRow");
+  const titleEl = document.getElementById("guidedTrailsTitle");
+  if (titleEl) titleEl.textContent = t("guidedTrailsTitle");
+  if (!row) return;
+  const isPt = getLang() === "pt";
+  row.innerHTML = "";
+  guidedTrails.forEach(tr => {
+    const pill = document.createElement("button");
+    pill.type = "button";
+    pill.className = `featured-pill guided-trail-pill${activeGuidedTrail?.id === tr.id ? " active" : ""}`;
+    pill.innerHTML = `<span>${escapeHtml(isPt ? tr.titlePt : tr.titleEn)}</span><span class="featured-pill-tag">${escapeHtml(isPt ? tr.tagPt : tr.tagEn)}</span>`;
+    pill.addEventListener("click", () => startGuidedTrail(tr));
+    row.appendChild(pill);
+  });
+}
+
+function startGuidedTrail(trail) {
+  if (!trail || !Array.isArray(trail.steps) || trail.steps.length === 0) return;
+  activeGuidedTrail = trail;
+  studyTrail = trail.steps.map(s => ({ verseId: s.verseId }));
+  trailIndex = 0;
+  saveStudyTrail();
+  renderGuidedTrails();
+  selectVerse(trail.steps[0].verseId, true, { fromTrail: true });
+}
+
 // Precompute and index topic tags for links during initialization for zero-alloc hot loop rendering
 function computeLinkTopics(link) {
   const topics = new Set();
@@ -2356,9 +2538,11 @@ function jumpToTrailIndex(idx) {
 }
 
 function clearStudyTrail() {
+  activeGuidedTrail = null;
   studyTrail = selectedVerseId ? [{ verseId: selectedVerseId }] : [];
   trailIndex = studyTrail.length - 1;
   saveStudyTrail();
+  renderGuidedTrails();
   renderStudyTrail();
 }
 
@@ -2412,6 +2596,32 @@ function renderStudyTrail() {
       0,
       activeChip.offsetLeft - (chipsContainer.clientWidth - activeChip.offsetWidth) / 2
     );
+  }
+
+  // Render active Guided Doctrinal Trail banner if in a guided trail
+  const banner = document.getElementById("guidedTrailBanner");
+  if (banner) {
+    const curVerseId = studyTrail[trailIndex]?.verseId;
+    const stepIdx = activeGuidedTrail ? activeGuidedTrail.steps.findIndex(s => s.verseId === curVerseId) : -1;
+    if (activeGuidedTrail && stepIdx !== -1) {
+      const isPt = getLang() === "pt";
+      const step = activeGuidedTrail.steps[stepIdx];
+      const titleEl = document.getElementById("guidedTrailBannerTitle");
+      const badgeEl = document.getElementById("guidedTrailStepBadge");
+      const noteEl = document.getElementById("guidedTrailBannerNote");
+      const nextBtn = document.getElementById("guidedTrailNextBtn");
+      if (titleEl) titleEl.textContent = isPt ? activeGuidedTrail.titlePt : activeGuidedTrail.titleEn;
+      if (badgeEl) badgeEl.textContent = `${stepIdx + 1} / ${activeGuidedTrail.steps.length}`;
+      if (noteEl) noteEl.textContent = isPt ? step.notePt : step.noteEn;
+      if (nextBtn) {
+        const isLast = stepIdx >= activeGuidedTrail.steps.length - 1;
+        nextBtn.textContent = isLast ? t("guidedTrailDoneStep") : t("guidedTrailNextStep");
+        nextBtn.disabled = isLast;
+      }
+      banner.style.display = "flex";
+    } else {
+      banner.style.display = "none";
+    }
   }
 }
 
@@ -3510,6 +3720,10 @@ if (bookmarkVerseBtn) {
 if (clearBookmarksBtn) {
   clearBookmarksBtn.addEventListener("click", clearAllBookmarks);
 }
+const printStudySheetBtn = document.getElementById("printStudySheetBtn");
+if (printStudySheetBtn) {
+  printStudySheetBtn.addEventListener("click", printStudySheet);
+}
 tutorialTabs.forEach((tab, idx) => {
   tab.addEventListener("click", () => {
     setTutorialTab(idx);
@@ -3763,6 +3977,7 @@ function updateUILanguage() {
 
   renderAxis();
   renderFeaturedPills();
+  renderGuidedTrails();
   if (currentViewMode === "threads") {
     renderThreadsChapter(false);
   }
@@ -3817,7 +4032,8 @@ async function init() {
       fetch(`${dataPrefix}data/verses_pt.json`),
       fetch(`${dataPrefix}data/literary_structures.json`),
       fetch(`${dataPrefix}data/external_verses.json`),
-      fetch(`${dataPrefix}data/study_resources.json`)
+      fetch(`${dataPrefix}data/study_resources.json`),
+      fetch(`${dataPrefix}data/guided_trails.json`)
     ]);
 
     for (const res of responses) {
@@ -3826,7 +4042,7 @@ async function init() {
       }
     }
 
-    const [booksRes, internalRes, externalRes, versesEnRes, versesPtRes, structuresRes, extVersesRes, studyRes] = responses;
+    const [booksRes, internalRes, externalRes, versesEnRes, versesPtRes, structuresRes, extVersesRes, studyRes, trailsRes] = responses;
     books = await booksRes.json();
     internalLinks = await internalRes.json();
     externalLinks = await externalRes.json();
@@ -3836,6 +4052,7 @@ async function init() {
     literaryStructures = await structuresRes.json();
     externalVerses = await extVersesRes.json();
     studyResources = await studyRes.json();
+    guidedTrails = await trailsRes.json();
 
     // Precompute topic sets on all links for zero-alloc hot loop rendering
     internalLinks.forEach(computeLinkTopics);
@@ -3953,8 +4170,11 @@ async function init() {
 
     const studyTrailBackBtn = document.getElementById("studyTrailBackBtn");
     const studyTrailClearBtn = document.getElementById("studyTrailClearBtn");
+    const guidedTrailNextBtn = document.getElementById("guidedTrailNextBtn");
     if (studyTrailBackBtn) studyTrailBackBtn.addEventListener("click", () => jumpToTrailIndex(trailIndex - 1));
     if (studyTrailClearBtn) studyTrailClearBtn.addEventListener("click", clearStudyTrail);
+    if (guidedTrailNextBtn) guidedTrailNextBtn.addEventListener("click", () => jumpToTrailIndex(trailIndex + 1));
+    renderGuidedTrails();
 
     if (paramBook) {
       zoomToBook(paramBook);
