@@ -2,6 +2,18 @@ import { inject } from '@vercel/analytics';
 import { t, getLang, setLang, getBookDisplayName, getBookShortDisplayName, getBibleBookDisplayName, getExternalRefDisplayName, getExternalWorkDisplayName, getConnectionTypeDisplayName } from "./i18n.js";
 import { icons } from "./icons.js";
 import { generateVerseCard } from "./shareCard.js";
+import {
+  BOOKMARKS_STORAGE_KEY,
+  BOOKMARK_META_STORAGE_KEY,
+  STUDY_TRAIL_STORAGE_KEY,
+  MAX_STUDY_TRAIL,
+  parseBookmarkIds,
+  readBookmarkMetaMap,
+  extractVerseMeta,
+  updateVerseMeta,
+  pushTrailStep,
+  getActiveGuidedStep
+} from "./studyHelpers.js";
 
 // Initialize Vercel Analytics
 inject();
@@ -22,8 +34,6 @@ let verseStructuresMap = new Map(); // verseId -> array of structure objects
 let studyResources = [];
 let guidedTrails = [];
 let activeGuidedTrail = null;
-const STUDY_TRAIL_STORAGE_KEY = "bom_study_trail_v1";
-const MAX_STUDY_TRAIL = 20;
 let studyTrail = [];
 let trailIndex = -1;
 
@@ -718,8 +728,6 @@ function closeComparisonModal() {
 }
 
 // --- Scripture Bookmarks & Study Notebook (localStorage) ---
-const BOOKMARKS_STORAGE_KEY = "app_bookmarks";
-const BOOKMARK_META_STORAGE_KEY = "app_bookmark_meta_v1";
 let activeNotebookFolder = "all";
 
 const NOTEBOOK_FOLDERS = [
@@ -730,55 +738,12 @@ const NOTEBOOK_FOLDERS = [
   { id: "general", key: "notebookFolderGeneral" }
 ];
 
-function getBookmarkMetaMap() {
-  if (typeof localStorage === "undefined") return {};
-  try {
-    const raw = localStorage.getItem(BOOKMARK_META_STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : {};
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
-  } catch (e) {
-    return {};
-  }
-}
-
-function saveBookmarkMetaMap(meta) {
-  if (typeof localStorage === "undefined") return;
-  try {
-    localStorage.setItem(BOOKMARK_META_STORAGE_KEY, JSON.stringify(meta));
-  } catch (e) {}
-}
-
 function getVerseNotebookMeta(verseId) {
-  const map = getBookmarkMetaMap();
-  const entry = map[String(verseId)];
-  return {
-    folder: entry?.folder || "general",
-    note: typeof entry?.note === "string" ? entry.note : ""
-  };
-}
-
-function setVerseNotebookMeta(verseId, patch) {
-  const map = getBookmarkMetaMap();
-  const cur = getVerseNotebookMeta(verseId);
-  map[String(verseId)] = { ...cur, ...patch };
-  saveBookmarkMetaMap(map);
-}
-
-function getFolderLabel(folderId) {
-  const found = NOTEBOOK_FOLDERS.find(f => f.id === folderId);
-  return found ? t(found.key) : t("notebookFolderGeneral");
+  return extractVerseMeta(verseId, readBookmarkMetaMap());
 }
 
 function getSavedBookmarks() {
-  if (typeof localStorage === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
-    if (!raw) return [];
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr.filter(id => Number.isInteger(id) && id >= 1 && id <= 6604) : [];
-  } catch (e) {
-    return [];
-  }
+  return parseBookmarkIds();
 }
 
 function saveBookmarks(ids) {
@@ -815,7 +780,9 @@ function removeBookmark(verseId) {
 function clearAllBookmarks() {
   if (confirm(t("bookmarksConfirmClear"))) {
     saveBookmarks([]);
-    saveBookmarkMetaMap({});
+    if (typeof localStorage !== "undefined") {
+      try { localStorage.removeItem(BOOKMARK_META_STORAGE_KEY); } catch (e) {}
+    }
     updateBookmarksUI();
     if (bookmarksModal && bookmarksModal.style.display !== "none") {
       renderBookmarksList();
@@ -852,13 +819,15 @@ function printStudySheet() {
 
   const isPt = getLang() === "pt";
   const dateStr = new Date().toLocaleDateString(isPt ? "pt-BR" : "en-US");
-  const filterTitle = activeNotebookFolder === "all" ? "" : ` — ${getFolderLabel(activeNotebookFolder)}`;
+  const filterMeta = NOTEBOOK_FOLDERS.find(f => f.id === activeNotebookFolder);
+  const filterTitle = activeNotebookFolder === "all" || !filterMeta ? "" : ` — ${t(filterMeta.key)}`;
 
   const itemsHtml = filtered.map(id => {
     const v = verses[id - 1];
     if (!v) return "";
     const meta = getVerseNotebookMeta(id);
-    const folderLabel = getFolderLabel(meta.folder);
+    const folderEntry = NOTEBOOK_FOLDERS.find(f => f.id === meta.folder);
+    const folderLabel = t(folderEntry ? folderEntry.key : "notebookFolderGeneral");
     return `
       <article class="print-sheet-item">
         <div class="print-sheet-item-head">
@@ -878,6 +847,8 @@ function printStudySheet() {
     </header>
     <div class="print-sheet-list">${itemsHtml}</div>
   `;
+  document.body.classList.add("is-printing-sheet");
+  window.addEventListener("afterprint", () => document.body.classList.remove("is-printing-sheet"), { once: true });
   window.print();
 }
 
@@ -986,10 +957,10 @@ function renderBookmarksList() {
 
   bookmarksBody.querySelectorAll(".bookmark-folder-select").forEach(sel => {
     sel.addEventListener("click", (e) => e.stopPropagation());
-    sel.addEventListener("change", (e) => {
+    sel.addEventListener("change", () => {
       const mId = parseInt(sel.dataset.metaId, 10);
       if (mId) {
-        setVerseNotebookMeta(mId, { folder: sel.value });
+        updateVerseMeta(mId, { folder: sel.value });
         renderBookmarksList();
       }
     });
@@ -999,7 +970,7 @@ function renderBookmarksList() {
     ta.addEventListener("click", (e) => e.stopPropagation());
     ta.addEventListener("input", () => {
       const mId = parseInt(ta.dataset.noteId, 10);
-      if (mId) setVerseNotebookMeta(mId, { note: ta.value });
+      if (mId) updateVerseMeta(mId, { note: ta.value });
     });
   });
 
@@ -2520,14 +2491,14 @@ function saveStudyTrail() {
 }
 
 function pushToStudyTrail(verseId) {
-  if (trailIndex >= 0 && studyTrail[trailIndex]?.verseId === verseId) return;
-  studyTrail = studyTrail.slice(0, trailIndex + 1);
-  studyTrail.push({ verseId });
-  if (studyTrail.length > MAX_STUDY_TRAIL) {
-    studyTrail.shift();
-  }
-  trailIndex = studyTrail.length - 1;
+  const hadTrail = !!activeGuidedTrail;
+  const next = pushTrailStep({ studyTrail, trailIndex, activeGuidedTrail }, verseId, MAX_STUDY_TRAIL);
+  if (next.studyTrail === studyTrail && next.trailIndex === trailIndex) return;
+  studyTrail = next.studyTrail;
+  trailIndex = next.trailIndex;
+  activeGuidedTrail = next.activeGuidedTrail;
   saveStudyTrail();
+  if (hadTrail) renderGuidedTrails();
 }
 
 function jumpToTrailIndex(idx) {
@@ -2553,10 +2524,12 @@ function renderStudyTrail() {
   const backText = document.getElementById("studyTrailBackText");
   const labelEl = document.getElementById("studyTrailLabel");
   const clearBtn = document.getElementById("studyTrailClearBtn");
+  const banner = document.getElementById("guidedTrailBanner");
   if (!bar || !chipsContainer) return;
 
   if (studyTrail.length < 2) {
     bar.style.display = "none";
+    if (banner) banner.style.display = "none";
     return;
   }
 
@@ -2599,13 +2572,11 @@ function renderStudyTrail() {
   }
 
   // Render active Guided Doctrinal Trail banner if in a guided trail
-  const banner = document.getElementById("guidedTrailBanner");
   if (banner) {
-    const curVerseId = studyTrail[trailIndex]?.verseId;
-    const stepIdx = activeGuidedTrail ? activeGuidedTrail.steps.findIndex(s => s.verseId === curVerseId) : -1;
-    if (activeGuidedTrail && stepIdx !== -1) {
+    const activeStep = getActiveGuidedStep(activeGuidedTrail, studyTrail, trailIndex);
+    if (activeStep) {
       const isPt = getLang() === "pt";
-      const step = activeGuidedTrail.steps[stepIdx];
+      const { stepIdx, step } = activeStep;
       const titleEl = document.getElementById("guidedTrailBannerTitle");
       const badgeEl = document.getElementById("guidedTrailStepBadge");
       const noteEl = document.getElementById("guidedTrailBannerNote");
@@ -2836,7 +2807,7 @@ function selectVerse(verseId, shouldScroll = false, options = {}) {
   renderStudyResources(verseObj);
 
   // Update pills highlight if matching
-  document.querySelectorAll(".featured-pill").forEach((pill, idx) => {
+  document.querySelectorAll("#featuredPillsRow .featured-pill").forEach((pill, idx) => {
     if (FEATURED_CONNECTIONS[idx]?.verseId === verseId) {
       pill.classList.add("active");
     } else {

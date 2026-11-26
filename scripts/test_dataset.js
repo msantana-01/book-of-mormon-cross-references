@@ -1,6 +1,16 @@
 import fs from "fs";
 import path from "path";
 import assert from "assert";
+import {
+  BOOKMARKS_STORAGE_KEY,
+  BOOKMARK_META_STORAGE_KEY,
+  parseBookmarkIds,
+  readBookmarkMetaMap,
+  extractVerseMeta,
+  updateVerseMeta,
+  pushTrailStep,
+  getActiveGuidedStep
+} from "../src/studyHelpers.js";
 
 const DATA_DIR = path.resolve("public/data");
 
@@ -147,5 +157,33 @@ guidedTrails.forEach((tr, idx) => {
   });
 });
 console.log(`✓ guided_trails.json: ${guidedTrails.length} guided study trails validated`);
+
+// 8. Check Study Notebook Storage & Guided Trail State Transitions
+const store = new Map();
+let metaReads = 0;
+const fakeStorage = {
+  getItem: (k) => { if (k === BOOKMARK_META_STORAGE_KEY) metaReads++; return store.get(k) ?? null; },
+  setItem: (k, v) => store.set(k, v)
+};
+
+store.set(BOOKMARKS_STORAGE_KEY, "[1, \"bad\", 0, 6605, 1768]");
+assert.deepStrictEqual(parseBookmarkIds(fakeStorage), [1, 1768], "Must filter invalid bookmark verseIds");
+store.set(BOOKMARK_META_STORAGE_KEY, "{corrupt json");
+assert.deepStrictEqual(readBookmarkMetaMap(fakeStorage), {}, "Must recover cleanly from corrupt meta JSON");
+
+metaReads = 0;
+const updatedMap = updateVerseMeta(1768, { folder: "talk", note: "Put off natural man" }, fakeStorage);
+assert.strictEqual(metaReads, 1, "updateVerseMeta must read storage only once per edit");
+assert.deepStrictEqual(extractVerseMeta(1768, updatedMap), { folder: "talk", note: "Put off natural man" });
+
+const sampleTrail = guidedTrails[0];
+const startedSteps = sampleTrail.steps.map(s => ({ verseId: s.verseId }));
+assert.ok(getActiveGuidedStep(sampleTrail, startedSteps, 0)?.stepIdx === 0, "Should resolve step 0 on active guided trail");
+assert.strictEqual(getActiveGuidedStep(sampleTrail, [{ verseId: sampleTrail.steps[0].verseId }], 0), null, "Must hide banner after trail is cleared to 1 item");
+
+const leftTrail = pushTrailStep({ studyTrail: startedSteps, trailIndex: 0, activeGuidedTrail: sampleTrail }, sampleTrail.steps[3].verseId);
+assert.strictEqual(leftTrail.activeGuidedTrail, null, "Jumping via search/link must clear activeGuidedTrail");
+assert.strictEqual(getActiveGuidedStep(leftTrail.activeGuidedTrail, leftTrail.studyTrail, leftTrail.trailIndex), null, "Jumping onto another step's verse must not show a dead Next Step banner");
+console.log("✓ studyHelpers.js: Notebook storage & guided trail transitions validated");
 
 console.log("\n✅ All data integrity checks PASSED successfully!");
