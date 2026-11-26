@@ -289,5 +289,81 @@
         "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/51"
       }
     ]
+  },
+  {
+    "id": "jarom-1-faithful-stewards",
+    "book": "Jarom",
+    "chapter": 1,
+    "verseStart": 1,
+    "verseEnd": 15,
+    "titleEn": "Jarom's Record: Looking Forward to the Messiah",
+    "titlePt": "Registro de Jarom: Olhar Adiante para o Messias",
+    "summaryEn": "Come, Follow Me (Enos–Words of Mormon): Prophets, priests, and teachers preserve faith in the Messiah centuries before His birth.",
+    "summaryPt": "Vem, e Segue-Me (Enos–Palavras de Mórmon): Profetas, sacerdotes e mestres preservam a fé no Messias séculos antes de Seu nascimento.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Enos–Words of Mormon",
+        "labelPt": "Vem, e Segue-Me: Enos–Palavras de Mórmon",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/16"
+      }
+    ]
+  },
+  {
+    "id": "omni-1-come-unto-christ",
+    "book": "Omni",
+    "chapter": 1,
+    "verseStart": 1,
+    "verseEnd": 30,
+    "titleEn": "Omni: From Zarahemla to King Benjamin",
+    "titlePt": "Ômni: De Zaraenla ao Rei Benjamim",
+    "summaryEn": "Come, Follow Me (Enos–Words of Mormon): Preserving the plates across generations and Amaleki's invitation to offer our whole souls to Christ.",
+    "summaryPt": "Vem, e Segue-Me (Enos–Palavras de Mórmon): A preservação das placas por gerações e o convite de Amaléqui para oferecer toda a alma a Cristo.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Enos–Words of Mormon",
+        "labelPt": "Vem, e Segue-Me: Enos–Palavras de Mórmon",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/16"
+      }
+    ]
+  },
+  {
+    "id": "words-of-mormon-1-wise-purpose",
+    "book": "Words of Mormon",
+    "chapter": 1,
+    "verseStart": 1,
+    "verseEnd": 18,
+    "titleEn": "Words of Mormon: The Wise Purpose of the Small Plates",
+    "titlePt": "Palavras de Mórmon: O Sábio Propósito das Placas Menores",
+    "summaryEn": "Come, Follow Me (Enos–Words of Mormon): Mormon follows the whisperings of the Spirit to join Nephi's small plates to his abridgment.",
+    "summaryPt": "Vem, e Segue-Me (Enos–Palavras de Mórmon): Mórmon segue os sussurros do Espírito ao unir as placas menores de Néfi ao seu resumo.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: Enos–Words of Mormon",
+        "labelPt": "Vem, e Segue-Me: Enos–Palavras de Mórmon",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/16"
+      }
+    ]
+  },
+  {
+    "id": "4-nephi-1-zion-unity",
+    "book": "4 Nephi",
+    "chapter": 1,
+    "verseStart": 1,
+    "verseEnd": 49,
+    "titleEn": "4 Nephi: Two Centuries of Zion Unity",
+    "titlePt": "4 Néfi: Dois Séculos de União em Sião",
+    "summaryEn": "Come, Follow Me (3 Nephi 27–4 Nephi): How the love of God dissolved all divisions and created the happiest people ever created by the hand of God.",
+    "summaryPt": "Vem, e Segue-Me (3 Néfi 27–4 Néfi): Como o amor de Deus dissolveu todas as divisões e gerou o povo mais feliz já criado pela mão de Deus.",
+    "links": [
+      {
+        "labelEn": "Come, Follow Me: 3 Nephi 27–4 Nephi",
+        "labelPt": "Vem, e Segue-Me: 3 Néfi 27–4 Néfi",
+        "type": "manual",
+        "urlBase": "https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-book-of-mormon-2024/43"
+      }
+    ]
   }
 ]

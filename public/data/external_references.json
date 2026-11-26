@@ -7461,5 +7461,71 @@
     "note": "Moroni exhorts readers not to deny the gifts of God, which differ in administration but come by the same Spirit, just as Paul teaches in 1 Corinthians 12.",
     "notePt": "Morôni exorta os leitores a não negarem os dons de Deus, que diferem em operação mas procedem do mesmo Espírito, assim como ensina Paulo em 1 Coríntios 12.",
     "category": "external"
+  },
+  {
+    "source": 1638,
+    "sourceRef": "Jarom 1:11",
+    "externalRef": "Galatians 3:24",
+    "externalWork": "Bible-NT",
+    "type": "doctrine",
+    "topics": "christ,covenant",
+    "note": "Like Paul teaching that the law was a 'schoolmaster to bring us unto Christ,' Jarom shows the Nephites kept the law of Moses precisely to point their souls to the Messiah.",
+    "notePt": "Assim como Paulo ensina que a lei foi um 'aio para nos conduzir a Cristo', Jarom mostra que os nefitas guardavam a lei de Moisés exatamente para apontar sua fé ao Messias.",
+    "category": "external"
+  },
+  {
+    "source": 1676,
+    "sourceRef": "Words of Mormon 1:4",
+    "externalRef": "Hebrews 10:1",
+    "externalWork": "Bible-NT",
+    "type": "typology",
+    "topics": "christ,prophecy",
+    "note": "Mormon values the small plates for their prophecies of Christ, echoing Hebrews that the ancient law held 'a shadow of good things to come.'",
+    "notePt": "Mórmon preza as placas menores por suas profecias sobre Cristo, ecoando Hebreus ao afirmar que a lei antiga tinha 'a sombra dos bens futuros'.",
+    "category": "external"
+  },
+  {
+    "source": 1690,
+    "sourceRef": "Words of Mormon 1:18",
+    "externalRef": "Psalm 127:1",
+    "externalWork": "Bible-OT",
+    "type": "parallel",
+    "topics": "righteousness,peace",
+    "note": "King Benjamin achieves lasting peace only because he labors 'in the strength of the Lord,' reflecting the psalmist's truth that except the Lord keep the city, watchmen labor in vain.",
+    "notePt": "O rei Benjamim alcança paz duradoura por trabalhar na força do Senhor, refletindo o salmo de que, se o Senhor não guardar a cidade, em vão vigia a sentinela.",
+    "category": "external"
+  },
+  {
+    "source": 5735,
+    "sourceRef": "4 Nephi 1:3",
+    "externalRef": "Acts 2:44",
+    "externalWork": "Bible-NT",
+    "type": "parallel",
+    "topics": "zion,unity",
+    "note": "The Nephite Zion 'had all things common among them,' echoing the early Jerusalem church described in Acts where believers shared all things in unity.",
+    "notePt": "A Sião nefita 'tinha todas as coisas em comum', ecoando a Igreja primitiva em Jerusalém descrita em Atos, onde os crentes compartilhavam tudo em união.",
+    "category": "external"
+  },
+  {
+    "source": 5749,
+    "sourceRef": "4 Nephi 1:17",
+    "externalRef": "John 17:21",
+    "externalWork": "Bible-NT",
+    "type": "fulfillment",
+    "topics": "zion,unity",
+    "note": "Two centuries of complete unity ('they were in one, the children of Christ') embody the Savior's intercessory prayer 'that they all may be one.'",
+    "notePt": "Dois séculos de plena unidade ('estavam unidos... filhos de Cristo') corporificam a oração intercessória do Salvador 'para que todos sejam um'.",
+    "category": "external"
+  },
+  {
+    "source": 5749,
+    "sourceRef": "4 Nephi 1:17",
+    "externalRef": "Psalm 133:1",
+    "externalWork": "Bible-OT",
+    "type": "parallel",
+    "topics": "zion,peace",
+    "note": "A society free of envy, strife, or divisions vividly fulfills the psalm: 'how good and how pleasant it is for brethren to dwell together in unity.'",
+    "notePt": "Uma sociedade livre de inveja, contendas ou divisões exemplifica o salmo: 'quão bom e quão suave é que os irmãos vivam em união'.",
+    "category": "external"
   }
 ]

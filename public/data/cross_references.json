@@ -601,5 +601,155 @@
     "note": "Mormon defines charity's attributes—suffering long, kind, not puffed up—and declares it the pure love of Christ that endureth forever.",
     "notePt": "Mórmon define os atributos da caridade — sofredora, benigna, não se ensoberbece — e a declara o puro amor de Cristo que dura para sempre.",
     "category": "internal"
+  },
+  {
+    "source": 1629,
+    "target": 518,
+    "sourceRef": "Jarom 1:2",
+    "targetRef": "1 Nephi 19:3",
+    "type": "parallel",
+    "note": "Jarom honors Nephi's charge to reserve the small plates for sacred ministry and the benefit of their Lamanite brethren.",
+    "notePt": "Jarom cumpre a incumbência de Néfi de reservar as placas menores para o ministério sagrado e para benefício de seus irmãos lamanitas.",
+    "category": "internal"
+  },
+  {
+    "source": 1629,
+    "target": 1613,
+    "sourceRef": "Jarom 1:2",
+    "targetRef": "Enos 1:13",
+    "type": "parallel",
+    "note": "Like his father Enos, Jarom keeps the record so that future Lamanites may receive the promises and knowledge of Christ.",
+    "notePt": "Assim como seu pai Enos, Jarom preserva o registro para que os futuros lamanitas recebam as promessas e o conhecimento de Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 1638,
+    "target": 1215,
+    "sourceRef": "Jarom 1:11",
+    "targetRef": "2 Nephi 25:25",
+    "type": "doctrine",
+    "note": "Prophets and priests teach the people to keep the law of Moses while looking forward in faith to the coming Messiah 'as though he already was.'",
+    "notePt": "Profetas e sacerdotes ensinam o povo a guardar a lei de Moisés olhando com fé para o Messias vindouro 'como se ele já tivesse vindo'.",
+    "category": "internal"
+  },
+  {
+    "source": 1656,
+    "target": 1692,
+    "sourceRef": "Omni 1:14",
+    "targetRef": "Mosiah 1:2",
+    "type": "narrative",
+    "note": "Mosiah brings the plates of brass when uniting with the people of Zarahemla, preserving the scriptures and language King Benjamin later teaches his sons.",
+    "notePt": "Mosias traz as placas de latão ao unir-se ao povo de Zaraenla, preservando as escrituras e a língua que o rei Benjamim ensina a seus filhos.",
+    "category": "internal"
+  },
+  {
+    "source": 1662,
+    "target": 1874,
+    "sourceRef": "Omni 1:20",
+    "targetRef": "Mosiah 8:13",
+    "type": "parallel",
+    "note": "Mosiah translates the Jaredite stone record by the gift and power of God—the same seeric gift Ammon later describes to King Limhi.",
+    "notePt": "Mosias traduz o registro jaredita gravado em pedra pelo dom e poder de Deus — o mesmo dom de vidente que Amon descreve ao rei Lími.",
+    "category": "internal"
+  },
+  {
+    "source": 1667,
+    "target": 1682,
+    "sourceRef": "Omni 1:25",
+    "targetRef": "Words of Mormon 1:10",
+    "type": "narrative",
+    "note": "Amaleki closes the small plates by entrusting them to King Benjamin—the exact handoff Mormon later discovers and bridges into the main record.",
+    "notePt": "Amaléqui encerra as placas menores entregando-as ao rei Benjamim — exatamente a entrega que Mórmon encontra e conecta ao registro principal.",
+    "category": "internal"
+  },
+  {
+    "source": 1668,
+    "target": 6602,
+    "sourceRef": "Omni 1:26",
+    "targetRef": "Moroni 10:32",
+    "type": "exhortation",
+    "note": "Amaleki's final plea—'come unto Christ... and offer your whole souls as an offering unto him'—resonates with Moroni's closing invitation at the end of the book.",
+    "notePt": "O apelo final de Amaléqui — 'vinde a Cristo... e oferecei toda a vossa alma como uma oferta a ele' — ecoa o convite final de Morôni no encerramento do livro.",
+    "category": "internal"
+  },
+  {
+    "source": 1676,
+    "target": 1214,
+    "sourceRef": "Words of Mormon 1:4",
+    "targetRef": "2 Nephi 25:24",
+    "type": "doctrine",
+    "note": "Mormon delights in the prophecies of Christ's coming preserved on the small plates, which consistently point every ordinance to the Savior.",
+    "notePt": "Mórmon alegra-se com as profecias da vinda de Cristo nas placas menores, que apontam cada ordenança diretamente para o Salvador.",
+    "category": "internal"
+  },
+  {
+    "source": 1679,
+    "target": 3605,
+    "sourceRef": "Words of Mormon 1:7",
+    "targetRef": "Alma 37:14",
+    "type": "doctrine",
+    "note": "Mormon includes the small plates 'for a wise purpose' whispered by the Spirit—the same divine purpose Alma testifies governs all sacred records.",
+    "notePt": "Mórmon inclui as placas menores 'com um sábio propósito' sussurrado pelo Espírito — o mesmo propósito divino que Alma testifica reger todos os registros sagrados.",
+    "category": "internal"
+  },
+  {
+    "source": 1689,
+    "target": 1709,
+    "sourceRef": "Words of Mormon 1:17",
+    "targetRef": "Mosiah 2:1",
+    "type": "narrative",
+    "note": "Words of Mormon bridges directly into King Benjamin's righteous reign and his temple gathering in Mosiah.",
+    "notePt": "Palavras de Mórmon faz a ponte direta para o reinado justo do rei Benjamim e sua assembleia no templo em Mosias.",
+    "category": "internal"
+  },
+  {
+    "source": 5744,
+    "target": 1214,
+    "sourceRef": "4 Nephi 1:12",
+    "targetRef": "2 Nephi 25:24",
+    "type": "fulfillment",
+    "note": "After Christ's ministry, the Nephites cease walking after the law of Moses, fulfilling Nephi's teaching that the law becomes dead in Christ.",
+    "notePt": "Após o ministério de Cristo, os nefitas deixam de seguir as ordenanças da lei de Moisés, cumprindo o ensino de Néfi de que a lei se cumpre em Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 5749,
+    "target": 1253,
+    "sourceRef": "4 Nephi 1:17",
+    "targetRef": "2 Nephi 26:33",
+    "type": "fulfillment",
+    "note": "For nearly two centuries there were 'neither Lamanites, nor any manner of -ites; but they were in one'—living out Nephi's witness that all are alike unto God.",
+    "notePt": "Por quase dois séculos não houve 'lamanitas nem qualquer espécie de itas; mas eram todos um' — vivendo na prática o testemunho de Néfi de que todos são iguais perante Deus.",
+    "category": "internal"
+  },
+  {
+    "source": 5756,
+    "target": 5794,
+    "sourceRef": "4 Nephi 1:24",
+    "targetRef": "Mormon 1:13",
+    "type": "narrative",
+    "note": "Pride, costly apparel, and class divisions fracture Zion after 200 years, setting in motion the spiritual decline Mormon later witnesses.",
+    "notePt": "O orgulho, as vestimentas custosas e as divisões em classes rompem Sião após 200 anos, iniciando o declínio espiritual que Mórmon mais tarde presencia.",
+    "category": "internal"
+  },
+  {
+    "source": 5762,
+    "target": 5706,
+    "sourceRef": "4 Nephi 1:30",
+    "targetRef": "3 Nephi 28:25",
+    "type": "parallel",
+    "note": "The wicked persecute the three translated disciples of Jesus, who remain protected by God to minister until the Savior returns.",
+    "notePt": "Os iníquos perseguem os três discípulos trasladados de Jesus, que permanecem protegidos por Deus para ministrar até a volta do Salvador.",
+    "category": "internal"
+  },
+  {
+    "source": 5780,
+    "target": 5783,
+    "sourceRef": "4 Nephi 1:48",
+    "targetRef": "Mormon 1:2",
+    "type": "narrative",
+    "note": "Ammaron hides the sacred records unto the Lord and charges young Mormon to retrieve the plates of Nephi when he reaches age twenty-four.",
+    "notePt": "Amaron oculta os registros sagrados para o Senhor e incumbe o jovem Mórmon de recolher as placas de Néfi aos vinte e quatro anos.",
+    "category": "internal"
   }
 ]
