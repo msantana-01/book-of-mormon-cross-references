@@ -2321,7 +2321,9 @@ function loadStudyTrail() {
     if (!raw) return;
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed?.items)) {
-      studyTrail = parsed.items.filter(item => item && item.verseId >= 1 && item.verseId <= 6604).slice(-MAX_STUDY_TRAIL);
+      studyTrail = parsed.items
+        .filter(item => item && Number.isInteger(item.verseId) && item.verseId >= 1 && item.verseId <= 6604)
+        .slice(-MAX_STUDY_TRAIL);
       const idx = typeof parsed.index === "number" ? parsed.index : studyTrail.length - 1;
       trailIndex = Math.max(-1, Math.min(studyTrail.length - 1, idx));
     }
@@ -2405,8 +2407,11 @@ function renderStudyTrail() {
   });
 
   const activeChip = chipsContainer.querySelector(".study-trail-chip.active");
-  if (activeChip && typeof activeChip.scrollIntoView === "function") {
-    activeChip.scrollIntoView({ inline: "nearest", block: "nearest" });
+  if (activeChip) {
+    chipsContainer.scrollLeft = Math.max(
+      0,
+      activeChip.offsetLeft - (chipsContainer.clientWidth - activeChip.offsetWidth) / 2
+    );
   }
 }
 
