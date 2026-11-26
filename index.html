@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book of Mormon Cross-References | Interactive Arc Diagram</title>
+  <meta name="description" content="Explore all 6,604 verses and cross-references of the Book of Mormon with an interactive arc visualization, biblical parallels, and chapter study." />
+  <meta name="theme-color" content="#d4af37" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="LdM Conexões" />
+  
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  
+  <!-- Typography per UI/UX Pro Max Scholarly Editorial System -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <script type="module" crossorigin src="./assets/index-bZ-DwM_Z.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-c1C70bho.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <h1 id="appTitle">The Book of Mormon</h1>
+        <p id="appSubtitle">Interactive Visualizer of Cross-References, Prophecies & Biblical Parallels</p>
+      </div>
+      <div class="header-actions">
+        <div class="badges">
+          <span class="badge badge-gold" id="badgeBooks">15 Books</span>
+          <span class="badge" id="badgeChapters">239 Chapters</span>
+          <span class="badge" id="badgeVerses">6,604 Verses</span>
+        </div>
+        <button id="bookmarksBtn" class="bookmarks-btn" title="Saved Scripture Bookmarks" aria-haspopup="dialog">
+          <svg class="ui-icon ui-icon-gold" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span id="bookmarksBtnText">Bookmarks</span>
+          <span class="badge-count" id="bookmarksCountBadge" style="display: none;">0</span>
+        </button>
+        <button id="howToUseBtn" class="how-to-use-btn" title="How to Use & Explore" aria-haspopup="dialog">
+          <svg class="ui-icon ui-icon-gold" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span id="howToUseText">How to Use</span>
+        </button>
+        <button id="langToggleBtn" class="lang-btn" aria-label="Toggle Interface Language">
+          <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span id="langText">Português</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Controls Bar -->
+  <section class="controls-bar" aria-label="Filter Controls">
+    <!-- Top Row: Expanded Search Bar -->
+    <div class="controls-row controls-row-search">
+      <div class="search-box" id="searchBoxContainer">
+        <span class="search-icon">
+          <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search verse (e.g. Alma 32:21, 1 Ne 3:7) or keyword..." aria-label="Search Scripture Verse" autocomplete="off" />
+        <button id="searchClearBtn" class="search-clear-btn" style="display: none;" title="Clear Search" aria-label="Clear Search">✕</button>
+        <div id="searchResultsDropdown" class="search-results-dropdown" style="display: none;" role="listbox" aria-label="Search Results"></div>
+      </div>
+    </div>
+
+    <!-- Bottom Row: Diagram Style on Left, Filter & Book Selection on Right -->
+    <div class="controls-row controls-row-actions">
+      <!-- View Mode Selector (Dual Bridge / Radial Ring / Threads) on Left -->
+      <div class="view-mode-container" role="region" aria-label="View Mode Switcher">
+        <span class="view-mode-label" id="viewModeLabel">Diagram Style:</span>
+        <div class="btn-group" role="group" aria-label="Choose Diagram Visualization Style">
+          <button class="view-btn active" data-view="dual" id="btnViewDual" title="Bible on top, Book of Mormon on bottom with connecting beams">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5"></path><path d="M20 19V5"></path><path d="M4 10h16"></path><path d="M4 19c4-6 12-6 16 0"></path></svg>
+            <span id="labelViewDual">Bridge (Bible ↔ BOM)</span>
+          </button>
+          <button class="view-btn" data-view="radial" id="btnViewRadial" title="Circular mandala ring with chords">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m12 3 3 9-6-3 9 3-6-9"></path></svg>
+            <span id="labelViewRadial">Sacred Ring</span>
+          </button>
+          <button class="view-btn" data-view="threads" id="btnViewThreads" title="Verse-by-verse chapter reading with connecting threads to scriptures">
+            <svg class="ui-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h6a4 4 0 0 1 4 4v10"></path><path d="M21 19h-6a4 4 0 0 1-4-4V5"></path><circle cx="3" cy="5" r="1.5"></circle><circle cx="21" cy="19" r="1.5"></circle></svg>
+            <span id="labelViewThreads">Threads</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters & Selects Aligned to Right -->
+      <button type="button" id="mobileFiltersToggleBtn" class="mobile-filters-toggle-btn" aria-expanded="false" aria-controls="filterGroup">
+        <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+        <span id="mobileFiltersToggleText">Filters</span>
+      </button>
+      <div class="filter-group" id="filterGroup">
+        <!-- Arc Color Mode Toggle (Books vs Themes) -->
+        <div class="btn-group" role="group" aria-label="Arc Color Mode">
+          <button class="filter-btn active" id="btnColorBooks" data-color-mode="book" title="Color arcs by Book of Mormon books">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span id="labelColorBooks">Livros</span>
+          </button>
+          <button class="filter-btn" id="btnColorThemes" data-color-mode="theme" title="Color arcs by doctrinal theme">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+            <span id="labelColorThemes">Temas</span>
+          </button>
+        </div>
+
+        <div class="btn-group" role="group" aria-label="Connection Type Filter">
+          <button class="filter-btn active" data-filter="all" id="btnFilterAll">All</button>
+          <button class="filter-btn" data-filter="internal" id="btnFilterInternal">Internal</button>
+          <button class="filter-btn" data-filter="external" id="btnFilterExternal">Biblical</button>
+        </div>
+        
+        <select id="topicSelect" class="select-input" aria-label="Filter by Doctrinal Theme">
+          <option value="all">All Doctrinal Themes</option>
+          <option value="prophecy">Prophecies & Fulfillments</option>
+          <option value="christ">Christ's Ministry & Visit</option>
+          <option value="faith">Faith & Repentance</option>
+          <option value="isaiah">Isaiah Quotations</option>
+          <option value="chiasmus">Chiasmus & Hebrew Poetry</option>
+          <option value="formulas">Prophetic Formulas ("And thus we see")</option>
+          <option value="hebraisms">Hebraisms & Semitic Idioms</option>
+        </select>
+
+        <select id="bookSelect" class="select-input" aria-label="Select Specific Book">
+          <option value="all">Whole Book of Mormon</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Doctrinal Theme Legend Bar (shown when Color Mode is 'theme') -->
+  <div id="themeLegendBar" class="theme-legend-bar" style="display: none;" role="region" aria-label="Doctrinal Theme Legend">
+    <span class="theme-legend-title" id="themeLegendTitle">Legenda de Temas:</span>
+    <div class="theme-legend-chips" id="themeLegendChips"></div>
+  </div>
+
+  <!-- Main View Area -->
+  <main>
+    <div class="canvas-wrapper">
+      <!-- Dual View Top Rail Title -->
+      <div id="dualTopLabelRow" class="dual-label-row">
+        <span class="dual-rail-title" id="bibleTopTitle">📖 The Holy Bible (Old & New Testament)</span>
+      </div>
+
+      <canvas id="arcCanvas"></canvas>
+      <div id="tooltip" role="tooltip" aria-hidden="true"></div>
+
+      <!-- Dual View Bottom Rail Title -->
+      <div id="dualBottomLabelRow" class="dual-label-row">
+        <span class="dual-rail-title" id="bomBottomTitle">📜 The Book of Mormon (15 Books)</span>
+        <button id="zoomResetBtn" class="zoom-reset-btn" style="display: none;" title="Reset view to all 15 books">
+          <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          <span id="zoomResetText">Reset to All 15 Books</span>
+        </button>
+      </div>
+
+      <!-- Axis bar containing the 15 books proportional segments -->
+      <div class="axis-container" id="axisContainer">
+        <div class="axis-bar" id="axisBar" title="Click or hover to browse books"></div>
+        <div class="book-labels-row" id="bookLabelsRow"></div>
+      </div>
+    </div>
+
+    <!-- Threads Reading & Cross-Reference Stage (Visible when Diagram Style = Threads) -->
+    <section id="threadsContainer" class="threads-container" style="display: none;" aria-label="Chapter Reading and Living Threads">
+      <!-- Chapter Navigation Header -->
+      <div class="threads-toolbar">
+        <div class="threads-nav-controls">
+          <button id="threadsPrevChBtn" class="tour-btn" title="Previous Chapter">
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span id="threadsPrevText">Prev Ch</span>
+          </button>
+
+          <div class="threads-select-group">
+            <select id="threadsBookSelect" class="select-input select-input-accent" aria-label="Select Book to Read"></select>
+            <select id="threadsChapterSelect" class="select-input select-input-accent" aria-label="Select Chapter"></select>
+          </div>
+
+          <button id="threadsNextChBtn" class="tour-btn" title="Next Chapter">
+            <span id="threadsNextText">Next Ch</span>
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+
+        <div class="threads-stats-area">
+          <span class="badge badge-gold badge-tabular" id="threadsStatsBadge">1 Nephi 1 • 20 Verses</span>
+        </div>
+      </div>
+
+      <!-- Threads Dual-Pane Stage -->
+      <div class="threads-stage" id="threadsStage">
+        <!-- Left: Chapter Reading Pane -->
+        <div class="threads-reading-pane" id="threadsReadingPane" role="region" aria-label="Scripture Chapter Reading">
+          <div class="threads-chapter-header">
+            <h2 id="threadsChapterHeaderTitle">1 Nephi 1</h2>
+            <p id="threadsChapterHeaderSub" class="text-muted">Explore verse-by-verse cross-references and living prophetic threads</p>
+            <div id="threadsStudyResourceSlot" class="threads-study-resource-slot"></div>
+          </div>
+          <div class="threads-verses-list" id="threadsVersesList">
+            <!-- Populated dynamically with verse items -->
+          </div>
+        </div>
+
+        <!-- Right: Living Threads & Scripture Spine Canvas -->
+        <div class="threads-canvas-pane" id="threadsCanvasPane">
+          <div class="threads-spine-header">
+            <span id="threadsSpineHeaderTitle">Scripture Spine</span>
+            <span class="threads-hint" id="threadsHoverHintText">Hover or click to illuminate</span>
+          </div>
+          <div class="threads-canvas-box" id="threadsCanvasBox">
+            <canvas id="threadsCanvas"></canvas>
+            <div id="threadsSpineTooltip" class="threads-spine-tooltip" role="tooltip" aria-hidden="true" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Study Panel / Inspector -->
+    <section class="study-panel" id="studyPanel" aria-labelledby="selectedVerseRef">
+      <!-- Study Trail Breadcrumbs (shown when >= 2 verses visited) -->
+      <nav class="study-trail-bar" id="studyTrailBar" style="display: none;" aria-label="Study Research Trail">
+        <button type="button" id="studyTrailBackBtn" class="study-trail-btn" title="Step back in trail">
+          <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span id="studyTrailBackText">Back</span>
+        </button>
+        <span class="study-trail-label" id="studyTrailLabel">Trail:</span>
+        <div class="study-trail-chips" id="studyTrailChips" role="list"></div>
+        <button type="button" id="studyTrailClearBtn" class="study-trail-clear-btn" title="Clear study trail">Clear</button>
+      </nav>
+      <div class="guided-trail-banner" id="guidedTrailBanner" style="display: none;">
+        <div class="guided-trail-banner-top">
+          <span class="guided-trail-banner-title" id="guidedTrailBannerTitle"></span>
+          <div class="guided-trail-banner-actions">
+            <span class="guided-trail-step-badge" id="guidedTrailStepBadge">1 / 6</span>
+            <button type="button" id="guidedTrailNextBtn" class="guided-trail-next-btn">Next →</button>
+          </div>
+        </div>
+        <p class="guided-trail-banner-note" id="guidedTrailBannerNote"></p>
+      </div>
+      <div class="panel-header">
+        <h2 id="selectedVerseTitle">
+          <span id="selectedVerseRef">Select a Verse</span>
+          <span class="tag tag-book" id="selectedVerseBadge" style="display: none;">Active</span>
+          <button id="bookmarkVerseBtn" class="bookmark-verse-btn" title="Bookmark this verse" aria-label="Bookmark this verse">
+            <svg class="ui-icon bookmark-star-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </button>
+        </h2>
+        <div class="panel-header-actions">
+          <span class="badge badge-gold badge-tabular" id="connectionsCountBadge">0 Connections</span>
+          <button id="copyLinkBtn" class="copy-link-btn" title="Copy direct link to verse and language" aria-label="Copy verse link">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <span id="copyLinkText">Copy Link</span>
+          </button>
+          <button id="shareCardBtn" class="share-card-btn" title="Export scripture card as PNG">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span id="shareCardText">Save Card (PNG)</span>
+          </button>
+          <button id="backToDiagramBtn" class="back-to-diagram-btn" title="Back to reading & diagram">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            <span id="backToDiagramText">Back to Diagram</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="verse-text-box" id="verseTextBox">
+        Hover or click on any point along the scripture axis above to inspect verses and connected arcs.
+      </div>
+
+      <!-- Ancient Semitic Literary Structure Box (Chiasmus, Formulas, Hebraisms) -->
+      <div class="literary-structure-box" id="literaryStructureBox" style="display: none;">
+        <div class="structure-header">
+          <div class="structure-badge-row">
+            <span class="structure-type-badge" id="structureTypeBadge">📜 Quiasmo Hebraico</span>
+            <span class="structure-scope-badge" id="structureScopeBadge">Alma 36:1–30</span>
+          </div>
+          <h3 class="structure-title" id="structureTitle"></h3>
+          <p class="structure-desc" id="structureDesc"></p>
+        </div>
+
+        <!-- Chiastic Parallelism Tree view (when type is chiasmus) -->
+        <div class="chiastic-tree-container" id="chiasticTreeContainer" style="display: none;">
+          <div class="chiastic-tree-header">
+            <span id="chiasticTreeHeaderTitle">Estrutura Poética Invertida (Quiasmo)</span>
+            <span class="chiastic-tree-hint" id="chiasticTreeHint">Clique em qualquer par para navegar</span>
+          </div>
+          <div class="chiastic-tree-list" id="chiasticTreeList" role="list"></div>
+        </div>
+
+        <!-- Formula occurrences list / pills (when formula or hebraism) -->
+        <div class="structure-occurrences-container" id="structureOccurrencesContainer" style="display: none;">
+          <div class="structure-occurrences-header">
+            <span id="structureOccurrencesHeaderTitle">Ocorrências Desta Estrutura</span>
+            <span class="structure-occurrences-hint" id="structureOccurrencesHint">Versículos conectados</span>
+          </div>
+          <div class="structure-pills-list" id="structurePillsList" role="list"></div>
+        </div>
+      </div>
+
+      <!-- Curated Study Resources (Come, Follow Me / Official Manuals) -->
+      <div class="study-resources-box" id="studyResourcesBox" style="display: none;">
+        <div class="study-resources-header">
+          <span class="study-resources-badge" id="studyResourcesBadge">Deepen Study</span>
+          <h3 class="study-resources-title" id="studyResourcesTitle"></h3>
+        </div>
+        <p class="study-resources-summary" id="studyResourcesSummary"></p>
+        <div class="study-resources-links" id="studyResourcesLinks"></div>
+      </div>
+
+      <div class="connections-section" id="connectionsSection">
+        <h3 id="connectionsSectionTitle">Cross-References & Parallels</h3>
+        <div class="connections-list" id="connectionsList" role="list">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <div id="officialLinkContainer" style="display: none;">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="official-link-btn" id="officialLink">
+          <span>Read the Book of Mormon chapter on ChurchofJesusChrist.org</span>
+          <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Featured Highlights Carousel & Tour Navigation (Placed UNDER the citations) -->
+    <section class="featured-container" aria-label="Featured Connections & Tour">
+      <div class="featured-header">
+        <span class="featured-label" id="featuredLabel">
+          <svg class="ui-icon ui-icon-gold" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+          Featured Connections:
+        </span>
+        
+        <!-- Tour controls -->
+        <div class="tour-controls">
+          <button id="prevConnBtn" class="tour-btn" title="Previous Connection" aria-label="Previous Connection">
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span class="tour-btn-text">Previous</span>
+          </button>
+          <span id="connCounterBadge" class="badge badge-tabular">1 / 850</span>
+          <button id="nextConnBtn" class="tour-btn" title="Next Connection" aria-label="Next Connection">
+            <span class="tour-btn-text">Next</span>
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <button id="randomConnBtn" class="tour-btn tour-btn-accent" title="Jump to Random Connection" aria-label="Random Connection">
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+            <span>Random</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="featured-pills-row" id="featuredPillsRow" role="region" aria-label="Quick Access Connections">
+        <!-- Populated dynamically via main.js -->
+      </div>
+      <div class="guided-trails-section" id="guidedTrailsSection">
+        <div class="guided-trails-header">
+          <span class="guided-trails-label" id="guidedTrailsTitle">🧭 Guided Doctrinal Study Trails:</span>
+        </div>
+        <div class="featured-pills-row" id="guidedTrailsRow" role="region" aria-label="Guided Doctrinal Study Trails"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- How to Use Tutorial Modal -->
+  <div id="tutorialModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="tutorialModalTitle" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="tutorialModalTitle">🧭 How to Use & Explore</h2>
+          <p id="tutorialModalSubtitle">Master the cross-references, sacred diagrams, chiastic structures & card exports.</p>
+        </div>
+        <button id="tutorialCloseBtn" class="modal-close-btn" aria-label="Close tutorial">
+          <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Tutorial Navigation Tabs -->
+      <div class="tutorial-tabs" role="tablist">
+        <button class="tutorial-tab active" data-tab="diagrams" role="tab" id="tabDiagrams">
+          <span class="tab-icon">🌉</span>
+          <span class="tab-label" id="tabDiagramsLabel">Diagram Styles</span>
+        </button>
+        <button class="tutorial-tab" data-tab="navigation" role="tab" id="tabNavigation">
+          <span class="tab-icon">🔍</span>
+          <span class="tab-label" id="tabNavigationLabel">Search & Filters</span>
+        </button>
+        <button class="tutorial-tab" data-tab="chiasmus" role="tab" id="tabChiasmus">
+          <span class="tab-icon">📜</span>
+          <span class="tab-label" id="tabChiasmusLabel">Chiasmus & Hebrew</span>
+        </button>
+        <button class="tutorial-tab" data-tab="cards" role="tab" id="tabCards">
+          <span class="tab-icon">📸</span>
+          <span class="tab-label" id="tabCardsLabel">Study Cards & Church</span>
+        </button>
+      </div>
+
+      <!-- Tutorial Content Panes -->
+      <div class="tutorial-content-pane">
+        <!-- Pane 1: Diagrams -->
+        <div class="tutorial-pane active" id="paneDiagrams">
+          <div class="tutorial-grid">
+            <div class="tutorial-preview-col">
+              <div class="tutorial-img-frame">
+                <img src="./images/guide/bridge.png" alt="Bridge Diagram Style" class="tutorial-screenshot" id="tutorialImgBridge" />
+                <div class="tutorial-caption" id="captionBridge">Bridge Diagram: Holy Bible (top) to Book of Mormon (bottom)</div>
+              </div>
+            </div>
+            <div class="tutorial-info-col">
+              <h3 id="tutoDiagramsTitle">Three Living Perspectives</h3>
+              <ul class="tutorial-points">
+                <li>
+                  <strong id="tutoBridgeLabel">🌉 Bridge (Bible ↔ BOM):</strong>
+                  <span id="tutoBridgeDesc">Witness how ancient Old Testament prophecies (Isaiah, Genesis) and New Testament events (Matthew, Luke) beam directly into Book of Mormon fulfillment.</span>
+                </li>
+                <li>
+                  <strong id="tutoRadialLabel">🔮 Sacred Ring:</strong>
+                  <span id="tutoRadialDesc">A circular harmonious chord graph displaying internal symmetry and prophetic threads interconnecting all 15 books.</span>
+                </li>
+                <li>
+                  <strong id="tutoThreadsLabel">🧵 Living Threads:</strong>
+                  <span id="tutoThreadsDesc">Chapter reading mode with an interactive canon spine on the right. Hover the spine or click any verse to follow cross-references live.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 2: Search & Filters -->
+        <div class="tutorial-pane" id="paneNavigation" style="display: none;">
+          <div class="tutorial-grid">
+            <div class="tutorial-preview-col">
+              <div class="tutorial-img-frame">
+                <img src="./images/guide/threads.png" alt="Search and Living Threads" class="tutorial-screenshot" id="tutorialImgThreads" />
+                <div class="tutorial-caption" id="captionThreads">Search any verse, filter internal or biblical arcs, and zoom into books</div>
+              </div>
+            </div>
+            <div class="tutorial-info-col">
+              <h3 id="tutoNavTitle">Instant Scripture Search & Filters</h3>
+              <ul class="tutorial-points">
+                <li>
+                  <strong id="tutoSearchLabel">🔍 Search Input:</strong>
+                  <span id="tutoSearchDesc">Type any reference (e.g., <em>Alma 32:21</em>, <em>1 Nephi 3:7</em>) or thematic keyword to jump immediately.</span>
+                </li>
+                <li>
+                  <strong id="tutoScopeLabel">⚡ Scope Filters:</strong>
+                  <span id="tutoScopeDesc">Switch between <em>All</em>, <em>Internal</em> (BOM only), and <em>Biblical</em> (OT/NT parallels) to isolate connections.</span>
+                </li>
+                <li>
+                  <strong id="tutoZoomLabel">📖 Zoom into Specific Books:</strong>
+                  <span id="tutoZoomDesc">Select any of the 15 books in the dropdown to zoom into chapters and inspect localized cluster connections.</span>
+                </li>
+                <li>
+                  <strong id="tutoPillsLabel">✨ Featured Pills:</strong>
+                  <span id="tutoPillsDesc">Click the golden pills at the top to tour iconic scriptural connections (Samuel's Sign, Abinadi & Isaiah 53, Alma on Faith).</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 3: Chiasmus & Ancient Structures -->
+        <div class="tutorial-pane" id="paneChiasmus" style="display: none;">
+          <div class="tutorial-grid">
+            <div class="tutorial-preview-col">
+              <div class="tutorial-img-frame">
+                <img src="./images/guide/chiasmus.png" alt="Ancient Hebrew Chiasmus Tree" class="tutorial-screenshot" id="tutorialImgChiasmus" />
+                <div class="tutorial-caption" id="captionChiasmus">Alma 36: Symmetrical inverted parallelism centered on Christ (v. 18)</div>
+              </div>
+            </div>
+            <div class="tutorial-info-col">
+              <h3 id="tutoChiasmusTitle">Ancient Semitic Craftsmanship</h3>
+              <ul class="tutorial-points">
+                <li>
+                  <strong id="tutoChiasmusLabel">📜 Hebrew Chiasmus:</strong>
+                  <span id="tutoChiasmusDesc">Explore ancient inverted poetry. The entire 30 verses of Alma 36 revolve symmetrically around the divine apex in verse 18: crying unto Jesus Christ for mercy.</span>
+                </li>
+                <li>
+                  <strong id="tutoTreeLabel">⭐ Interactive Apex & Levels:</strong>
+                  <span id="tutoTreeDesc">Click any level in the chiastic tree (A ↔ A', B ↔ B') to jump back and forth and compare paired parallel clauses.</span>
+                </li>
+                <li>
+                  <strong id="tutoFormulasLabel">✍️ Prophetic Formulas:</strong>
+                  <span id="tutoFormulasDesc">Discover Mormon's editorial signature ("And thus we see") and the Deuteronomy-rooted Covenant of the Promised Land ("Prosper in the land").</span>
+                </li>
+                <li>
+                  <strong id="tutoHebraismsLabel">🏛️ Hebraisms:</strong>
+                  <span id="tutoHebraismsDesc">Analyze authentic Semitic grammar: noun construct states ("plates of brass", "rod of iron"), solemn oaths ("As the Lord liveth"), and autobiographical colophons.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 4: Study Cards & Church.org -->
+        <div class="tutorial-pane" id="paneCards" style="display: none;">
+          <div class="tutorial-grid">
+            <div class="tutorial-preview-col">
+              <div class="tutorial-img-frame">
+                <img src="./images/guide/study_card.png" alt="Export Scripture Card PNG" class="tutorial-screenshot" id="tutorialImgCard" />
+                <div class="tutorial-caption" id="captionCard">High-resolution study card ready to download and share</div>
+              </div>
+            </div>
+            <div class="tutorial-info-col">
+              <h3 id="tutoCardsTitle">Study Tools & Social Sharing</h3>
+              <ul class="tutorial-points">
+                <li>
+                  <strong id="tutoCardsLabel">📸 1-Click PNG Card:</strong>
+                  <span id="tutoCardsDesc">Click "Save Card (PNG)" to instantly generate a high-definition, beautifully styled study card with verse text and parallels for Instagram, WhatsApp, or gospel presentations.</span>
+                </li>
+                <li>
+                  <strong id="tutoChurchLabel">↗️ Official Church Integration:</strong>
+                  <span id="tutoChurchDesc">Click the link at the bottom of the study panel to read the full chapter on ChurchofJesusChrist.org in Portuguese or English.</span>
+                </li>
+                <li>
+                  <strong id="tutoShareLabel">🔗 Direct Deep Linking:</strong>
+                  <span id="tutoShareDesc">Share any verse directly using URL parameters (e.g. <code>/?v=3579</code> for Alma 36:18 or <code>/?view=threads</code>).</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div class="modal-footer-nav">
+          <button id="tutorialPrevBtn" class="modal-nav-btn" disabled>
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span id="tutorialPrevText">Previous</span>
+          </button>
+          <span class="tutorial-step-indicator" id="tutorialStepIndicator">1 / 4</span>
+          <button id="tutorialNextBtn" class="modal-nav-btn modal-nav-btn-primary">
+            <span id="tutorialNextText">Next</span>
+            <svg class="ui-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+        <button id="tutorialDoneBtn" class="modal-done-btn">
+          <span id="tutorialDoneText">Start Exploring</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Side-by-Side Scripture Comparison Modal (BOM ↔ Holy Bible) -->
+  <div id="comparisonModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="comparisonModalTitle" style="display: none;">
+    <div class="modal-card modal-card-comparison">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="comparisonModalTitle">⚖️ Scripture Parallel Comparison</h2>
+          <p id="comparisonModalSubtitle">Side-by-side doctrinal & textual alignment</p>
+        </div>
+        <button id="comparisonCloseBtn" class="modal-close-btn" aria-label="Close comparison">
+          <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- Left Column: Book of Mormon Verse -->
+        <div class="comparison-column comparison-bom">
+          <div class="comparison-col-header">
+            <span class="comparison-col-tag" id="comparisonBomTag">Book of Mormon</span>
+            <h3 class="comparison-verse-ref" id="comparisonBomRef">Alma 36:18</h3>
+          </div>
+          <div class="comparison-verse-body" id="comparisonBomText"></div>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="comparison-church-link" id="comparisonBomChurchLink">
+            <span id="comparisonBomChurchText">Read on ChurchofJesusChrist.org ↗</span>
+          </a>
+        </div>
+
+        <!-- Center Column: Doctrinal Connection & Note -->
+        <div class="comparison-center">
+          <div class="comparison-link-indicator">
+            <span class="comparison-beam-icon">↔</span>
+            <span class="tag tag-external" id="comparisonTypeBadge">Parallel</span>
+          </div>
+          <div class="comparison-note-box">
+            <div class="comparison-note-title" id="comparisonNoteTitle">Doctrinal Insight</div>
+            <div class="comparison-note-text" id="comparisonNoteText"></div>
+          </div>
+        </div>
+
+        <!-- Right Column: Holy Bible Verse -->
+        <div class="comparison-column comparison-bible">
+          <div class="comparison-col-header">
+            <span class="comparison-col-tag comparison-tag-bible" id="comparisonBibleTag">Holy Bible</span>
+            <h3 class="comparison-verse-ref" id="comparisonBibleRef">Luke 22:42</h3>
+          </div>
+          <div class="comparison-verse-body" id="comparisonBibleText"></div>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="comparison-church-link" id="comparisonBibleChurchLink">
+            <span id="comparisonBibleChurchText">Read Bible chapter on ChurchofJesusChrist.org ↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookmarks Modal -->
+  <div id="bookmarksModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="bookmarksModalTitle" style="display: none;">
+    <div class="modal-card modal-card-bookmarks">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="bookmarksModalTitle">⭐ Saved Scripture Bookmarks</h2>
+          <p id="bookmarksModalSubtitle">Your bookmarked verses saved for study, talks, and lessons</p>
+        </div>
+        <button id="bookmarksCloseBtn" class="modal-close-btn" aria-label="Close bookmarks">
+          <svg class="ui-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="bookmark-folder-bar" id="bookmarkFolderFilterBar" role="tablist" aria-label="Filter Study Notebook by Folder"></div>
+
+      <div class="bookmarks-body" id="bookmarksBody">
+        <!-- Dynamically rendered list of bookmarks -->
+      </div>
+
+      <div class="modal-footer bookmarks-footer">
+        <span class="bookmarks-total-count" id="bookmarksTotalCount">0 Bookmarks</span>
+        <div class="bookmarks-footer-actions">
+          <button type="button" id="printStudySheetBtn" class="print-study-btn" style="display: none;">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            <span id="printStudySheetText">Print Study Sheet</span>
+          </button>
+          <button id="clearBookmarksBtn" class="clear-bookmarks-btn" style="display: none;">
+            <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span id="clearBookmarksText">Clear All</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p id="footerCredits">
+      Public Domain scripture data via <a href="https://scriptures.nephi.org/" target="_blank" rel="noopener">scriptures.nephi.org</a> (LDS Documentation Project) and open scripture research.
+      Inspired by <a href="https://github.com/trekhleb/bible-cross-references" target="_blank" rel="noopener">trekhleb/bible-cross-references</a> and Chris Harrison.
+    </p>
+  </footer>
+
+  <!-- Printable Study Sheet (visible only when printing) -->
+  <section id="printStudySheet" class="print-study-sheet" aria-hidden="true"></section>
+
+</body>
+</html>
