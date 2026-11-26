@@ -1490,12 +1490,27 @@ main {
   display: flex;
   gap: 0.65rem;
   overflow-x: auto;
-  padding: 0.2rem 0.2rem 0.5rem 0.2rem;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  padding: 0.2rem 0.2rem 0.65rem 0.2rem;
 }
-.featured-pills-row::-webkit-scrollbar {
-  display: none;
+
+/* Visible slim horizontal scrollbar for mouse drag on desktop */
+:is(.featured-pills-row, .study-trail-chips, .bookmark-folder-bar, .tutorial-tabs) {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.45) rgba(255, 255, 255, 0.05);
+}
+:is(.featured-pills-row, .study-trail-chips, .bookmark-folder-bar, .tutorial-tabs)::-webkit-scrollbar {
+  height: 8px;
+}
+:is(.featured-pills-row, .study-trail-chips, .bookmark-folder-bar, .tutorial-tabs)::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 9999px;
+}
+:is(.featured-pills-row, .study-trail-chips, .bookmark-folder-bar, .tutorial-tabs)::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.42);
+  border-radius: 9999px;
+}
+:is(.featured-pills-row, .study-trail-chips, .bookmark-folder-bar, .tutorial-tabs)::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.65);
 }
 
 .featured-pill {
@@ -2095,11 +2110,6 @@ footer a:hover {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.tutorial-tabs::-webkit-scrollbar {
-  display: none;
 }
 
 .tutorial-tab {
@@ -2959,12 +2969,7 @@ footer a {
   flex: 1 1 auto;
   min-width: 0;
   overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.study-trail-chips::-webkit-scrollbar {
-  display: none;
+  padding-bottom: 0.25rem;
 }
 
 .study-trail-chip {
@@ -3037,11 +3042,6 @@ footer a {
   padding: 0.65rem 1.25rem;
   border-bottom: 1px solid var(--border-color);
   overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.bookmark-folder-bar::-webkit-scrollbar {
-  display: none;
 }
 
 .bookmark-folder-pill {
