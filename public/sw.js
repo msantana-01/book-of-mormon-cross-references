@@ -1,5 +1,5 @@
 // Book of Mormon Cross-References Service Worker
-const CACHE_NAME = "bom-crossref-v5";
+const CACHE_NAME = "bom-crossref-v6";
 const STATIC_PRECACHE = [
   "./",
   "./index.html",

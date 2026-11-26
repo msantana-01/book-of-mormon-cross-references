@@ -751,5 +751,715 @@
     "note": "Ammaron hides the sacred records unto the Lord and charges young Mormon to retrieve the plates of Nephi when he reaches age twenty-four.",
     "notePt": "Amaron oculta os registros sagrados para o Senhor e incumbe o jovem Mórmon de recolher as placas de Néfi aos vinte e quatro anos.",
     "category": "internal"
+  },
+  {
+    "source": 1404,
+    "target": 652,
+    "sourceRef": "Jacob 1:7",
+    "targetRef": "2 Nephi 2:2",
+    "type": "doctrine",
+    "note": "Jacob labors diligently to persuade his people to come unto Christ and enter into God's rest, continuing the covenant testimony Lehi gave him.",
+    "notePt": "Jacó trabalha diligentemente para persuadir seu povo a vir a Cristo e entrar no descanso de Deus, continuando o testemunho do convênio que Leí lhe deixou.",
+    "category": "internal"
+  },
+  {
+    "source": 1434,
+    "target": 1802,
+    "sourceRef": "Jacob 2:18",
+    "targetRef": "Mosiah 4:26",
+    "type": "doctrine",
+    "note": "Jacob commands the Nephites to seek the kingdom of God before riches and to use wealth to clothe the naked and feed the hungry—matching King Benjamin's charge to impart of our substance.",
+    "notePt": "Jacó ordena que busquem o reino de Deus antes das riquezas e usem os bens para vestir os nus e alimentar os famintos — em harmonia com o mandamento do rei Benjamim.",
+    "category": "internal"
+  },
+  {
+    "source": 1453,
+    "target": 1404,
+    "sourceRef": "Jacob 3:2",
+    "targetRef": "Jacob 1:7",
+    "type": "exhortation",
+    "note": "Jacob comforts the pure in heart to look unto God with firmness of mind and pray with exceeding faith so He will console them in their afflictions.",
+    "notePt": "Jacó consola os puros de coração para que olhem para Deus com firmeza de mente e orem com fé extrema para serem consolados em suas aflições.",
+    "category": "internal"
+  },
+  {
+    "source": 1469,
+    "target": 1215,
+    "sourceRef": "Jacob 4:4",
+    "targetRef": "2 Nephi 25:25",
+    "type": "doctrine",
+    "note": "Jacob explains that all the prophets before them knew of Christ and had a hope of His glory hundreds of years before His coming.",
+    "notePt": "Jacó explica que todos os profetas antes deles conheciam a Cristo e tinham esperança de Sua glória centenas de anos antes de Sua vinda.",
+    "category": "internal"
+  },
+  {
+    "source": 1479,
+    "target": 1476,
+    "sourceRef": "Jacob 4:14",
+    "targetRef": "Jacob 4:11",
+    "type": "doctrine",
+    "note": "Looking beyond the mark caused ancient Jerusalem to stumble over the stone of stumbling, rejecting the very foundation of the Atonement.",
+    "notePt": "Olhar além do marco levou a antiga Jerusalém a tropeçar na pedra de tropeço, rejeitando o próprio alicerce da Expiação.",
+    "category": "internal"
+  },
+  {
+    "source": 1565,
+    "target": 1571,
+    "sourceRef": "Jacob 6:5",
+    "targetRef": "Jacob 6:11",
+    "type": "exhortation",
+    "note": "Jacob pleads with his readers to cleave unto God as He cleaveth unto them and repent before entering the narrow gate.",
+    "notePt": "Jacó suplica aos leitores que se apeguem a Deus assim como Ele se apega a eles e que se arrependam para entrar pela porta estreita.",
+    "category": "internal"
+  },
+  {
+    "source": 1585,
+    "target": 1604,
+    "sourceRef": "Jacob 7:12",
+    "targetRef": "Enos 1:4",
+    "type": "parallel",
+    "note": "Jacob testifies against Sherem that all prophets have borne witness of Christ, passing that same unwavering faith directly to his son Enos.",
+    "notePt": "Jacó testifica a Serém que todos os profetas deram testemunho de Cristo, transmitindo essa mesma fé inabalável diretamente a seu filho Enos.",
+    "category": "internal"
+  },
+  {
+    "source": 5796,
+    "target": 1604,
+    "sourceRef": "Mormon 1:15",
+    "targetRef": "Enos 1:4",
+    "type": "parallel",
+    "note": "At age fifteen, Mormon is visited of the Lord and tastes and knows of the goodness of Jesus, echoing the personal witness of earlier prophets.",
+    "notePt": "Aos quinze anos, Mórmon é visitado pelo Senhor e prova e conhece a bondade de Jesus, ecoando o testemunho pessoal dos profetas anteriores.",
+    "category": "internal"
+  },
+  {
+    "source": 5813,
+    "target": 5182,
+    "sourceRef": "Mormon 2:13",
+    "targetRef": "3 Nephi 9:20",
+    "type": "doctrine",
+    "note": "Mormon distinguishes the 'sorrowing of the damned' from true repentance with a broken heart and contrite spirit taught by the Savior.",
+    "notePt": "Mórmon distingue a 'tristeza dos condenados' do verdadeiro arrependimento com coração quebrantado e espírito contrito ensinado pelo Salvador.",
+    "category": "internal"
+  },
+  {
+    "source": 5851,
+    "target": 1215,
+    "sourceRef": "Mormon 3:22",
+    "targetRef": "2 Nephi 25:25",
+    "type": "prophecy",
+    "note": "Mormon writes to persuade all ends of the earth to repent and prepare to stand before the judgment-seat of Christ.",
+    "notePt": "Mórmon escreve para persuadir todos os confins da terra a se arrependerem e se prepararem para comparecer perante o tribunal de Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 5891,
+    "target": 1565,
+    "sourceRef": "Mormon 5:17",
+    "targetRef": "Jacob 6:5",
+    "type": "parallel",
+    "note": "Mormon laments how the Nephites drifted like chaff before the wind once they lost the Spirit, yet affirms the Lord still remembers His covenant with Israel.",
+    "notePt": "Mórmon lamenta como os nefitas ficaram como palha ao vento ao perderem o Espírito, mas reafirma que o Senhor ainda se lembra de Seu convênio com Israel.",
+    "category": "internal"
+  },
+  {
+    "source": 5915,
+    "target": 5925,
+    "sourceRef": "Mormon 6:17",
+    "targetRef": "Mormon 7:5",
+    "type": "exhortation",
+    "note": "Overwhelmed with grief at Cumorah, Mormon pleads: 'How could ye have rejected that Jesus, who stood with open arms to receive you!'",
+    "notePt": "Tomado de dor em Cumora, Mórmon clama: 'Como pudestes rejeitar aquele Jesus que estava de braços abertos para vos receber!'",
+    "category": "internal"
+  },
+  {
+    "source": 5929,
+    "target": 1376,
+    "sourceRef": "Mormon 7:9",
+    "targetRef": "2 Nephi 32:3",
+    "type": "doctrine",
+    "note": "Mormon explains that the Book of Mormon (Nephite record) and the Bible (Jewish record) testify together as two witnesses to Christ.",
+    "notePt": "Mórmon explica que o Livro de Mórmon (registro nefita) e a Bíblia (registro judaico) testificam juntos como duas testemunhas de Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 5956,
+    "target": 6575,
+    "sourceRef": "Mormon 8:26",
+    "targetRef": "Moroni 10:5",
+    "type": "prophecy",
+    "note": "Moroni prophesies that the Book of Mormon will come forth by the power of God in a day when miracles are denied, inviting every reader to seek the Spirit's witness.",
+    "notePt": "Morôni profetiza que o Livro de Mórmon sairá à luz pelo poder de Deus num dia em que os milagres são negados, convidando cada leitor a buscar o testemunho do Espírito.",
+    "category": "internal"
+  },
+  {
+    "source": 6445,
+    "target": 1571,
+    "sourceRef": "Moroni 1:4",
+    "targetRef": "Jacob 6:11",
+    "type": "exhortation",
+    "note": "Alone and hunted, Moroni writes the sacred ordinances and final exhortations for the benefit of the Lamanites.",
+    "notePt": "Sozinho e perseguido, Morôni registra as ordenanças sagradas e exortações finais em benefício dos lamanitas.",
+    "category": "internal"
+  },
+  {
+    "source": 6447,
+    "target": 5442,
+    "sourceRef": "Moroni 2:2",
+    "targetRef": "3 Nephi 18:20",
+    "type": "quotation",
+    "note": "Moroni preserves the exact words of Christ giving the twelve Nephite disciples power to confer the gift of the Holy Ghost.",
+    "notePt": "Morôni preserva as palavras exatas de Cristo conferindo aos doze discípulos nefitas o poder para conceder o dom do Espírito Santo.",
+    "category": "internal"
+  },
+  {
+    "source": 6451,
+    "target": 2112,
+    "sourceRef": "Moroni 3:3",
+    "targetRef": "Mosiah 18:10",
+    "type": "doctrine",
+    "note": "Moroni records the ordinance and priesthood authority to ordain priests and teachers in the name of Jesus Christ.",
+    "notePt": "Morôni registra a ordenança e a autoridade do sacerdócio para ordenar sacerdotes e mestres em nome de Jesus Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 6455,
+    "target": 5429,
+    "sourceRef": "Moroni 4:3",
+    "targetRef": "3 Nephi 18:7",
+    "type": "fulfillment",
+    "note": "The Nephite sacramental prayer on the bread carries out Christ's commandment at Bountiful to remember His body and keep His commandments.",
+    "notePt": "A oração sacramental do pão cumpre o mandamento de Cristo em Abundância de recordar Seu corpo e guardar Seus mandamentos.",
+    "category": "internal"
+  },
+  {
+    "source": 6461,
+    "target": 2111,
+    "sourceRef": "Moroni 6:4",
+    "targetRef": "Mosiah 18:9",
+    "type": "parallel",
+    "note": "Members of the Church are remembered and nourished by the good word of God and watchfulness unto prayer, just as Alma covenanted at the Waters of Mormon.",
+    "notePt": "Os membros da Igreja são lembrados e nutridos pela boa palavra de Deus e vigilância na oração, como Alma ensinou nas Águas de Mórmon.",
+    "category": "internal"
+  },
+  {
+    "source": 6522,
+    "target": 1768,
+    "sourceRef": "Moroni 8:8",
+    "targetRef": "Mosiah 3:19",
+    "type": "doctrine",
+    "note": "Mormon teaches that little children are alive in Christ and need no baptism, harmonizing with King Benjamin's revelation on Christ's Atonement covering little children.",
+    "notePt": "Mórmon ensina que as criancinhas estão vivas em Cristo e não necessitam de batismo, em harmonia com a revelação do rei Benjamim.",
+    "category": "internal"
+  },
+  {
+    "source": 6569,
+    "target": 5992,
+    "sourceRef": "Moroni 9:25",
+    "targetRef": "Mormon 9:21",
+    "type": "exhortation",
+    "note": "Amid total war, Mormon urges his son Moroni to be faithful in Christ and let His grace and long-suffering rest in his mind forever.",
+    "notePt": "Em meio à guerra total, Mórmon exorta seu filho Morôni a ser fiel em Cristo e deixar que Sua graça e longanimidade permaneçam em sua mente para sempre.",
+    "category": "internal"
+  },
+  {
+    "source": 6051,
+    "target": 1658,
+    "sourceRef": "Ether 1:43",
+    "targetRef": "Omni 1:16",
+    "type": "prophecy",
+    "note": "The Lord promises the brother of Jared to lead his people to a choice land and make of them a great nation.",
+    "notePt": "O Senhor promete ao irmão de Jarede guiar seu povo a uma terra escolhida e fazer deles uma grande nação.",
+    "category": "internal"
+  },
+  {
+    "source": 6063,
+    "target": 1253,
+    "sourceRef": "Ether 2:12",
+    "targetRef": "2 Nephi 26:33",
+    "type": "prophecy",
+    "note": "Moroni records the divine decree over the land of promise: whoso possesses it must serve the true and living God, who is Jesus Christ.",
+    "notePt": "Morôni registra o decreto divino sobre a terra da promissão: quem a possuir deve servir ao Deus verdadeiro e vivo, que é Jesus Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 6090,
+    "target": 5213,
+    "sourceRef": "Ether 3:14",
+    "targetRef": "3 Nephi 11:10",
+    "type": "prophecy",
+    "note": "The pre-mortal Lord reveals His spirit body to the brother of Jared and declares: 'Behold, I am he who was prepared from the foundation of the world to redeem my people. I am Jesus Christ.'",
+    "notePt": "O Senhor pré-mortal revela Seu corpo espiritual ao irmão de Jarede e declara: 'Eis que sou aquele que foi preparado desde a fundação do mundo para redimir meu povo. Eu sou Jesus Cristo.'",
+    "category": "internal"
+  },
+  {
+    "source": 6116,
+    "target": 6482,
+    "sourceRef": "Ether 4:12",
+    "targetRef": "Moroni 7:16",
+    "type": "doctrine",
+    "note": "Christ declares that whatsoever thing persuadeth men to do good is of Him, matching Mormon's clear test for the Light of Christ.",
+    "notePt": "Cristo declara que tudo o que persuade os homens a fazer o bem vem Dele, alinhando-se ao critério claro de Mórmon sobre a Luz de Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 6127,
+    "target": 1372,
+    "sourceRef": "Ether 5:4",
+    "targetRef": "2 Nephi 31:20",
+    "type": "prophecy",
+    "note": "Moroni foretells that three witnesses, in addition to himself and the Lord, will behold the plates and establish the Book of Mormon.",
+    "notePt": "Morôni prediz que três testemunhas, além dele próprio e do Senhor, contemplarão as placas e confirmarão o Livro de Mórmon.",
+    "category": "internal"
+  },
+  {
+    "source": 6141,
+    "target": 1709,
+    "sourceRef": "Ether 6:12",
+    "targetRef": "Mosiah 2:1",
+    "type": "parallel",
+    "note": "Upon landing safely in the promised land, the Jaredites shed tears of joy and bow down in humble thanksgiving before the Lord.",
+    "notePt": "Ao desembarcarem em segurança na terra prometida, os jareditas derramam lágrimas de alegria e se prostram em humilde gratidão perante o Senhor.",
+    "category": "internal"
+  },
+  {
+    "source": 6210,
+    "target": 4643,
+    "sourceRef": "Ether 8:24",
+    "targetRef": "Helaman 6:30",
+    "type": "exhortation",
+    "note": "Moroni warns modern nations against secret combinations that seek power and gain, echoing Helaman's account of Gadianton's bands.",
+    "notePt": "Morôni adverte as nações modernas contra as combinações secretas que buscam poder e lucro, ecoando o relato de Helamã sobre os bandos de Gadiânton.",
+    "category": "internal"
+  },
+  {
+    "source": 6354,
+    "target": 5544,
+    "sourceRef": "Ether 13:9",
+    "targetRef": "3 Nephi 21:1",
+    "type": "prophecy",
+    "note": "Ether prophesies of the New Jerusalem to be built upon this land unto the remnant of the seed of Joseph, aligning with the Savior's promise in 3 Nephi.",
+    "notePt": "Éter profetiza sobre a Nova Jerusalém a ser edificada nesta terra para o remanescente da semente de José, em harmonia com a promessa do Salvador em 3 Néfi.",
+    "category": "internal"
+  },
+  {
+    "source": 6441,
+    "target": 6445,
+    "sourceRef": "Ether 15:34",
+    "targetRef": "Moroni 1:4",
+    "type": "narrative",
+    "note": "Ether finishes his record and hides it where Limhi's people later find the 24 gold plates, leaving his final fate in the Lord's hands.",
+    "notePt": "Éter conclui seu registro e o oculta onde o povo de Lími mais tarde encontra as 24 placas de ouro, entregando seu destino ao Senhor.",
+    "category": "internal"
+  },
+  {
+    "source": 4527,
+    "target": 1376,
+    "sourceRef": "Helaman 3:29",
+    "targetRef": "2 Nephi 32:3",
+    "type": "doctrine",
+    "note": "Helaman teaches that whosoever will lay hold upon the word of God—which is quick and powerful—shall be led in a strait and narrow course across the gulf of misery.",
+    "notePt": "Helamã ensina que todo aquele que se apegar à palavra de Deus — que é viva e poderosa — será guiado por um caminho reto e estreito através do abismo de miséria.",
+    "category": "internal"
+  },
+  {
+    "source": 4547,
+    "target": 1802,
+    "sourceRef": "Helaman 4:12",
+    "targetRef": "Mosiah 4:26",
+    "type": "narrative",
+    "note": "Pride, oppression of the poor, and mockery of sacred things strip the Nephites of their divine protection and strength.",
+    "notePt": "O orgulho, a opressão aos pobres e a zombaria do que é sagrado privam os nefitas de sua proteção e força divinas.",
+    "category": "internal"
+  },
+  {
+    "source": 4683,
+    "target": 2396,
+    "sourceRef": "Helaman 7:29",
+    "targetRef": "Mosiah 27:25",
+    "type": "exhortation",
+    "note": "Nephi prays on his tower and warns the people that except they repent, their cities will become desolate and they will perish.",
+    "notePt": "Néfi ora em sua torre e adverte o povo de que, a menos que se arrependam, suas cidades ficarão desoladas e eles perecerão.",
+    "category": "internal"
+  },
+  {
+    "source": 4756,
+    "target": 438,
+    "sourceRef": "Helaman 10:4",
+    "targetRef": "1 Nephi 17:3",
+    "type": "parallel",
+    "note": "The Lord commends Nephi for unwearying diligence and confers sealing power upon him because he never feared nor sought his own life.",
+    "notePt": "O Senhor elogia Néfi por sua diligência incansável e lhe confere o poder selador porque ele nunca temeu nem buscou a própria vida.",
+    "category": "internal"
+  },
+  {
+    "source": 4873,
+    "target": 3536,
+    "sourceRef": "Helaman 13:38",
+    "targetRef": "Alma 34:32",
+    "type": "exhortation",
+    "note": "Samuel warns that procrastinating the day of repentance brings eternal regret ('the days of your probation are past'), matching Amulek's urgent plea.",
+    "notePt": "Samuel adverte que procrastinar o dia do arrependimento traz remorso eterno ('passaram os dias de vossa provação'), ecoando o apelo urgente de Amuleque.",
+    "category": "internal"
+  },
+  {
+    "source": 4912,
+    "target": 2873,
+    "sourceRef": "Helaman 15:7",
+    "targetRef": "Alma 13:2",
+    "type": "doctrine",
+    "note": "When converted Lamanites gain a knowledge of the truth and believe the scriptures, they become firm and steadfast in the faith.",
+    "notePt": "Quando os lamanitas convertidos adquirem conhecimento da verdade e creem nas escrituras, tornam-se firmes e constantes na fé.",
+    "category": "internal"
+  },
+  {
+    "source": 2501,
+    "target": 1802,
+    "sourceRef": "Alma 1:26",
+    "targetRef": "Mosiah 4:26",
+    "type": "parallel",
+    "note": "In the early Church at Zarahemla, priest and learner walked on equal footing, imparting of their substance to the poor just as King Benjamin taught.",
+    "notePt": "Na Igreja primitiva em Zaraenla, sacerdote e discípulo serviam em pé de igualdade, repartindo de seus bens com os pobres como ensinou o rei Benjamim.",
+    "category": "internal"
+  },
+  {
+    "source": 2592,
+    "target": 3405,
+    "sourceRef": "Alma 4:19",
+    "targetRef": "Alma 31:5",
+    "type": "parallel",
+    "note": "Alma steps down from the judgment-seat to bear down in pure testimony—the same trust in the power of the word he later applies among the Zoramites.",
+    "notePt": "Alma renuncia ao tribunal para pregar em puro testemunho — a mesma confiança no poder da palavra que aplica depois entre os zoramitas.",
+    "category": "internal"
+  },
+  {
+    "source": 2619,
+    "target": 2607,
+    "sourceRef": "Alma 5:26",
+    "targetRef": "Alma 5:14",
+    "type": "exhortation",
+    "note": "Alma urges those who have experienced a change of heart to ask themselves whether they feel to sing the song of redeeming love right now.",
+    "notePt": "Alma exorta os que sentiram a mudança de coração a perguntar a si mesmos se podem sentir hoje vontade de cantar o cântico do amor que redime.",
+    "category": "internal"
+  },
+  {
+    "source": 2674,
+    "target": 2675,
+    "sourceRef": "Alma 7:11",
+    "targetRef": "Alma 7:12",
+    "type": "doctrine",
+    "note": "Alma prophesies that the Son of God will suffer pains, afflictions, temptations, and infirmities so His bowels may be filled with mercy to succor His people.",
+    "notePt": "Alma profetiza que o Filho de Deus padecerá dores, aflições, tentações e enfermidades para que Suas entranhas se encham de misericórdia a fim de socorrer Seu povo.",
+    "category": "internal"
+  },
+  {
+    "source": 2831,
+    "target": 3695,
+    "sourceRef": "Alma 11:43",
+    "targetRef": "Alma 40:23",
+    "type": "doctrine",
+    "note": "Amulek's witness of bodily restoration ('spirit and body shall be reunited again in its perfect form') is later echoed and expanded by Alma to Corianton.",
+    "notePt": "O testemunho de Amuleque sobre a restauração física ('espírito e corpo serão novamente reunidos em sua forma perfeita') é retomado por Alma a Coriânton.",
+    "category": "internal"
+  },
+  {
+    "source": 2858,
+    "target": 3728,
+    "sourceRef": "Alma 12:24",
+    "targetRef": "Alma 42:15",
+    "type": "doctrine",
+    "note": "Alma teaches Zeezrom that mortal life is a probationary state granted through Christ's Atonement to prepare to meet God.",
+    "notePt": "Alma ensina a Zeezrom que a vida mortal é um estado de provação concedido pela Expiação de Cristo para nos prepararmos para encontrar Deus.",
+    "category": "internal"
+  },
+  {
+    "source": 2873,
+    "target": 2674,
+    "sourceRef": "Alma 13:2",
+    "targetRef": "Alma 7:11",
+    "type": "doctrine",
+    "note": "Priests are ordained after the order of the Son so the people might look forward to His Son for a redemption from their sins.",
+    "notePt": "Os sacerdotes são ordenados segundo a ordem do Filho para que o povo olhe para Seu Filho buscando redenção dos pecados.",
+    "category": "internal"
+  },
+  {
+    "source": 2973,
+    "target": 3405,
+    "sourceRef": "Alma 17:2",
+    "targetRef": "Alma 31:5",
+    "type": "parallel",
+    "note": "The sons of Mosiah search the scriptures diligently and give themselves to much prayer and fasting so they may teach with power and authority of God.",
+    "notePt": "Os filhos de Mosias examinam as escrituras diligentemente e entregam-se a muita oração e jejum para ensinar com poder e autoridade de Deus.",
+    "category": "internal"
+  },
+  {
+    "source": 3045,
+    "target": 2396,
+    "sourceRef": "Alma 18:35",
+    "targetRef": "Mosiah 27:25",
+    "type": "doctrine",
+    "note": "Ammon teaches King Lamoni the Creation, the Fall, and the plan of redemption through the Spirit that accompanies true preaching.",
+    "notePt": "Amon ensina ao rei Lamôni a Criação, a Queda e o plano de redenção por meio do Espírito que acompanha a pregação verdadeira.",
+    "category": "internal"
+  },
+  {
+    "source": 3156,
+    "target": 3045,
+    "sourceRef": "Alma 22:14",
+    "targetRef": "Alma 18:35",
+    "type": "parallel",
+    "note": "Aaron expounds the same plan of redemption to Lamoni's father, leading the king to offer up all his sins to know God.",
+    "notePt": "Aarão expõe o mesmo plano de redenção ao pai de Lamôni, levando o rei a abandonar todos os seus pecados para conhecer a Deus.",
+    "category": "internal"
+  },
+  {
+    "source": 3214,
+    "target": 4116,
+    "sourceRef": "Alma 24:19",
+    "targetRef": "Alma 53:21",
+    "type": "narrative",
+    "note": "The Anti-Nephi-Lehies bury their weapons of war deep in the earth in covenant faithfulness—a legacy inherited by their two thousand stripling sons.",
+    "notePt": "Os ânti-néfi-leítas enterram profundamente suas armas em fidelidade ao convênio — um legado herdado por seus dois mil jovens filhos.",
+    "category": "internal"
+  },
+  {
+    "source": 3254,
+    "target": 3643,
+    "sourceRef": "Alma 26:12",
+    "targetRef": "Alma 38:5",
+    "type": "parallel",
+    "note": "Ammon rejoices that 'in his strength I can do all things,' expressing the exact humble reliance on God Alma commends to Shiblon.",
+    "notePt": "Amon regozija-se dizendo que 'em sua força posso fazer todas as coisas', expressando a mesma confiança humilde em Deus que Alma recomenda a Siblon.",
+    "category": "internal"
+  },
+  {
+    "source": 3332,
+    "target": 3254,
+    "sourceRef": "Alma 29:9",
+    "targetRef": "Alma 26:12",
+    "type": "exhortation",
+    "note": "Alma desires to be an instrument in the hands of God to bring souls to repentance, echoing Ammon's missionary gratitude.",
+    "notePt": "Alma deseja ser um instrumento nas mãos de Deus para conduzir almas ao arrependimento, ecoando a gratidão missionária de Amon.",
+    "category": "internal"
+  },
+  {
+    "source": 3384,
+    "target": 1679,
+    "sourceRef": "Alma 30:44",
+    "targetRef": "Words of Mormon 1:7",
+    "type": "doctrine",
+    "note": "Alma testifies to Korihor that all things denote there is a God—the earth, its motion, and all the planets moving in their regular form.",
+    "notePt": "Alma testifica a Corior que todas as coisas mostram que há um Deus — a terra, seu movimento e todos os planetas que se movem em sua forma regular.",
+    "category": "internal"
+  },
+  {
+    "source": 3512,
+    "target": 2674,
+    "sourceRef": "Alma 34:8",
+    "targetRef": "Alma 7:11",
+    "type": "doctrine",
+    "note": "Amulek testifies that Christ must come to take away the sins of the world through an infinite and eternal sacrifice.",
+    "notePt": "Amuleque testifica que Cristo deve vir para tirar os pecados do mundo por meio de um sacrifício infinito e eterno.",
+    "category": "internal"
+  },
+  {
+    "source": 3597,
+    "target": 1679,
+    "sourceRef": "Alma 37:6",
+    "targetRef": "Words of Mormon 1:7",
+    "type": "doctrine",
+    "note": "Alma teaches Helaman that by small and simple things are great things brought to pass—including the preservation of the sacred records for a wise purpose.",
+    "notePt": "Alma ensina a Helamã que por coisas pequenas e simples são realizadas grandes coisas — incluindo a preservação dos registros sagrados com sábio propósito.",
+    "category": "internal"
+  },
+  {
+    "source": 3628,
+    "target": 3643,
+    "sourceRef": "Alma 37:37",
+    "targetRef": "Alma 38:5",
+    "type": "exhortation",
+    "note": "Alma counsels Helaman to 'counsel with the Lord in all thy doings,' mirroring his promise to Shiblon that those who put their trust in God shall be supported.",
+    "notePt": "Alma aconselha Helamã a 'aconselhar-se com o Senhor em tudo o que fizer', espelhando sua promessa a Siblon de que quem confia em Deus será amparado.",
+    "category": "internal"
+  },
+  {
+    "source": 3662,
+    "target": 3708,
+    "sourceRef": "Alma 39:9",
+    "targetRef": "Alma 41:10",
+    "type": "exhortation",
+    "note": "Alma warns Corianton to forsake his sins and 'go no more after the lusts of your eyes,' preparing him for the truth that wickedness never was happiness.",
+    "notePt": "Alma adverte Coriânton a abandonar seus pecados e não seguir 'a concupiscência dos teus olhos', preparando-o para entender que iniquidade nunca foi felicidade.",
+    "category": "internal"
+  },
+  {
+    "source": 3858,
+    "target": 3940,
+    "sourceRef": "Alma 46:12",
+    "targetRef": "Alma 48:17",
+    "type": "narrative",
+    "note": "Captain Moroni raises the Title of Liberty—reminding his people of their God, religion, freedom, and families—demonstrating the immovable faith praised in Alma 48.",
+    "notePt": "O capitão Morôni ergue o Estandarte da Liberdade — lembrando seu povo de seu Deus, religião, liberdade e famílias — demonstrando a fé inabalável elogiada em Alma 48.",
+    "category": "internal"
+  },
+  {
+    "source": 4281,
+    "target": 3643,
+    "sourceRef": "Alma 58:11",
+    "targetRef": "Alma 38:5",
+    "type": "parallel",
+    "note": "When outnumbered, Helaman's army pours out their souls in prayer, and the Lord visits them with assurances of peace and deliverance.",
+    "notePt": "Em inferioridade numérica, o exército de Helamã derrama a alma em oração, e o Senhor os visita com garantias de paz e livramento.",
+    "category": "internal"
+  },
+  {
+    "source": 4429,
+    "target": 5750,
+    "sourceRef": "Alma 62:48",
+    "targetRef": "4 Nephi 1:18",
+    "type": "parallel",
+    "note": "After years of war, the people of Nephi remember how great things the Lord had done for them and enjoy peace through their humility and prayer.",
+    "notePt": "Após anos de guerra, o povo de Néfi lembra-se das grandes coisas que o Senhor fizera por eles e desfruta de paz por meio da humildade e oração.",
+    "category": "internal"
+  },
+  {
+    "source": 1813,
+    "target": 1808,
+    "sourceRef": "Mosiah 5:7",
+    "targetRef": "Mosiah 5:2",
+    "type": "doctrine",
+    "note": "Because of the covenant they have made, King Benjamin's people are called the children of Christ, spiritually begotten of Him.",
+    "notePt": "Por causa do convênio que fizeram, o povo do rei Benjamim passa a ser chamado filhos de Cristo, gerados espiritualmente por Ele.",
+    "category": "internal"
+  },
+  {
+    "source": 1861,
+    "target": 2265,
+    "sourceRef": "Mosiah 7:33",
+    "targetRef": "Mosiah 23:21",
+    "type": "doctrine",
+    "note": "Limhi testifies that if the people turn to the Lord with full purpose of heart, He will deliver them out of bondage—just as the Lord later tries and delivers Alma's people.",
+    "notePt": "Lími testifica que se o povo se voltar ao Senhor de todo o coração, Ele os livrará do cativeiro — exatamente como o Senhor prova e livra o povo de Alma.",
+    "category": "internal"
+  },
+  {
+    "source": 1925,
+    "target": 2047,
+    "sourceRef": "Mosiah 11:2",
+    "targetRef": "Mosiah 15:11",
+    "type": "narrative",
+    "note": "King Noah's wickedness and worldly taxation set the stage for Abinadi's prophetic witness of Christ as our Redeemer.",
+    "notePt": "A iniquidade e os impostos opressivos do rei Noé preparam o cenário para o testemunho profético de Abinádi sobre Cristo como nosso Redentor.",
+    "category": "internal"
+  },
+  {
+    "source": 2111,
+    "target": 2112,
+    "sourceRef": "Mosiah 18:9",
+    "targetRef": "Mosiah 18:10",
+    "type": "doctrine",
+    "note": "At the Waters of Mormon, Alma defines the baptismal covenant: mourning with those that mourn, comforting those in need of comfort, and standing as witnesses of God at all times.",
+    "notePt": "Nas Águas de Mórmon, Alma define o convênio batismal: chorar com os que choram, consolar os que necessitam de consolo e servir como testemunhas de Deus em todos os momentos.",
+    "category": "internal"
+  },
+  {
+    "source": 2297,
+    "target": 2265,
+    "sourceRef": "Mosiah 24:14",
+    "targetRef": "Mosiah 23:21",
+    "type": "fulfillment",
+    "note": "When Alma's people pray silently under bondage, the Lord eases their burdens so they scarcely feel them—fulfilling His promise to deliver those who trust Him.",
+    "notePt": "Quando o povo de Alma ora em silêncio no cativeiro, o Senhor alivia suas cargas para que quase não as sintam — cumprindo Sua promessa de livramento.",
+    "category": "internal"
+  },
+  {
+    "source": 2454,
+    "target": 3858,
+    "sourceRef": "Mosiah 29:26",
+    "targetRef": "Alma 46:12",
+    "type": "parallel",
+    "note": "King Mosiah establishes the reign of judges based on the voice of the people, creating the free republic Captain Moroni later defends.",
+    "notePt": "O rei Mosias estabelece o governo dos juízes pela voz do povo, fundando a república livre que o capitão Morôni posteriormente defende.",
+    "category": "internal"
+  },
+  {
+    "source": 424,
+    "target": 3628,
+    "sourceRef": "1 Nephi 16:28",
+    "targetRef": "Alma 37:37",
+    "type": "parallel",
+    "note": "The Liahona pointers work according to the faith, diligence, and heed given unto them—which Alma later explains is a type for the words of Christ.",
+    "notePt": "Os ponteiros da Liahona funcionam conforme a fé, diligência e atenção que lhes são dadas — símbolo que Alma depois compara às palavras de Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 493,
+    "target": 438,
+    "sourceRef": "1 Nephi 18:3",
+    "targetRef": "1 Nephi 17:3",
+    "type": "narrative",
+    "note": "Nephi prays often on the mount and builds the ship according to the Lord's pattern, showing that God prepares a way when His servants obey.",
+    "notePt": "Néfi ora frequentemente no monte e constrói o navio segundo o modelo do Senhor, mostrando que Deus prepara o caminho quando Seus servos obedecem.",
+    "category": "internal"
+  },
+  {
+    "source": 612,
+    "target": 5749,
+    "sourceRef": "1 Nephi 22:25",
+    "targetRef": "4 Nephi 1:17",
+    "type": "prophecy",
+    "note": "Nephi foretells that the Holy One of Israel gathers His children into one fold, prefiguring the Zion unity realized after Christ's visit.",
+    "notePt": "Néfi prediz que o Santo de Israel reunirá Seus filhos em um só rebanho, prefigurando a unidade de Sião concretizada após a visita de Cristo.",
+    "category": "internal"
+  },
+  {
+    "source": 4960,
+    "target": 4886,
+    "sourceRef": "3 Nephi 1:13",
+    "targetRef": "Helaman 14:12",
+    "type": "fulfillment",
+    "note": "The sign of Christ's birth—a day, a night, and a day without darkness—arrives on the very threshold of the believers' promised destruction, fulfilling Samuel the Lamanite's prophecy.",
+    "notePt": "O sinal do nascimento de Cristo — um dia, uma noite e um dia sem trevas — chega exatamente na véspera da destruição ameaçada aos crentes, cumprindo a profecia de Samuel, o lamanita.",
+    "category": "internal"
+  },
+  {
+    "source": 5068,
+    "target": 1,
+    "sourceRef": "3 Nephi 5:13",
+    "targetRef": "1 Nephi 1:1",
+    "type": "parallel",
+    "note": "Mormon introduces himself as a disciple of Jesus Christ called to declare His word, echoing Nephi's opening record.",
+    "notePt": "Mórmon apresenta-se como discípulo de Jesus Cristo chamado para declarar Sua palavra, ecoando a abertura do registro de Néfi.",
+    "category": "internal"
+  },
+  {
+    "source": 5404,
+    "target": 2674,
+    "sourceRef": "3 Nephi 17:7",
+    "targetRef": "Alma 7:11",
+    "type": "fulfillment",
+    "note": "With 'bowels filled with compassion,' the risen Savior heals all the sick and afflicted among the Nephites, fulfilling Alma's prophecy of His compassionate mercy.",
+    "notePt": "Com as entranhas cheias de compaixão, o Salvador ressuscitado cura todos os enfermos e aflitos entre os nefitas, cumprindo a profecia de Alma.",
+    "category": "internal"
+  },
+  {
+    "source": 5668,
+    "target": 5675,
+    "sourceRef": "3 Nephi 27:20",
+    "targetRef": "3 Nephi 27:27",
+    "type": "doctrine",
+    "note": "Jesus invites all to repent, be baptized, and be sanctified by the Holy Ghost so they may become even as He is.",
+    "notePt": "Jesus convida todos a se arrependerem, serem batizados e santificados pelo Espírito Santo para se tornarem assim como Ele é.",
+    "category": "internal"
+  },
+  {
+    "source": 5722,
+    "target": 1565,
+    "sourceRef": "3 Nephi 29:1",
+    "targetRef": "Jacob 6:5",
+    "type": "prophecy",
+    "note": "The Savior declares that when these sayings come forth to the Gentiles, the covenant of the Father to gather Israel is already being fulfilled.",
+    "notePt": "O Salvador declara que quando essas palavras chegarem aos gentios, o convênio do Pai para coligar Israel já estará sendo cumprido.",
+    "category": "internal"
   }
 ]
