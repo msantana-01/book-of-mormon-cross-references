@@ -219,6 +219,16 @@
 
     <!-- Study Panel / Inspector -->
     <section class="study-panel" id="studyPanel" aria-labelledby="selectedVerseRef">
+      <!-- Study Trail Breadcrumbs (shown when >= 2 verses visited) -->
+      <nav class="study-trail-bar" id="studyTrailBar" style="display: none;" aria-label="Study Research Trail">
+        <button type="button" id="studyTrailBackBtn" class="study-trail-btn" title="Step back in trail">
+          <svg class="ui-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span id="studyTrailBackText">Back</span>
+        </button>
+        <span class="study-trail-label" id="studyTrailLabel">Trail:</span>
+        <div class="study-trail-chips" id="studyTrailChips" role="list"></div>
+        <button type="button" id="studyTrailClearBtn" class="study-trail-clear-btn" title="Clear study trail">Clear</button>
+      </nav>
       <div class="panel-header">
         <h2 id="selectedVerseTitle">
           <span id="selectedVerseRef">Select a Verse</span>

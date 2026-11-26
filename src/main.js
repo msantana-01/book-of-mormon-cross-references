@@ -20,6 +20,10 @@ let connectedVerseIdsList = []; // sorted array of IDs that have >= 1 connection
 let literaryStructures = [];
 let verseStructuresMap = new Map(); // verseId -> array of structure objects
 let studyResources = [];
+const STUDY_TRAIL_STORAGE_KEY = "bom_study_trail_v1";
+const MAX_STUDY_TRAIL = 20;
+let studyTrail = [];
+let trailIndex = -1;
 
 let currentViewMode = "dual"; // "dual" | "radial" | "threads"
 let selectedVerseId = 1; // Default to 1 Nephi 1:1 (First verse of the Book of Mormon)
@@ -2310,10 +2314,110 @@ function renderLiteraryStructure(verseId) {
   }
 }
 
+function loadStudyTrail() {
+  if (typeof sessionStorage === "undefined") return;
+  try {
+    const raw = sessionStorage.getItem(STUDY_TRAIL_STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed?.items)) {
+      studyTrail = parsed.items.filter(item => item && item.verseId >= 1 && item.verseId <= 6604).slice(-MAX_STUDY_TRAIL);
+      const idx = typeof parsed.index === "number" ? parsed.index : studyTrail.length - 1;
+      trailIndex = Math.max(-1, Math.min(studyTrail.length - 1, idx));
+    }
+  } catch (e) { /* ignore corrupt sessionStorage */ }
+}
+
+function saveStudyTrail() {
+  if (typeof sessionStorage === "undefined") return;
+  try {
+    sessionStorage.setItem(STUDY_TRAIL_STORAGE_KEY, JSON.stringify({ items: studyTrail, index: trailIndex }));
+  } catch (e) { /* ignore quota errors */ }
+}
+
+function pushToStudyTrail(verseId) {
+  if (trailIndex >= 0 && studyTrail[trailIndex]?.verseId === verseId) return;
+  studyTrail = studyTrail.slice(0, trailIndex + 1);
+  studyTrail.push({ verseId });
+  if (studyTrail.length > MAX_STUDY_TRAIL) {
+    studyTrail.shift();
+  }
+  trailIndex = studyTrail.length - 1;
+  saveStudyTrail();
+}
+
+function jumpToTrailIndex(idx) {
+  if (idx < 0 || idx >= studyTrail.length) return;
+  trailIndex = idx;
+  saveStudyTrail();
+  selectVerse(studyTrail[idx].verseId, false, { fromTrail: true });
+}
+
+function clearStudyTrail() {
+  studyTrail = selectedVerseId ? [{ verseId: selectedVerseId }] : [];
+  trailIndex = studyTrail.length - 1;
+  saveStudyTrail();
+  renderStudyTrail();
+}
+
+function renderStudyTrail() {
+  const bar = document.getElementById("studyTrailBar");
+  const chipsContainer = document.getElementById("studyTrailChips");
+  const backBtn = document.getElementById("studyTrailBackBtn");
+  const backText = document.getElementById("studyTrailBackText");
+  const labelEl = document.getElementById("studyTrailLabel");
+  const clearBtn = document.getElementById("studyTrailClearBtn");
+  if (!bar || !chipsContainer) return;
+
+  if (studyTrail.length < 2) {
+    bar.style.display = "none";
+    return;
+  }
+
+  bar.style.display = "flex";
+  if (backText) backText.textContent = t("studyTrailBack");
+  if (labelEl) labelEl.textContent = t("studyTrailLabel");
+  if (clearBtn) clearBtn.textContent = t("studyTrailClear");
+  if (backBtn) backBtn.disabled = trailIndex <= 0;
+
+  chipsContainer.innerHTML = "";
+  studyTrail.forEach((item, idx) => {
+    const vObj = verses[item.verseId - 1];
+    const refLabel = vObj ? vObj.ref : `#${item.verseId}`;
+    const chip = document.createElement("button");
+    chip.type = "button";
+    const isCurrent = idx === trailIndex;
+    const isForward = idx > trailIndex;
+    chip.className = `study-trail-chip${isCurrent ? " active" : ""}${isForward ? " is-forward" : ""}`;
+    chip.textContent = refLabel;
+    chip.setAttribute("role", "listitem");
+    if (isCurrent) chip.setAttribute("aria-current", "step");
+    chip.addEventListener("click", () => jumpToTrailIndex(idx));
+    chipsContainer.appendChild(chip);
+
+    if (idx < studyTrail.length - 1) {
+      const sep = document.createElement("span");
+      sep.className = "study-trail-sep";
+      sep.setAttribute("aria-hidden", "true");
+      sep.textContent = "→";
+      chipsContainer.appendChild(sep);
+    }
+  });
+
+  const activeChip = chipsContainer.querySelector(".study-trail-chip.active");
+  if (activeChip && typeof activeChip.scrollIntoView === "function") {
+    activeChip.scrollIntoView({ inline: "nearest", block: "nearest" });
+  }
+}
+
 // Select a verse and update the Study Panel
-function selectVerse(verseId, shouldScroll = false) {
+function selectVerse(verseId, shouldScroll = false, options = {}) {
   if (!verseId || verseId < 1 || verseId > 6604) return;
   selectedVerseId = verseId;
+  if (!options.fromTrail) {
+    pushToStudyTrail(verseId);
+  }
+  renderStudyTrail();
 
   // Update sequential tour counter if present (book-aware)
   const activeBook = getActiveBook();
@@ -3658,7 +3762,7 @@ function updateUILanguage() {
     renderThreadsChapter(false);
   }
   if (selectedVerseId) {
-    selectVerse(selectedVerseId);
+    selectVerse(selectedVerseId, false, { fromTrail: true });
   }
 }
 
@@ -3824,6 +3928,8 @@ async function init() {
       renderThreadsChapter(true);
     }
 
+    loadStudyTrail();
+
     let initialVerseId = 1;
     if (paramVerse) {
       const vNum = parseInt(paramVerse, 10);
@@ -3832,12 +3938,18 @@ async function init() {
       }
     }
     selectedVerseId = initialVerseId;
+    pushToStudyTrail(initialVerseId);
 
     if (getLang() === "pt") {
       updateUILanguage();
     } else {
-      selectVerse(initialVerseId);
+      selectVerse(initialVerseId, false, { fromTrail: true });
     }
+
+    const studyTrailBackBtn = document.getElementById("studyTrailBackBtn");
+    const studyTrailClearBtn = document.getElementById("studyTrailClearBtn");
+    if (studyTrailBackBtn) studyTrailBackBtn.addEventListener("click", () => jumpToTrailIndex(trailIndex - 1));
+    if (studyTrailClearBtn) studyTrailClearBtn.addEventListener("click", clearStudyTrail);
 
     if (paramBook) {
       zoomToBook(paramBook);
